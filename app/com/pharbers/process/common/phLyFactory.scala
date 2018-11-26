@@ -1,4 +1,4 @@
-package process.common
+package com.pharbers.process.common
 
 import scala.reflect.runtime.{universe => ru}
 

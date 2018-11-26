@@ -1,8 +1,8 @@
-package process.stm.step.gen.genDataSet
+package com.pharbers.process.stm.step.gen.genDataSet
 
 import com.pharbers.baseModules.PharbersInjectModule
 import com.pharbers.moduleConfig.{ConfigDefines, ConfigImpl}
-import process.common.phCommand
+import com.pharbers.process.common.phCommand
 
 import scala.xml.{Node, NodeSeq}
 

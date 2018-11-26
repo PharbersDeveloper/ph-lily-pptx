@@ -1,7 +1,7 @@
-package process.stm.step.pptx
+package com.pharbers.process.stm.step.pptx
 
 import com.pharbers.baseModules.PharbersInjectModule
-import process.common.phCommand
+import com.pharbers.process.common.phCommand
 
 trait phGenPPT extends PharbersInjectModule {
     override val id: String = "gen_search_set"

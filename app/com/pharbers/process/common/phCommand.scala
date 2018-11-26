@@ -1,4 +1,4 @@
-package process.common
+package com.pharbers.process.common
 
 trait phCommand {
     def perExec : Unit = Unit

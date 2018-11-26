@@ -1,13 +1,13 @@
 <pharbers-modules>
     <flow_define>
         <flow_nodes>
-            <flow_node index="1" factory="process.stm.step.gen.genDataSet.phGenDataSetImpl"
+            <flow_node index="1" factory="com.pharbers.process.stm.step.gen.genDataSet.phGenDataSetImpl"
                        name="gen data set"
                        description="the abstraction gather all the source file to generate data set" />
-            <flow_node index="2" factory="process.stm.step.gen.genSearchSet.phGenSearchSetImpl"
+            <flow_node index="2" factory="com.pharbers.process.stm.step.gen.genSearchSet.phGenSearchSetImpl"
                        name="gen search set"
                        description="the abstraction gather all the search file to generate search set" />
-            <flow_node index="3" factory="process.stm.step.pptx.phGenPPTImpl"
+            <flow_node index="3" factory="com.pharbers.process.stm.step.pptx.phGenPPTImpl"
                        name="gen page"
                        description="calculate and generate ppt" />
         </flow_nodes>
