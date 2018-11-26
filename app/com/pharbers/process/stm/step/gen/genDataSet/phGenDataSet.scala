@@ -2,7 +2,7 @@ package com.pharbers.process.stm.step.gen.genDataSet
 
 import com.pharbers.baseModules.PharbersInjectModule
 import com.pharbers.moduleConfig.{ConfigDefines, ConfigImpl}
-import com.pharbers.process.common.phCommand
+import com.pharbers.process.common.{phCommand, phLyFactory}
 
 import scala.xml.{Node, NodeSeq}
 
@@ -36,8 +36,17 @@ trait phGenDataSet extends PharbersInjectModule {
 
 class phGenDataSetImpl extends phGenDataSet with phCommand {
     override def exec: Unit = {
-        println(data_sources)
-        println(merge_func)
+
+        data_sources.foreach { nod =>
+            val fct = nod.get("factory").get
+            val cmd = phLyFactory.getInstance(fct).asInstanceOf[phCommand]
+            cmd.perExec(nod.get("path").get)
+            cmd.exec
+            cmd.postExec
+        }
+
+//        println(data_sources)
+//        println(merge_func)
         println("gen data set")
     }
 }
