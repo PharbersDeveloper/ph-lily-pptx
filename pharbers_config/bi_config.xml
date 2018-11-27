@@ -22,36 +22,6 @@
                        descritption="what is this for"
                        path="/data/lily/source_file_20181118/CECLOR TOTAL.CSV"
                        factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="2"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/CIALIS.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="3"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/EVISTA.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="4"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/ONO.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="5"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/PROZAC.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="6"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/STRATTERA.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="7"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/VANCOCIN.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
         </data_nodes>
     </gen_data_set>
     <gen_search_set>
@@ -70,8 +40,7 @@
         </data_nodes>
     </gen_search_set>
     <gen_pages>
-        <factory value="" />
-        <in_file value="" />
-        <out_file value="" />
+        <format path="pharbers_config/bi_format.json" factory="" />
+        <out_file path="" />
     </gen_pages>
  </pharbers-modules>
