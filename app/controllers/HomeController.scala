@@ -9,7 +9,7 @@ import play.api.mvc._
 class HomeController @Inject()(cc: ControllerComponents) extends AbstractController(cc) {
 
     def index() = Action { implicit request: Request[AnyContent] =>
-        phLyFactory.getInstance("com.pharbers.process.flow.phBIFlowGenImpl").asInstanceOf[phCommand].exec
+        phLyFactory.getInstance("com.pharbers.process.flow.phBIFlowGenImpl").asInstanceOf[phCommand].exec(null)
         Ok(views.html.index())
     }
 }

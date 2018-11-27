@@ -22,7 +22,7 @@ trait phGenPPT extends PharbersInjectModule {
 }
 
 class phGenPPTImpl extends phGenPPT with phCommand {
-    override def exec: Unit = {
+    override def exec(args : Any) : Any = {
         println("phGenPPTImpl")
     }
 }

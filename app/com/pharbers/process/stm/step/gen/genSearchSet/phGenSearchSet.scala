@@ -36,7 +36,7 @@ trait phGenSearchSet extends PharbersInjectModule {
 }
 
 class phGenSearchSetImpl extends phGenSearchSet with phCommand {
-    override def exec: Unit = {
+    override def exec(args : Any) : Any = {
         println(data_sources)
         println(merge_func)
         println("gen search set")
