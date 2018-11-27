@@ -45,7 +45,7 @@ class phGenSearchSetImpl extends phGenSearchSet with phCommand {
             command.exec(x("path")).asInstanceOf[Option[DataFrame]].getOrElse(throw new Exception("search error"))
         })
         val command = phLyFactory.getInstance(merge_func("factory")).asInstanceOf[phCommand]
-        phLyFactory.stssoo = phLyFactory.stssoo + (id -> command.exec(dfLst))
+        phLyFactory.stssoo += (id -> command.exec(dfLst))
 //        println(merge_func)
 //        println("gen search set")
     }
