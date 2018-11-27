@@ -2,7 +2,7 @@ package com.pharbers.process.stm.step.gen.genSearchSet
 
 import com.pharbers.baseModules.PharbersInjectModule
 import com.pharbers.moduleConfig.{ConfigDefines, ConfigImpl}
-import com.pharbers.process.common.phCommand
+import com.pharbers.process.common.{phCommand, phLyFactory}
 
 import scala.xml.Node
 import scala.xml.NodeSeq
@@ -37,7 +37,14 @@ trait phGenSearchSet extends PharbersInjectModule {
 
 class phGenSearchSetImpl extends phGenSearchSet with phCommand {
     override def exec: Unit = {
-        println(data_sources)
+//        println(data_sources)
+        data_sources.foreach(x => {
+            val function = x("factory")
+            val command = phLyFactory.getInstance(function).asInstanceOf[phCommand]
+            command.perExec(x("path"))
+            command.exec
+            command.postExec
+        })
         println(merge_func)
         println("gen search set")
     }
