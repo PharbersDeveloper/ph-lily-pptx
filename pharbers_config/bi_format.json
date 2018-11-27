@@ -10,21 +10,29 @@
             {
                 "title": "",
                 "content": {
-                    "tables": {
-                        "pos": [
-                            0,
-                            0,
-                            100,
-                            100
-                        ],
-                        "timeline": [],
-                        "col": [
-                            "ROM"
-                        ],
-                        "row": [
-                            ""
-                        ]
-                    }
+                    "texts": [
+                        {
+                            "pos": [
+                                0, 0, 100, 100
+                            ],
+                            "font": "",
+                            "text": "abcde"
+                        }
+                    ],
+                    "tables": [
+                        {
+                            "pos": [
+                                0, 0, 100, 100
+                            ],
+                            "timeline": [],
+                            "col": [
+                                "ROM"
+                            ],
+                            "row": [
+                                ""
+                            ]
+                        }
+                    ]
                 }
             }
         ]

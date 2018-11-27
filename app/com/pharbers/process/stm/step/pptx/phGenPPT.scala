@@ -2,7 +2,7 @@ package com.pharbers.process.stm.step.pptx
 
 import com.pharbers.baseModules.PharbersInjectModule
 import com.pharbers.moduleConfig.{ConfigDefines, ConfigImpl}
-import com.pharbers.process.common.phCommand
+import com.pharbers.process.common.{phCommand, phLyFactory}
 import play.api.libs.json._
 
 import scala.io.Source
@@ -31,15 +31,11 @@ trait phGenPPT extends PharbersInjectModule {
 
 class phGenPPTImpl extends phGenPPT with phCommand {
     override def exec(args : Any) : Any = {
-
         val format_filename = this.format.get("path").get
         val buf = Source.fromFile(format_filename)
         val format = Json.parse(buf.mkString)
-
-        println(buf.mkString)
-        println(format)
-
-
+        val factory = this.format.get("factory").get
+        phLyFactory.getInstance(factory).asInstanceOf[phCommand].exec(format)
         println("phGenPPTImpl")
     }
 }
