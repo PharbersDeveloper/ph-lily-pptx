@@ -37,11 +37,11 @@ trait phGenDataSet extends PharbersInjectModule {
 class phGenDataSetImpl extends phGenDataSet with phCommand {
     override def exec(args : Any) : Any = {
 
-        data_sources.foreach { nod =>
-            val fct = nod.get("factory").get
-            val cmd = phLyFactory.getInstance(fct).asInstanceOf[phCommand]
-            cmd.exec(nod.get("path").get)
-        }
+//        data_sources.foreach { nod =>
+//            val fct = nod.get("factory").get
+//            val cmd = phLyFactory.getInstance(fct).asInstanceOf[phCommand]
+//            cmd.exec(nod.get("path").get)
+//        }
 
 //        println(data_sources)
 //        println(merge_func)

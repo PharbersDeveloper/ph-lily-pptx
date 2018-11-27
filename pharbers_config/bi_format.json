@@ -1,0 +1,32 @@
+{
+    "title": "alfredtest",
+    "slice": {
+        "filter": {
+            "name": "",
+            "description": "",
+            "factory": ""
+        },
+        "sliders": [
+            {
+                "title": "",
+                "content": {
+                    "tables": {
+                        "pos": [
+                            0,
+                            0,
+                            100,
+                            100
+                        ],
+                        "timeline": [],
+                        "col": [
+                            "ROM"
+                        ],
+                        "row": [
+                            ""
+                        ]
+                    }
+                }
+            }
+        ]
+    }
+}

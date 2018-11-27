@@ -1,28 +1,45 @@
 package com.pharbers.process.stm.step.pptx
 
 import com.pharbers.baseModules.PharbersInjectModule
+import com.pharbers.moduleConfig.{ConfigDefines, ConfigImpl}
 import com.pharbers.process.common.phCommand
+import play.api.libs.json._
+
+import scala.io.Source
+import scala.xml.{Node, NodeSeq}
 
 trait phGenPPT extends PharbersInjectModule {
-    override val id: String = "gen_search_set"
+    override val id: String = "gen_pages"
     override val configPath: String = "pharbers_config/bi_config.xml"
-    override val md: List[String] = "factory" :: "in_file" :: "out_file" :: Nil
+    override val md: List[String] = "format" :: "out_file" :: Nil
 
-    lazy val factory = config.mc.find(_._1 == "factory").
-                            map (_._2.toString).
-                            getOrElse(throw new Exception("配置文件错误，phGenPPT => factory"))
+    import com.pharbers.moduleConfig.ModuleConfig.fr
+    implicit val f: (ConfigDefines, Node) => ConfigImpl = ((c, n) => ConfigImpl(c.md map (x =>x -> (n \ x))))
+    override lazy val config: ConfigImpl = loadConfig(configDir + "/" + configPath)
 
-    lazy val in_file = config.mc.find(_._1 == "in_file").
-                            map (_._2.toString).
-                            getOrElse(throw new Exception("配置文件错误，phGenPPT => in_file"))
+    lazy val format = config.mc.find(_._1 == "format").map { iter =>
+        Map(
+            "path" -> (iter._2.asInstanceOf[NodeSeq] \\ "@path").toString,
+            "factory" -> (iter._2.asInstanceOf[NodeSeq] \\ "@factory").toString
+        )
+    }.getOrElse(throw new Exception("配置文件错误，phGenPPT => format"))
 
-    lazy val out_file = config.mc.find(_._1 == "out_file").
-                            map (_._2.toString).
-                            getOrElse(throw new Exception("配置文件错误，phGenPPT => out_file"))
+    lazy val out_file = config.mc.find(_._1 == "out_file").map { iter =>
+        (iter._2.asInstanceOf[NodeSeq] \\ "@path").toString()
+    }.getOrElse(throw new Exception("配置文件错误，phGenPPT => out_file"))
 }
 
 class phGenPPTImpl extends phGenPPT with phCommand {
     override def exec(args : Any) : Any = {
+
+        val format_filename = this.format.get("path").get
+        val buf = Source.fromFile(format_filename)
+        val format = Json.parse(buf.mkString)
+
+        println(buf.mkString)
+        println(format)
+
+
         println("phGenPPTImpl")
     }
 }
