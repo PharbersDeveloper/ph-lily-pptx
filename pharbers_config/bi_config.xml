@@ -20,53 +20,18 @@
             <data_node index="1"
                        name="data node"
                        descritption="what is this for"
-                       path="/data/lily/source_file_20181118/CECLOR TOTAL.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="2"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/CIALIS.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="3"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/EVISTA.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="4"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/ONO.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="5"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/PROZAC.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="6"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/STRATTERA.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="7"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/VANCOCIN.CSV"
+                       path="/data/lily/source_file_20181118/twelveTitle"
                        factory="com.pharbers.process.read.phReadDataImpl"/>
         </data_nodes>
     </gen_data_set>
     <gen_search_set>
-        <merge factory="" description="" />
+        <merge factory="com.pharbers.process.merge.phMergeSearch" description="" />
         <data_nodes>
             <data_node index="1"
                        name="search data node"
                        descritption="what is this for"
                        path="/test/ANTIDEPRESSANTS_CHPA_ BRAND_1_MAPPING.csv"
                        factory="com.pharbers.process.read.phReadSearchImpl"/>
-            <data_node index="2"
-                       name="search data node 2"
-                       descritption="what is this data do"
-                       path=""
-                       factory=""/>
         </data_nodes>
     </gen_search_set>
     <gen_pages>

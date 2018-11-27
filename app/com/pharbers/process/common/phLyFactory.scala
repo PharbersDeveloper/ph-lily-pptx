@@ -6,7 +6,7 @@ import scala.reflect.runtime.{universe => ru}
 import org.apache.spark.sql.DataFrame
 
 object phLyFactory {
-    var stssoo : Map[String, AnyVal] = Map.empty
+    var stssoo : Map[String, Any] = Map.empty
     lazy val sparkDriver: phSparkDriver = phSparkDriver("cui-test")
     import sparkDriver.ss.implicits._
 
@@ -22,7 +22,7 @@ object phLyFactory {
     }
 
     def getStorageWithName(name : String) : DataFrame = {
-        return null
+         stssoo.getOrElse(name, throw new Exception("error key")).asInstanceOf[DataFrame]
     }
 
     def getCalcInstance() : phSparkDriver = sparkDriver
