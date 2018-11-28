@@ -15,27 +15,33 @@
         </flow_nodes>
     </flow_define>
     <gen_data_set>
-        <merge factory="" description="" />
+        <merge dotPath="/test/ADD_RATE_Test.csv" factory="com.pharbers.process.read.phReadDotImpl" description="" />
         <data_nodes>
             <data_node index="1"
                        name="data node"
                        descritption="what is this for"
-                       path="/data/lily/source_file_20181118/twelveTitle"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
+                       path="/data/lily/source_file_20181118/fourTitle"
+                       factory="com.pharbers.process.read.phReadDataFourTitleImpl"/>
         </data_nodes>
     </gen_data_set>
     <gen_search_set>
-        <merge factory="com.pharbers.process.merge.phMergeSearch" description="" />
+        <merge factory="" description="" />
         <data_nodes>
             <data_node index="1"
                        name="search data node"
                        descritption="what is this for"
-                       path="/test/ANTIDEPRESSANTS_CHPA_ BRAND_1_MAPPING.csv"
-                       factory="com.pharbers.process.read.phReadSearchImpl"/>
+                       path=""
+                       factory=""/>
+            <data_node index="2"
+                       name="search data node 2"
+                       descritption="what is this data do"
+                       path=""
+                       factory=""/>
         </data_nodes>
     </gen_search_set>
     <gen_pages>
-        <format path="pharbers_config/bi_format.json" factory="package com.pharbers.process.stm.step.pptx.phJsonGenPPT" />
-        <out_file path="" />
+        <factory value="" />
+        <in_file value="" />
+        <out_file value="" />
     </gen_pages>
  </pharbers-modules>
