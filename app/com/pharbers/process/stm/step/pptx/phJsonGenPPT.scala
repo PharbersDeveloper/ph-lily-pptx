@@ -14,7 +14,6 @@ trait phJsonGenPPT extends phCommand {
         phLyFactory.stssoo += ("ppt" -> ppt)
         val sl = (format \ "slice").asOpt[JsValue].get
         phLyFactory.getInstance("com.pharbers.process.stm.step.pptx.slice.phGenSlicePPTImpl").asInstanceOf[phCommand].exec(sl)
-
         println(out_put_filename)
         out_put_filename
     }
