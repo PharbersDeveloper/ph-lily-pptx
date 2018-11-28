@@ -1,18 +1,16 @@
 package com.pharbers.process.stm.step.gen.genDataSet
 
-import java.util.UUID
-
 import com.pharbers.baseModules.PharbersInjectModule
 import com.pharbers.moduleConfig.{ConfigDefines, ConfigImpl}
-import com.pharbers.process.common.{phCommand, phLyFactory}
-import org.apache.spark.sql.DataFrame
+import com.pharbers.process.common.{phCommand, phLyDataSet, phLyFactory}
+import org.apache.spark.rdd.RDD
 
 import scala.xml.{Node, NodeSeq}
 
 trait phGenDataSet extends PharbersInjectModule {
     override val id: String = "gen_data_set"
     override val configPath: String = "pharbers_config/bi_config.xml"
-    override val md: List[String] = "merge" :: "data_nodes" :: Nil
+    override val md: List[String] = "merges" :: "data_nodes" :: Nil
 
     import com.pharbers.moduleConfig.ModuleConfig.fr
 
@@ -30,41 +28,40 @@ trait phGenDataSet extends PharbersInjectModule {
         }
     }.getOrElse(throw new Exception("配置文件错误，phGenDataSet => data source")).sortBy(_._1).map(_._2)
 
-    lazy val merge_func = config.mc.find(_._1 == "merge").map { opt =>
-        Map(
-            "factory" -> (opt._2.asInstanceOf[NodeSeq] \\ "@factory").toString(),
-            "description" -> (opt._2.asInstanceOf[NodeSeq] \\ "@description").toString(),
-            "dotPath" -> (opt._2.asInstanceOf[NodeSeq] \\ "@dotPath").toString()
-        )
+    lazy val merge_func = config.mc.find(_._1 == "merges").map { opt =>
+        (opt._2.asInstanceOf[NodeSeq] \\ "merge").toList.map { iter =>
+            Map(
+                "factory" -> (iter \\ "@factory").toString,
+                "path" -> (iter \\ "@path").toString,
+                "description" -> (iter \\ "@description").toString
+            )
+        }
     }.getOrElse(throw new Exception("配置文件错误，phGenDataSet => merge func"))
 }
 
 class phGenDataSetImpl extends phGenDataSet with phCommand {
     override def exec(args: Any): Any = {
-        val bigTableDFlst = data_sources.map { nod =>
+        val rdd_lst = data_sources.map { nod =>
             val fct = nod.get("factory").get
             val cmd = phLyFactory.getInstance(fct).asInstanceOf[phCommand]
             cmd.exec(nod.get("path").get)
         }
 
-        val cmd = phLyFactory.getInstance(merge_func("factory")).asInstanceOf[phCommand]
-        val result = cmd.exec(Map("dotPath" -> merge_func("dotPath"), "bigTableDF" -> bigTableDFlst))
-        //        println("写入开始=======================")
-        //        result.asInstanceOf[DataFrame].write
-        //            .format("csv")
-        //            .option("header", value = true)
-        //            .option("delimiter", ",")
-        //            .save("hdfs:///test/bigTableResult2018112711815")
-        //        println("写入完成=======================")
-        println("计算count开始=======================")
-        val count = result.asInstanceOf[DataFrame].count()
-        println("计算count结束=======================")
-        println(count)
+        rdd_lst.foreach(println)
 
-        //        result.asInstanceOf[DataFrame].show(false)
-        //        println(data_sources)
-        //        println(merge_func)
+        def callAcc(lst : List[Map[String, String]], rdd : Option[Any]) : Option[Any] = {
+            if (lst.isEmpty) rdd
+            else {
+                val cur = lst.head
+                val path = cur.get("path").get
+                val cmd = phLyFactory.getInstance(cur.get("factory").get).asInstanceOf[phCommand]
+                cmd.preExec(path)
+                callAcc(lst.tail, cmd.exec(rdd).asInstanceOf[Option[RDD[(String, phLyDataSet)]]])
+            }
+        }
+        val result = callAcc(merge_func, Some(rdd_lst))
+        result.take(200).foreach(println)
+
         println("gen data set")
-        phLyFactory.stssoo
     }
 }

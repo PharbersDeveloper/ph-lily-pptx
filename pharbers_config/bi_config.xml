@@ -15,9 +15,40 @@
         </flow_nodes>
     </flow_define>
     <gen_data_set>
-        <merge dotPath="/test/ADD_RATE_Test.csv" factory="com.pharbers.process.read.phReadDotImpl" description="" />
+        <merges>
+            <merge
+                    index="1"
+                    path=""
+                    factory="com.pharbers.process.merge.phMergeDistinctImpl"
+                    description="merge data nodes data" />
+            <merge
+                    index="2"
+                    path="/test/ADD_RATE_Test.csv"
+                    factory="com.pharbers.process.merge.phMergeWithDotImpl"
+                    description="merge date with dot rate" />
+        </merges>
         <data_nodes>
             <data_node index="1"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/source_file_20181118/fullTitle"
+                       factory="com.pharbers.process.read.phReadDataFullTitleImpl"/>
+            <data_node index="2"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/source_file_20181118/twelveTitle"
+                       factory="com.pharbers.process.read.phReadDataTwelveTitleImpl"/>
+            <data_node index="3"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/source_file_20181118/eightTitle"
+                       factory="com.pharbers.process.read.phReadDataEightTitleImpl"/>
+            <data_node index="4"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/source_file_20181118/sixTitle"
+                       factory="com.pharbers.process.read.phReadDataSixTitleImpl"/>
+            <data_node index="5"
                        name="data node"
                        descritption="what is this for"
                        path="/data/lily/source_file_20181118/fourTitle"
