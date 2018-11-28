@@ -17,7 +17,7 @@ class phSearchFilterImpl extends phFilter with phCommand {
         def calcYM(start: Int, end: Int): List[Int] = {
             end - start < 100 match {
                 case true => (start to end).toList
-                case _ => (start to (start / 100 * 100 + 100)).toList ::: calcYM(start / 100 * 100 + 100, end)
+                case _ => (start to (start / 100 * 100 + 112)).toList ::: calcYM(start / 100 * 100 + 101, end)
             }
         }
         val ym = calcYM(timeline(0).toInt, timeline(1).toInt)
