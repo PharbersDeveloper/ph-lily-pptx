@@ -54,7 +54,7 @@ class phMergeDistinctImpl extends phMergeDistinct with phCommand {
         phLyFactory.clearStorage
         phLyFactory.setStorageWithName("main frame", reval)
         phLyFactory.saveMidProcess("main frame", "hdfs:///test/mid/main-frame-without-dot/")
-//        println(reval.count())
+        println(reval.count())
         Some(reval)
     }
 }

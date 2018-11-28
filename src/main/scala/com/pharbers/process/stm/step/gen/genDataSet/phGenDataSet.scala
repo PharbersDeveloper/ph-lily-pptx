@@ -60,13 +60,14 @@ class phGenDataSetImpl extends phGenDataSet with phCommand {
             }
         }
         val result = callAcc(merge_func, Some(rdd_lst)).get.asInstanceOf[RDD[(String, phLyDataSet)]]
-        result.take(200).foreach(println)
+//        result.take(200).foreach(println)
 
         phLyFactory.clearStorage
         phLyFactory.setStorageWithName("main-frame", result)
-        val df = phLyFactory.phRow2DFDetail("main-frame")
+        val df = phLyFactory.phRow2DFDetail("main-frame").distinct()
         println("gen data set")
-        df.show(false)
+        df.sort(-df("DOT")).show(false)
+        println(df.count())
         df
     }
 }
