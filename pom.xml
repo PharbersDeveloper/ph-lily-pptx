@@ -75,6 +75,17 @@
                 </dependency>
 
                 <dependency>
+                    <groupId>org.apache.poi</groupId>
+                    <artifactId>poi</artifactId>
+                    <version>3.17</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.poi</groupId>
+                    <artifactId>poi-ooxml</artifactId>
+                    <version>3.17</version>
+                </dependency>
+
+                <dependency>
                     <groupId>org.scalatest</groupId>
                     <artifactId>scalatest_2.11</artifactId>
                     <version>3.0.1</version>

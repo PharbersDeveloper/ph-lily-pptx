@@ -14,7 +14,7 @@ class phSearchFilterImpl extends phFilter with phCommand {
         val displayNames = (js \ "display").as[List[String]].reduce(_ + "," + _)
         val timeline = (js \ "timeline").as[List[String]]
         val filt = (js \ "filt").as[List[String]].reduce(_ + "," + _)
-        val calcYM : (Int, Int) => List[Int] = (start, end) => {
+        def calcYM(start: Int, end: Int): List[Int] = {
             end - start < 100 match {
                 case true => (start to end).toList
                 case _ => (start to (start / 100 * 100 + 100)).toList ::: calcYM(start / 100 * 100 + 100, end)

@@ -1,40 +1,45 @@
 {
     "title": "alfredtest",
-    "slice": {
-        "filter": {
-            "name": "",
-            "description": "",
-            "factory": ""
-        },
-        "sliders": [
-            {
-                "title": "",
-                "content": {
-                    "texts": [
-                        {
-                            "pos": [
-                                0, 0, 100, 100
-                            ],
-                            "font": "",
-                            "text": "abcde"
-                        }
-                    ],
-                    "tables": [
-                        {
-                            "pos": [
-                                0, 0, 100, 100
-                            ],
-                            "timeline": [],
-                            "col": [
-                                "ROM"
-                            ],
-                            "row": [
-                                ""
-                            ]
-                        }
-                    ]
+    "slices": [
+        {
+            "filter": {
+                "name": "",
+                "description": "from display and timeline",
+                "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
+                "display": [],
+                "timeline": [],
+                "filt": []
+            },
+            "sliders": [
+                {
+                    "title": "",
+                    "content": {
+                        "texts": [
+                            {
+                                "pos": [
+                                    0, 0, 100, 100
+                                ],
+                                "font": "",
+                                "text": "abcde"
+                            }
+                        ],
+                        "tables": [
+                            {
+                                "pos": [
+                                    0, 0, 100, 100
+                                ],
+                                "timeline": [],
+                                "col": [
+                                    "ROM"
+                                ],
+                                "row": [
+                                    ""
+                                ]
+                            }
+                        ]
+                    }
                 }
-            }
-        ]
-    }
+            ]
+        }
+    ]
 }

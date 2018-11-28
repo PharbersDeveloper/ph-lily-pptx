@@ -25,23 +25,17 @@
         </data_nodes>
     </gen_data_set>
     <gen_search_set>
-        <merge factory="" description="" />
+        <merge factory="com.pharbers.process.merge.phMergeSearch" description="" />
         <data_nodes>
             <data_node index="1"
                        name="search data node"
                        descritption="what is this for"
-                       path=""
-                       factory=""/>
-            <data_node index="2"
-                       name="search data node 2"
-                       descritption="what is this data do"
-                       path=""
-                       factory=""/>
+                       path="/test/ANTIDEPRESSANTS_CHPA_ BRAND_1_MAPPING.csv"
+                       factory="com.pharbers.process.read.phReadSearchImpl"/>
         </data_nodes>
     </gen_search_set>
     <gen_pages>
-        <factory value="" />
-        <in_file value="" />
-        <out_file value="" />
+        <format path="pharbers_config/bi_format.json" factory="package com.pharbers.process.stm.step.pptx.phJsonGenPPT" />
+        <out_file path="" />
     </gen_pages>
- </pharbers-modules>
+</pharbers-modules>
