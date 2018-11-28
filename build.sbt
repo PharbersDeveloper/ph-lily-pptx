@@ -31,6 +31,9 @@ libraryDependencies ++= Seq(
     "org.apache.hadoop" % "hadoop-common" % "2.7.2",
     "org.apache.hadoop" % "hadoop-hdfs" % "2.7.2",
 
+    "org.apache.poi" % "poi" % "3.17",
+    "org.apache.poi" % "poi-ooxml" % "3.17",
+
     "com.fasterxml.jackson.core" % "jackson-databind" % "2.6.7" force(),
 
     "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.2" % Test

@@ -8,6 +8,8 @@ trait phGenSlicePPT {
     var df : Option[DataFrame] = None
     def genSliceDataFrame(filter : JsValue) : Unit = {
         // TODO: 从匹配表中的信息，形成一个Filter，将主表Filter出来保存到df中
+        val factory = (filter \ "factory").asOpt[String].get
+        df = Some(phLyFactory.getInstance(factory).asInstanceOf[phCommand].exec().asInstanceOf[DataFrame])
     }
 }
 

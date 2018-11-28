@@ -1,8 +1,11 @@
 package com.pharbers.process.stm.step.pptx
 
+import java.io.FileOutputStream
+
 import com.pharbers.baseModules.PharbersInjectModule
 import com.pharbers.moduleConfig.{ConfigDefines, ConfigImpl}
 import com.pharbers.process.common.{phCommand, phLyFactory}
+import org.apache.poi.xslf.usermodel.XMLSlideShow
 import play.api.libs.json._
 
 import scala.io.Source
@@ -35,7 +38,9 @@ class phGenPPTImpl extends phGenPPT with phCommand {
         val buf = Source.fromFile(format_filename)
         val format = Json.parse(buf.mkString)
         val factory = this.format.get("factory").get
-        phLyFactory.getInstance(factory).asInstanceOf[phCommand].exec(format)
+        val name = phLyFactory.getInstance(factory).asInstanceOf[phCommand].exec(format)
+        val ppt = phLyFactory.getStorageWithName("ppt").asInstanceOf[XMLSlideShow]
+        ppt.write(new FileOutputStream(out_file + name))
         println("phGenPPTImpl")
     }
 }
