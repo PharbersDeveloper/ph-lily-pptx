@@ -6,18 +6,23 @@ import org.apache.spark.sql.DataFrame
 import play.api.libs.json.JsValue
 
 trait phReportContent {
+    var slide: XSLFSlide = _
+    def setElementInSlider(className: String, element: Any, data: Any = null): Unit ={
+        phLyFactory.getInstance(className).asInstanceOf[phCommand]
+            .exec(Map("ppt-inc" -> slide, "element" -> element, "data" -> data))
+    }
 
 }
 
 class phReportContentImpl extends phReportContent with phCommand {
     override def exec(args: Any): Any = {
         val argMap = args.asInstanceOf[Map[String, Any]]
-        val slide = argMap("ppt_inc").asInstanceOf[XSLFSlide]
+        slide = argMap("ppt_inc").asInstanceOf[XSLFSlide]
         val data = argMap("data").asInstanceOf[DataFrame]
         val content = argMap("content").asInstanceOf[JsValue]
         val text = (content \ "texts").asOpt[JsValue]
         val table = (content \ "tables").asOpt[JsValue]
-        phLyFactory.getInstance("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTextImpl")
-            .asInstanceOf[phCommand].exec()
+        setElementInSlider("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTextImpl", text)
+        setElementInSlider("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl", table, data)
     }
 }

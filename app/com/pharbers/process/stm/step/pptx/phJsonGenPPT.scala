@@ -12,8 +12,8 @@ trait phJsonGenPPT extends phCommand {
         // TODO: 在这里创建PPT实例，把这个实例当作参数像里面传递
         val ppt = new XMLSlideShow()
         phLyFactory.stssoo += ("ppt" -> ppt)
-        val sl = (format \ "slice").asOpt[JsValue].get
-        phLyFactory.getInstance("com.pharbers.process.stm.step.pptx.slice.phGenSlicePPTImpl").asInstanceOf[phCommand].exec(sl)
+        (format \ "slices").asOpt[List[JsValue]].get.map(sl =>
+            phLyFactory.getInstance("com.pharbers.process.stm.step.pptx.slice.phGenSlicePPTImpl").asInstanceOf[phCommand].exec(sl))
         println(out_put_filename)
         out_put_filename
     }
