@@ -6,7 +6,7 @@ import scala.reflect.runtime.{universe => ru}
 import org.apache.spark.sql.DataFrame
 
 object phLyFactory {
-    var stssoo : Map[String, AnyVal] = Map.empty
+    var stssoo : Map[String, AnyRef] = Map.empty
     lazy val sparkDriver: phSparkDriver = phSparkDriver("cui-test")
     import sparkDriver.ss.implicits._
 

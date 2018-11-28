@@ -15,43 +15,13 @@
         </flow_nodes>
     </flow_define>
     <gen_data_set>
-        <merge factory="" description="" />
+        <merge dotPath="/test/ADD_RATE_Test.csv" factory="com.pharbers.process.read.phReadDotImpl" description="" />
         <data_nodes>
             <data_node index="1"
                        name="data node"
                        descritption="what is this for"
-                       path="/data/lily/source_file_20181118/CECLOR TOTAL.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="2"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/CIALIS.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="3"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/EVISTA.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="4"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/ONO.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="5"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/PROZAC.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="6"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/STRATTERA.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
-            <data_node index="7"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/source_file_20181118/VANCOCIN.CSV"
-                       factory="com.pharbers.process.read.phReadDataImpl"/>
+                       path="/data/lily/source_file_20181118/fourTitle"
+                       factory="com.pharbers.process.read.phReadDataFourTitleImpl"/>
         </data_nodes>
     </gen_data_set>
     <gen_search_set>
