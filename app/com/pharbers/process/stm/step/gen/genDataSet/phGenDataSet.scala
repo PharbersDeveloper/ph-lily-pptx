@@ -49,13 +49,6 @@ class phGenDataSetImpl extends phGenDataSet with phCommand {
 
         val cmd = phLyFactory.getInstance(merge_func("factory")).asInstanceOf[phCommand]
         val result = cmd.exec(Map("dotPath" -> merge_func("dotPath"), "bigTableDF" -> bigTableDFlst))
-        //        println("写入开始=======================")
-        //        result.asInstanceOf[DataFrame].write
-        //            .format("csv")
-        //            .option("header", value = true)
-        //            .option("delimiter", ",")
-        //            .save("hdfs:///test/bigTableResult2018112711815")
-        //        println("写入完成=======================")
         println("计算count开始=======================")
         val count = result.asInstanceOf[DataFrame].count()
         println("计算count结束=======================")
