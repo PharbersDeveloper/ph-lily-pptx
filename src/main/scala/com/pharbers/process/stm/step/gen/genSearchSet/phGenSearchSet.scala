@@ -2,7 +2,8 @@ package com.pharbers.process.stm.step.gen.genSearchSet
 
 import com.pharbers.baseModules.PharbersInjectModule
 import com.pharbers.moduleConfig.{ConfigDefines, ConfigImpl}
-import com.pharbers.process.common.phCommand
+import com.pharbers.process.common.{phCommand, phLyFactory}
+import org.apache.spark.sql.DataFrame
 
 import scala.xml.Node
 import scala.xml.NodeSeq
@@ -36,9 +37,16 @@ trait phGenSearchSet extends PharbersInjectModule {
 }
 
 class phGenSearchSetImpl extends phGenSearchSet with phCommand {
-    override def exec(args : Any) : Any = {
-        println(data_sources)
-        println(merge_func)
-        println("gen search set")
+    override def exec(args : Any): Unit = {
+        //        println(data_sources)
+        val dfLst = data_sources.map(x => {
+            val function = x("factory")
+            val command = phLyFactory.getInstance(function).asInstanceOf[phCommand]
+            command.exec(x("path")).asInstanceOf[Option[DataFrame]].getOrElse(throw new Exception("search error"))
+        })
+        val command = phLyFactory.getInstance(merge_func("factory")).asInstanceOf[phCommand]
+        phLyFactory.stssoo += (id -> command.exec(dfLst))
+        //        println(merge_func)
+        //        println("gen search set")
     }
 }

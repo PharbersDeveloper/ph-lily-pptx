@@ -9,7 +9,7 @@ trait phReportContent {
     var slide: XSLFSlide = _
     def setElementInSlider(className: String, element: Any, data: Any = null): Unit ={
         phLyFactory.getInstance(className).asInstanceOf[phCommand]
-            .exec(Map("ppt-inc" -> slide, "element" -> element, "data" -> data))
+            .exec(Map("ppt_inc" -> slide, "element" -> element, "data" -> data))
     }
 
 }
@@ -20,8 +20,8 @@ class phReportContentImpl extends phReportContent with phCommand {
         slide = argMap("ppt_inc").asInstanceOf[XSLFSlide]
         val data = argMap("data").asInstanceOf[DataFrame]
         val content = argMap("content").asInstanceOf[JsValue]
-        val text = (content \ "texts").asOpt[JsValue]
-        val table = (content \ "tables").asOpt[JsValue]
+        val text = (content \ "texts").as[JsValue]
+        val table = (content \ "tables").as[JsValue]
         setElementInSlider("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTextImpl", text)
         setElementInSlider("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl", table, data)
     }

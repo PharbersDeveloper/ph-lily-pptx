@@ -16,14 +16,14 @@ class phReportContentTableImpl extends phReportContentTable with phCommand {
         val data = argMap("data").asInstanceOf[DataFrame]
         argMap("element").asInstanceOf[JsValue].as[List[JsValue]].foreach(x => {
             val pos = (x \ "pos").as[List[Int]]
-            val timeline = (x \" timeline").as[List[String]]
-            val col = (x \" col").as[List[String]]
-            val row = (x \" row").as[List[String]]
+            val timeline = (x \"timeline").as[List[String]]
+            val col = (x \ "col").as[List[String]]
+            val row = (x \ "row").as[List[String]]
 
             val table = slide.createTable()
-            val function = "com.pharbers.process.stm.step.pptx.slider.content" + col(0)
+            val function = "com.pharbers.process.stm.step.pptx.slider.content." + col(0)
             val value = phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
-                ("data" -> data, "displayName" -> row(0), "ym" -> timeline(0))
+                Map("data" -> data, "displayName" -> row(0), "ym" -> timeline(0))
             )
         })
     }

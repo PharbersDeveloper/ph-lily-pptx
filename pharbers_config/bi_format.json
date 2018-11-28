@@ -6,13 +6,13 @@
                 "name": "",
                 "description": "from display and timeline",
                 "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
-                "display": [],
-                "timeline": [],
+                "display": ["SSRI ANTIDEPRESSANTS"],
+                "timeline": ["201610", "201709"],
                 "filt": []
             },
             "sliders": [
                 {
-                    "title": "",
+                    "title": "test",
                     "content": {
                         "texts": [
                             {
@@ -28,12 +28,12 @@
                                 "pos": [
                                     0, 0, 100, 100
                                 ],
-                                "timeline": [201610,201809],
+                                "timeline": ["MAT M09 18"],
                                 "col": [
-                                    "ROM"
+                                    "dotMn"
                                 ],
                                 "row": [
-                                    ""
+                                    "SSRI ANTIDEPRESSANTS"
                                 ]
                             }
                         ]
