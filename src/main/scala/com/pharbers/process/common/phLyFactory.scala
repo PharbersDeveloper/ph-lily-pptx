@@ -45,4 +45,7 @@ object phLyFactory {
 
     def getCalcInstance() : phSparkDriver = sparkDriver
     def phRow2DF(name : String) : DataFrame = getStorageWithName(name).toDF()
+    def phRow2DFDetail(name : String) : DataFrame = getStorageWithName(name).map { iter =>
+            (iter._1, iter._2.product_name, iter._2.pack_des, iter._2.date, iter._2.tp, iter._2.add_rate, iter._2.dot, iter._2.value)
+        }.toDF("ID", "PRODUCT NAME", "PACK DES", "DATE", "TYPE", "ADD RATE", "DOT", "VALUE")
 }

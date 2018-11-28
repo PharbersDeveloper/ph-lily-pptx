@@ -81,8 +81,8 @@ class phMergeWithDotImpl extends phMergeWithDot with phCommand {
 //        assert(rdd.count() == reval.count())
         phLyFactory.setStorageWithName("main frame dot", reval)
         phLyFactory.saveMidProcess("main frame dot", "hdfs:///test/mid/main-frame-with-dot/")
-        println(reval.count)
-        println(reval.filter(row => row._2.dot > 0).count)
+//        println(reval.count)
+//        println(reval.filter(row => row._2.dot > 0).count)
         Some(reval)
     }
 }
