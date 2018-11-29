@@ -14,7 +14,8 @@ class phReportTitlePropImpl extends phReportTitleProp with phCommand {
         val argMap = args.asInstanceOf[Map[String, Any]]
         val title = argMap("ppt_inc").asInstanceOf[XSLFSlide].getPlaceholder(0)
         //add配置文件
-        title.setAnchor(new Rectangle(0, 0,100,100))
-        title.setText(argMap("title").asInstanceOf[String])
+        title.setAnchor(new Rectangle(100, 10,500,100))
+        val run = title.setText(argMap("title").asInstanceOf[String])
+        run.setFontSize(24.0)
     }
 }

@@ -12,7 +12,7 @@
             },
             "sliders": [
                 {
-                    "title": "test",
+                    "title": "Prozac and Key Competitors DOT/CASH Performance in CHPA (MAT)",
                     "content": {
                         "texts": [
                             {
@@ -26,7 +26,7 @@
                         "tables": [
                             {
                                 "pos": [
-                                    0, 50, 50, 150
+                                    50, 50, 500, 50
                                 ],
                                 "timeline": ["MAT M09 18", "MAT M09 17"],
                                 "col": [
@@ -35,8 +35,8 @@
                                     "GrowthPercentage"
                                 ],
                                 "row": [
-                                  "Lilly relevant Mkt", "SSRI ANTIDEPRESSANTS", "MIRTAZAPINE", "PROZAC    LLY",
-                                  "CYMBALTA    LLY", "Total Generic Fluoxetine(Generic Prozac)", "SEROXAT    TJS",
+                                  "Lilly relevant Mkt", "SSRI ANTIDEPRESSANTS","SNRI ANTIDEPRESSANTS", "MIRTAZAPINE", "PROZAC    LLY",
+                                  "CYMBALTA    LLY", "Total Generic Fluoxetine(Generic Prozac)", "Total Generic Duloxetine(Generic Cymbalta)", "SEROXAT    TJS",
                                   "Total Generic Paroxetine(Generic Seroxat)", "EFEXOR XR    WYE", "BO LE XIN C4K(Generic Efexor)",
                                   "ZOLOFT    PZD", "Total Generic Sertraline(Generic Zoloft)", "CIPRAMIL    XJS",
                                   "REMERON    ORG", "LUVOX    ABT", "LEXAPRO    XJS", "Others(Mirtazapine+Trazodone+Deanxit)"

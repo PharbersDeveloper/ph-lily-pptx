@@ -74,3 +74,14 @@ class GrowthPercentage extends phReportTableCol with phCommand {
         (((yearSum-lasteYearResult)/lasteYearResult)*100).toString
     }
 }
+
+class som extends phReportTableCol with phCommand {
+    override def exec(args: Any): Any = {
+        val argMap = args.asInstanceOf[Map[String, Any]]
+        data = argMap("data").asInstanceOf[DataFrame]
+        val map = argMap("dataMap").asInstanceOf[collection.mutable.Map[String, Double]]
+        val displayName = argMap("displayName").asInstanceOf[String]
+        val ym = argMap("ym").asInstanceOf[String]
+        map(displayName + ym) / map("Lilly relevant Mkt" + ym) * 100
+    }
+}

@@ -1,6 +1,7 @@
 package com.pharbers.process.stm.step.pptx
 
 import java.io.FileOutputStream
+import java.util.Date
 
 import com.pharbers.baseModules.PharbersInjectModule
 import com.pharbers.moduleConfig.{ConfigDefines, ConfigImpl}
@@ -34,6 +35,8 @@ trait phGenPPT extends PharbersInjectModule {
 
 class phGenPPTImpl extends phGenPPT with phCommand {
     override def exec(args : Any) : Any = {
+        println("******************************************************************************************")
+        println(new Date())
         val format_filename = this.format.get("path").get
         val buf = Source.fromFile(format_filename)
         val format = Json.parse(buf.mkString)
