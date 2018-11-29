@@ -13,7 +13,7 @@ trait phReportContentTable {
     var slide: XSLFSlide = _
 
     def addTable(args: Map[String, Any]): XSLFSlide = {
-        var map: collection.mutable.Map[String, Double] = collection.mutable.Map.empty
+
         val argMap = args.asInstanceOf[Map[String, Any]]
         //ppt一页
         slide = argMap("ppt_inc").asInstanceOf[XSLFSlide]
@@ -41,6 +41,8 @@ trait phReportContentTable {
             //TODO：设置表格每一行和列的高度和宽度
             //            table.setColumnWidth(1, 100)
             //            table.getRows.get(0).setHeight(100)
+            //算出的数据
+            var dataMap: mutable.Map[String, Double] = mutable.Map()
             Array.range(0, rowList.size).map { disPlayNameIndex =>
                 val displayName = rowList(disPlayNameIndex)
                 val rowIndex = disPlayNameIndex + 2
@@ -52,7 +54,7 @@ trait phReportContentTable {
                         //TODO:需要在这里用col作为key在一个Map中获取对应的计算方法
                         val function = "com.pharbers.process.stm.step.pptx.slider.content." + colName
                         val value = phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
-                            Map("data" -> data, "displayName" -> displayName, "ym" -> ym, "dataMap" -> map)
+                            Map("data" -> data, "displayName" -> displayName, "ym" -> ym, "dataMap"->dataMap)
                         )
                         //给单元格赋值
                         table.getRows.get(rowIndex).getCells.get(colIndex).setText(value.toString)
