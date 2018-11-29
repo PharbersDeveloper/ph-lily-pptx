@@ -7,6 +7,8 @@ import org.apache.poi.xslf.usermodel.XSLFSlide
 import org.apache.spark.sql.DataFrame
 import play.api.libs.json.JsValue
 
+import scala.collection.mutable
+
 trait phReportContentTable {
     var slide: XSLFSlide = _
 
@@ -39,6 +41,8 @@ trait phReportContentTable {
             //TODO：设置表格每一行和列的高度和宽度
             //            table.setColumnWidth(1, 100)
             //            table.getRows.get(0).setHeight(100)
+            //算出的数据
+            var dataMap: mutable.Map[String, Double] = mutable.Map()
             Array.range(0, rowList.size).map { disPlayNameIndex =>
                 val displayName = rowList(disPlayNameIndex)
                 val rowIndex = disPlayNameIndex + 2
@@ -46,11 +50,11 @@ trait phReportContentTable {
                     val ym = timeline(timelineIndex)
                     Array.range(0, colList.size).map { colNameIndex =>
                         val colName = colList(colNameIndex)
-                        val colIndex = 3 * timelineIndex + colNameIndex + 1
+                        val colIndex = colList.size * timelineIndex + colNameIndex + 1
                         //TODO:需要在这里用col作为key在一个Map中获取对应的计算方法
                         val function = "com.pharbers.process.stm.step.pptx.slider.content." + colName
                         val value = phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
-                            Map("data" -> data, "displayName" -> displayName, "ym" -> ym)
+                            Map("data" -> data, "displayName" -> displayName, "ym" -> ym, "dataMap"->dataMap)
                         )
                         //给单元格赋值
                         table.getRows.get(rowIndex).getCells.get(colIndex).setText(value.toString)

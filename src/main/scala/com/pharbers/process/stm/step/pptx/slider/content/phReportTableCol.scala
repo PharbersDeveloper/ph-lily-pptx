@@ -5,6 +5,8 @@ import com.pharbers.spark.phSparkDriver
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.col
 
+import scala.collection.mutable
+
 
 trait phReportTableCol{
     lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
@@ -37,13 +39,38 @@ class dotMn extends  phReportTableCol with phCommand {
         data = argMap("data").asInstanceOf[DataFrame]
         val displayName = argMap("displayName").asInstanceOf[String]
         val ym = argMap("ym").asInstanceOf[String]
+        val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
         val ymDF = getYmDF(ym)
-        val result = data.filter(col("Display Name") === displayName)
+        val sum = data.filter(col("Display Name") === displayName)
                 .join(ymDF, data("DATE") === ymDF("yms"))
                 .select("DOT")
                 .filter(col("DOT") > 0)
                 .agg(Map("DOT" -> "sum"))
                 .collectAsList().get(0).toString()
-        (result.substring(1, result.length - 1).toDouble / 1000000).toString
+        val resultSum = sum.substring(1,sum.length-1).toDouble
+        dataMap(displayName+ym) = resultSum
+        (resultSum / 1000000).toString
+    }
+}
+
+class GrowthPercentage extends phReportTableCol with phCommand {
+    override def exec(args: Any): Any = {
+        val argMap = args.asInstanceOf[Map[String, Any]]
+        data = argMap("data").asInstanceOf[DataFrame]
+        val displayName = argMap("displayName").asInstanceOf[String]
+        val ym = argMap("ym").asInstanceOf[String]
+        val yearSum: Double = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]](displayName+ym)
+        val month = ym.substring(5, 7)
+        val lastYear: String = (ym.split(" ").last.toInt-1).toString
+        val lastymstr: String = month + " " + lastYear
+        val lastyearymDF: DataFrame = getYmDF("MAT M"+month+" "+lastYear)
+        val lastYearSum = data.filter(col("Display Name") === displayName)
+            .join(lastyearymDF, data("DATE") === lastyearymDF("yms"))
+            .select("DOT")
+            .filter(col("DOT") > 0)
+            .agg(Map("DOT" -> "sum"))
+            .collectAsList().get(0).toString()
+        val lasteYearResult = lastYearSum.substring(1,lastYearSum.size-1).toDouble
+        (((yearSum-lasteYearResult)/lasteYearResult)*100).toString
     }
 }
