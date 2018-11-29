@@ -39,7 +39,7 @@ class phGenPPTImpl extends phGenPPT with phCommand {
         val format = Json.parse(buf.mkString)
         val factory = this.format.get("factory").get
         val name = phLyFactory.getInstance(factory).asInstanceOf[phCommand].exec(format)
-        val ppt = phLyFactory.getStorageWithName("ppt").asInstanceOf[XMLSlideShow]
+        val ppt = phLyFactory.stssoo("ppt").asInstanceOf[XMLSlideShow]
         ppt.write(new FileOutputStream(out_file + name))
         println("phGenPPTImpl")
     }

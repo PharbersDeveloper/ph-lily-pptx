@@ -25,6 +25,7 @@ class phReportContentTableImpl extends phReportContentTable with phCommand {
             val value = phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
                 Map("data" -> data, "displayName" -> row(0), "ym" -> timeline(0))
             )
+            println(value)
         })
     }
 }

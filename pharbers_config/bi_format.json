@@ -7,7 +7,7 @@
                 "description": "from display and timeline",
                 "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
                 "display": ["SSRI ANTIDEPRESSANTS"],
-                "timeline": ["201610", "201709"],
+                "timeline": ["201610", "201812"],
                 "filt": []
             },
             "sliders": [

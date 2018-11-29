@@ -16,7 +16,7 @@ trait phReportTableCol{
         val ym = ymstr.substring(5).split(" ")
         val month = ym(0).toInt
         val year = 2000 + ym(1).toInt
-        getymlst(List(month.toString + "/" + year.toString), month, year, 12).map { str =>
+        getymlst(List(), month, year, 12).map { str =>
             if (str.length == 7) str
             else "0" + str
         }.toDF("yms")
@@ -38,9 +38,10 @@ class dotMn extends  phReportTableCol with phCommand {
         val displayName = argMap("displayName").asInstanceOf[String]
         val ym = argMap("ym").asInstanceOf[String]
         val ymDF = getYmDF(ym)
-        val result = data.filter(col("Display name") === displayName)
-                .join(ymDF, data("YM") === ymDF("yms"))
+        val result = data.filter(col("Display Name") === displayName)
+                .join(ymDF, data("DATE") === ymDF("yms"))
                 .select("DOT")
+                .filter(col("DOT") > 0)
                 .agg(Map("DOT" -> "sum"))
                 .collectAsList().get(0).toString()
         (result.substring(1, result.length - 1).toDouble / 1000000).toString

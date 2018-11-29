@@ -9,7 +9,7 @@ import scala.reflect.runtime.{universe => ru}
 import org.apache.spark.sql.DataFrame
 
 object phLyFactory {
-    var stssoo : Map[String, AnyRef] = Map.empty
+    var stssoo : Map[String, Any] = Map.empty
     lazy val sparkDriver: phSparkDriver = phSparkDriver("cui-test")
     import sparkDriver.ss.implicits._
 
@@ -41,6 +41,7 @@ object phLyFactory {
     def getStorageWithName(name : String) : RDD[(String, phLyDataSet)] =
         stssoo.get(name).map (_.asInstanceOf[RDD[(String, phLyDataSet)]]).
             getOrElse(throw new Exception("RDD 不存在"))
+    def getStorageWithDFName(name: String): DataFrame = stssoo.get(name).get.asInstanceOf[DataFrame]
     def clearStorage = stssoo = Map.empty
 
     def getCalcInstance() : phSparkDriver = sparkDriver
