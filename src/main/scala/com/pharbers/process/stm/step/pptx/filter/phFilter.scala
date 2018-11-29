@@ -15,19 +15,19 @@ class phSearchFilterImpl extends phFilter with phCommand {
         import sparkDriver.ss.implicits._
 
         val js = args.asInstanceOf[JsValue]
-        val displayNameDF = (js \ "display").as[List[String]].toDF("Display")
-        val timeline = (js \ "timeline").as[List[String]]
-//        val filt = (js \ "filt").as[List[String]].reduce(_ + "," + _)
-        def calcYM(start: Int, end: Int): List[Int] = {
-            (end / 100 - start / 100) == 0 match {
-                case true => (start to end).toList
-                case _ => (start to (start / 100 * 100 + 12)).toList ::: calcYM(start / 100 * 100 + 101, end)
-            }
-        }
-        val ymDF = calcYM(timeline(0).toInt, timeline(1).toInt)
-                .map(x => x.toString.substring(4) + "/" + x.toString.substring(0, 4))
-                .toDF("YM")
+//        val displayNameDF = (js \ "display").as[List[String]].toDF("Display")
+//        val timeline = (js \ "timeline").as[List[String]]
+////        val filt = (js \ "filt").as[List[String]].reduce(_ + "," + _)
+//        def calcYM(start: Int, end: Int): List[Int] = {
+//            (end / 100 - start / 100) == 0 match {
+//                case true => (start to end).toList
+//                case _ => (start to (start / 100 * 100 + 12)).toList ::: calcYM(start / 100 * 100 + 101, end)
+//            }
+//        }
+//        val ymDF = calcYM(timeline(0).toInt, timeline(1).toInt)
+//                .map(x => x.toString.substring(4) + "/" + x.toString.substring(0, 4))
+//                .toDF("YM")
         val source = phLyFactory.getStorageWithDFName("DF_gen_search_set")
-        source.join(ymDF, source("DATE") === ymDF("YM")).join(displayNameDF, source("Display Name") === displayNameDF("Display"))
+        source
     }
 }

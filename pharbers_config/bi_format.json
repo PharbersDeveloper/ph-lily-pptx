@@ -7,7 +7,7 @@
                 "description": "from display and timeline",
                 "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
                 "display": ["SSRI ANTIDEPRESSANTS"],
-                "timeline": ["201610", "201812"],
+                "timeline": ["201510", "201812"],
                 "filt": []
             },
             "sliders": [
@@ -26,14 +26,20 @@
                         "tables": [
                             {
                                 "pos": [
-                                    0, 50, 100, 100
+                                    0, 50, 50, 150
                                 ],
-                                "timeline": ["MAT M09 18"],
+                                "timeline": ["MAT M09 18", "MAT M09 17"],
                                 "col": [
-                                    "dotMn"
+                                    "dotMn",
+                                    "som",
+                                    "GrowthPercentage"
                                 ],
                                 "row": [
-                                    "SSRI ANTIDEPRESSANTS"
+                                  "Lilly relevant Mkt", "SSRI ANTIDEPRESSANTS", "MIRTAZAPINE", "PROZAC    LLY",
+                                  "CYMBALTA    LLY", "Total Generic Fluoxetine(Generic Prozac)", "SEROXAT    TJS",
+                                  "Total Generic Paroxetine(Generic Seroxat)", "EFEXOR XR    WYE", "BO LE XIN C4K(Generic Efexor)",
+                                  "ZOLOFT    PZD", "Total Generic Sertraline(Generic Zoloft)", "CIPRAMIL    XJS",
+                                  "REMERON    ORG", "LUVOX    ABT", "LEXAPRO    XJS", "Others(Mirtazapine+Trazodone+Deanxit)"
                                 ]
                             }
                         ]

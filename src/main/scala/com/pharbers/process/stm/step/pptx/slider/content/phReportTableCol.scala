@@ -31,10 +31,11 @@ trait phReportTableCol{
     }
 }
 
-class dotMn extends  phReportTableCol with phCommand {
+class dotMn extends phReportTableCol with phCommand {
     override def exec(args: Any): Any = {
         val argMap = args.asInstanceOf[Map[String, Any]]
         data = argMap("data").asInstanceOf[DataFrame]
+        val map = argMap("dataMap").asInstanceOf[collection.mutable.Map[String, Double]]
         val displayName = argMap("displayName").asInstanceOf[String]
         val ym = argMap("ym").asInstanceOf[String]
         val ymDF = getYmDF(ym)
@@ -44,6 +45,19 @@ class dotMn extends  phReportTableCol with phCommand {
                 .filter(col("DOT") > 0)
                 .agg(Map("DOT" -> "sum"))
                 .collectAsList().get(0).toString()
+        println(displayName + "***********" + ym)
+        map(displayName + ym) = result.substring(1, result.length - 1).toDouble
         (result.substring(1, result.length - 1).toDouble / 1000000).toString
+    }
+}
+
+class som extends phReportTableCol with phCommand {
+    override def exec(args: Any): Any = {
+        val argMap = args.asInstanceOf[Map[String, Any]]
+        data = argMap("data").asInstanceOf[DataFrame]
+        val map = argMap("dataMap").asInstanceOf[collection.mutable.Map[String, Double]]
+        val displayName = argMap("displayName").asInstanceOf[String]
+        val ym = argMap("ym").asInstanceOf[String]
+        map(displayName + ym) / map("Lilly relevant Mkt" + ym) * 100
     }
 }
