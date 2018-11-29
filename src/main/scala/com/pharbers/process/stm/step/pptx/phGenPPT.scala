@@ -40,7 +40,7 @@ class phGenPPTImpl extends phGenPPT with phCommand {
         val factory = this.format.get("factory").get
         val name = phLyFactory.getInstance(factory).asInstanceOf[phCommand].exec(format)
         val ppt = phLyFactory.stssoo("ppt").asInstanceOf[XMLSlideShow]
-        ppt.write(new FileOutputStream(out_file + name))
+        ppt.write(new FileOutputStream(name + ".pptx"))
         println("phGenPPTImpl")
     }
 }

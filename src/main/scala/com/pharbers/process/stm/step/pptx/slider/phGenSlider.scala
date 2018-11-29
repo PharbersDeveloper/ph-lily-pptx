@@ -15,7 +15,7 @@ class phGenSliderImpl extends phGenSlider with phCommand {
         val tmp = args.asInstanceOf[Map[String, AnyRef]]
         val ppt = tmp("ppt").asInstanceOf[XMLSlideShow]
         val master = ppt.getSlideMasters.get(0)
-        val slider = ppt.createSlide(master.getLayout(SlideLayout.TITLE))
+        val slider = ppt.createSlide(master.getLayout(SlideLayout.TITLE_ONLY))
         val format = tmp.get("slider").get.asInstanceOf[JsValue]
         val title = (format \ "title").asOpt[String].get
         phLyFactory.getInstance("com.pharbers.process.stm.step.pptx.slider.prop.phReportTitlePropImpl").

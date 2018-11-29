@@ -22,11 +22,11 @@ trait phReportContentTable {
             //xywh
             val pos = (x \ "pos").as[List[Int]]
             //第一行
-            val timeline = (x \ " timeline").as[List[String]]
+            val timeline = (x \ "timeline").as[List[String]]
             //第二行
-            val colList = (x \ " col").as[List[String]]
+            val colList = (x \ "col").as[List[String]]
             //第一列
-            val rowList = (x \ " row").as[List[String]]
+            val rowList = (x \ "row").as[List[String]]
             //表的行数
             val rowCount = rowList.size + 2
             //表的列数
@@ -34,7 +34,7 @@ trait phReportContentTable {
             //创建table
             val table = slide.createTable(rowCount, colCount)
             //设置表格相对于左上角的位置
-            val rectangle: Rectangle = new Rectangle(pos.head, pos(2), pos(3), pos(4))
+            val rectangle: Rectangle = new Rectangle(pos.head, pos(1), pos(2), pos(3))
             table.setAnchor(rectangle)
             //TODO：设置表格每一行和列的高度和宽度
             //            table.setColumnWidth(1, 100)
@@ -48,7 +48,7 @@ trait phReportContentTable {
                         val colName = colList(colNameIndex)
                         val colIndex = 3 * timelineIndex + colNameIndex + 1
                         //TODO:需要在这里用col作为key在一个Map中获取对应的计算方法
-                        val function = "com.pharbers.process.stm.step.pptx.slider.content" + colName
+                        val function = "com.pharbers.process.stm.step.pptx.slider.content." + colName
                         val value = phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
                             Map("data" -> data, "displayName" -> displayName, "ym" -> ym)
                         )
