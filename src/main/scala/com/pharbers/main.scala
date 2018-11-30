@@ -5,6 +5,7 @@ import java.io.{FileInputStream, FileOutputStream}
 import java.util.Date
 
 import com.pharbers.process.common.{phCommand, phLyFactory}
+import com.pharbers.process.stm.step.pptx.slider.content.{phReportTableCol, som}
 import org.apache.poi.sl.usermodel.SlideShow
 import org.apache.poi.sl.usermodel.TableCell.BorderEdge
 import org.apache.poi.xslf.usermodel.{SlideLayout, XMLSlideShow, XSLFTextRun, XSLFTextShape}
@@ -35,4 +36,12 @@ object test extends App {
     table.getCell(0,1).setBorderColor(BorderEdge.right, Color.BLACK)
 
     ppt.write(new FileOutputStream("dcs.pptx"))
+}
+
+object test2 extends App {
+    new som().getYmDF("RQ M09 18").show
+    val ym = "MAT M09 18"
+    val lastYear = (ym.split(" ").last.toInt-1).toString
+    val lastYm = (ym.split(" ").take(ym.split(" ").length - 1) ++ Array(lastYear)).mkString(" ")
+    println()
 }

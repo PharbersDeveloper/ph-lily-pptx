@@ -1,5 +1,5 @@
 {
-    "title": "alfredtest",
+    "title": "63.2",
     "slices": [
         {
             "filter": {
@@ -12,7 +12,7 @@
             },
             "sliders": [
                 {
-                    "title": "Prozac and Key Competitors DOT/CASH Performance in CHPA (MAT)",
+                    "title": "Prozac and Key Competitors DOT/CASH Performance in CHPA (YTD)",
                     "content": {
                         "texts": [
                             {
@@ -20,7 +20,7 @@
                                     0, 0, 100, 100
                                 ],
                                 "font": "",
-                                "text": "abcde"
+                                "text": ""
                             }
                         ],
                         "tables": [
@@ -28,11 +28,11 @@
                                 "pos": [
                                     50, 50, 500, 50
                                 ],
-                                "timeline": ["MAT M09 18", "MAT M09 17"],
+                                "timeline": ["RQ M09 18", "RQ M09 17"],
                                 "col": [
-                                    "dotMn",
-                                    "som",
-                                    "GrowthPercentage"
+                                    "RMB",
+                                    "SOM(%)",
+                                    "Growth(%)"
                                 ],
                                 "row": [
                                   "Lilly relevant Mkt", "SSRI ANTIDEPRESSANTS","SNRI ANTIDEPRESSANTS", "MIRTAZAPINE", "PROZAC    LLY",
