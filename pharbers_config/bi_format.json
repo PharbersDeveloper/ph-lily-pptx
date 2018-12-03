@@ -1,19 +1,19 @@
 {
-    "title": "63.2",
+    "title": "68",
     "slices": [
         {
             "filter": {
                 "name": "",
                 "description": "from display and timeline",
                 "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
-                "display": ["SSRI ANTIDEPRESSANTS"],
-                "timeline": ["201510", "201812"],
                 "filt": []
             },
             "sliders": [
                 {
-                    "title": "Prozac and Key Competitors DOT/CASH Performance in CHPA (YTD)",
+                    "title": "Prozac and Key Competitors DOT Trends in CHPA",
                     "content": {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+                        "mkt_display": "",
                         "texts": [
                             {
                                 "pos": [
@@ -28,18 +28,21 @@
                                 "pos": [
                                     50, 50, 500, 50
                                 ],
-                                "timeline": ["RQ M09 18", "RQ M09 17"],
+                                "timeline": [
+                                    "MAT M09 18", "MAT M09 17"
+                                ],
                                 "col": [
                                     "RMB",
                                     "SOM(%)",
                                     "Growth(%)"
                                 ],
                                 "row": [
-                                  "Lilly relevant Mkt", "SSRI ANTIDEPRESSANTS","SNRI ANTIDEPRESSANTS", "MIRTAZAPINE", "PROZAC    LLY",
-                                  "CYMBALTA    LLY", "Total Generic Fluoxetine(Generic Prozac)", "Total Generic Duloxetine(Generic Cymbalta)", "SEROXAT    TJS",
-                                  "Total Generic Paroxetine(Generic Seroxat)", "EFEXOR XR    WYE", "BO LE XIN C4K(Generic Efexor)",
-                                  "ZOLOFT    PZD", "Total Generic Sertraline(Generic Zoloft)", "CIPRAMIL    XJS",
-                                  "REMERON    ORG", "LUVOX    ABT", "LEXAPRO    XJS", "Others(Mirtazapine+Trazodone+Deanxit)"
+                                    "Total mCRC 3L Market (Relevant)", "AI HENG            JSH",
+                                    "ELOXATIN           SG9", "Other Oxaliplatin",
+                                    "XELODA             ROC", "Other Capecitabine", "AI LI              JSH",
+                                    "CAMPTO             PFZ", "Other Irinotecan", "AVASTIN            GTC",
+                                    "ERBITUX            MCK", "FLUOROURACIL", "RALTITREXED", "FANG KE            HNQ",
+                                    "Other Tegafur", "STIVARGA           BY6", "AI TAN             JSH"
                                 ]
                             }
                         ]

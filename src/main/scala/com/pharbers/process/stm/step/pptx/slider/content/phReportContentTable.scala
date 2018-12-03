@@ -15,10 +15,11 @@ object phReportContentTable{
         "DOT(Mn)" -> "dotMn",
         "SOM(%)" -> "som",
         "Growth(%)" -> "GrowthPercentage",
-        "RMB" -> "rmb"
+        "RMB" -> "rmb",
+        "SOM in Branded MKT(%)" -> "som"
     )
     def colName2FunctionName(name: String): String = {
-        functionMap.getOrElse(name,throw new Exception("未定义方法"))
+        functionMap.getOrElse(name,throw new Exception("未定义方法" + name))
     }
 }
 trait phReportContentTable {
@@ -59,11 +60,11 @@ trait phReportContentTable {
             val timelineRow = table.addRow()
             timelineRow.setHeight(0.8)
             timeline.foreach(x => timelineRow.addCell().setText(x).setFontSize(10.0))
-            val fristRow = table.addRow()
-            fristRow.setHeight(0.8)
-            fristRow.addCell()
+            val firstRow = table.addRow()
+            firstRow.setHeight(0.8)
+            firstRow.addCell()
             table.setColumnWidth(0, 240)
-            timeline.foreach(_ => colList.foreach(x => fristRow.addCell().setText(x).setFontSize(10.0)))
+            timeline.foreach(_ => colList.foreach(x => firstRow.addCell().setText(x).setFontSize(10.0)))
             rowList.foreach(displayName => {
                 val row = table.addRow()
                 row.setHeight(0.8)
@@ -115,4 +116,74 @@ trait phReportContentTable {
 
 class phReportContentTableImpl extends phReportContentTable with phCommand {
     override def exec(args: Any): Any = this.addTable(args.asInstanceOf[Map[String, Any]])
+}
+
+class phReportContentTrendsTable extends phReportContentTable with phCommand {
+    override def exec(args: Any): Any = this.addTable(args.asInstanceOf[Map[String, Any]])
+
+    override def addTable(args: Map[String, Any]): XSLFSlide = {
+        val argMap = args.asInstanceOf[Map[String, Any]]
+        //ppt一页
+        slide = argMap("ppt_inc").asInstanceOf[XSLFSlide]
+        //数据
+        val data = argMap("data").asInstanceOf[DataFrame]
+        //List
+        argMap("element").asInstanceOf[JsValue].as[List[JsValue]].foreach(x => {
+            //xywh
+            val pos = (x \ "pos").as[List[Int]]
+            //第一行
+            val timeline = (x \ "timeline").as[List[String]]
+            //第二行
+            val colList = (x \ "col").as[List[String]]
+            //第一列
+            val rowList = (x \ "row").as[List[String]]
+            //表的行数
+            val rowCount = rowList.size + 2
+            //表的列数
+            val colCount = colList.size * timeline.size + 1
+            //算出的数据
+            var dataMap: mutable.Map[String, Double] = mutable.Map()
+            val table = slide.createTable()
+            //设置表格相对于左上角的位置
+            val rectangle: Rectangle = new Rectangle(pos.head, pos(1), pos(2), pos(3))
+            table.setAnchor(rectangle)
+            val timelineRow = table.addRow()
+            timelineRow.setHeight(0.8)
+            timelineRow.addCell()
+            timeline.foreach(x => timelineRow.addCell().setText(x).setFontSize(10.0))
+//            val firstRow = table.addRow()
+//            firstRow.setHeight(0.8)
+//            firstRow.addCell()
+            table.setColumnWidth(0, 240)
+//            timeline.foreach(_ => colList.foreach(x => firstRow.addCell().setText(x).setFontSize(10.0)))
+            (rowList :+ "Lilly relevant Mkt").foreach(displayName => {
+                timeline.foreach(ym => {
+                    val function = "com.pharbers.process.stm.step.pptx.slider.content." + phReportContentTable.colName2FunctionName("DOT(Mn)")
+                    phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
+                        Map("data" -> data, "displayName" -> displayName,
+                            "ym" -> ym, "dataMap" -> dataMap, "firstRow" -> "Lilly relevant Mkt", "firstCol" -> colList.head)
+                    )
+                })
+            })
+            rowList.foreach(displayName => {
+                val row = table.addRow()
+                row.setHeight(0.8)
+                row.addCell().setText(displayName).setFontSize(10.0)
+                timeline.foreach(ym => colList.foreach(colName => {
+                    val function = "com.pharbers.process.stm.step.pptx.slider.content." + phReportContentTable.colName2FunctionName(colName)
+                    val value = phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
+                        Map("data" -> data, "displayName" -> displayName,
+                            "ym" -> ym, "dataMap" -> dataMap, "firstRow" -> "Lilly relevant Mkt", "firstCol" -> colList.head)
+                    )
+                    row.addCell().setText(value.toString).setFontSize(10.0)
+                }))
+            })
+            (0 until table.getRows.size()).foreach(x => {
+                val cells = table.getRows.get(x).getCells
+                (0 until cells.size()).foreach(x => setCellBorderColor(cells.get(x), Color.BLACK))
+            })
+            (1 until  colCount).foreach(x => table.setColumnWidth(x, 65))
+        })
+        slide
+    }
 }

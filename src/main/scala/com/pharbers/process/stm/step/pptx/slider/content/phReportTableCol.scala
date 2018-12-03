@@ -19,29 +19,23 @@ trait phReportTableCol{
 //        val mon = "[M,MON,MTH] M[0-9][0-9] [0-9][0-9]".r
         ymstr.split(" ").length match {
             case 3 => {
+                val ym = ymstr.substring(5).split(" ")
+                val month = ym(0).toInt
+                val year = 2000 + ym(1).toInt
                 ymstr.split(" ")(0) match {
                     case "MAT" => {
-                        val ym = ymstr.substring(5).split(" ")
-                        val month = ym(0).toInt
-                        val year = 2000 + ym(1).toInt
                         getymlst(List(), month, year, 12).map { str =>
                             if (str.length == 7) str
                             else "0" + str
                         }.toDF("yms")
                     }
                     case "YTD" => {
-                        val ym = ymstr.substring(5).split(" ")
-                        val month = ym(0).toInt
-                        val year = 2000 + ym(1).toInt
                         (1 to month).map(x => s"$x/$year").map { str =>
                             if (str.length == 7) str
                             else "0" + str
                         }.toDF("yms")
                     }
                     case "RQ" => {
-                        val ym = ymstr.substring(5).split(" ")
-                        val month = ym(0).toInt
-                        val year = 2000 + ym(1).toInt
                         getymlst(List(), month, year, 3).map { str =>
                             if (str.length == 7) str
                             else "0" + str
@@ -50,11 +44,11 @@ trait phReportTableCol{
                 }
             }
             case 2 => {
+                val ym = ymstr.substring(1).split(" ")
+                val month = ym(0).toInt
+                val year = 2000 + ym(1).toInt
                 ymstr.charAt(0) match {
                     case 'M' => {
-                        val ym = ymstr.substring(1).split(" ")
-                        val month = ym(0).toInt
-                        val year = 2000 + ym(1).toInt
                         List(s"$month/$year").map { str =>
                             if (str.length == 7) str
                             else "0" + str
@@ -85,7 +79,7 @@ class dotMn extends  phReportTableCol with phCommand {
         val sum = data.filter(col("Display Name") === displayName)
                 .join(ymDF, data("DATE") === ymDF("yms"))
                 .select("DOT")
-                .filter(col("DOT") > 0)
+                .filter(col("DOT") >= 0)
                 .agg(Map("DOT" -> "sum"))
                 .collectAsList().get(0).toString()
         val resultSum = sum.substring(1,sum.length-1).toDouble
