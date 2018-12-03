@@ -127,6 +127,7 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
         slide = argMap("ppt_inc").asInstanceOf[XSLFSlide]
         //数据
         val data = argMap("data").asInstanceOf[DataFrame]
+        val mktDisplayName = argMap("mkt_display").asInstanceOf[String]
         //List
         argMap("element").asInstanceOf[JsValue].as[List[JsValue]].foreach(x => {
             //xywh
@@ -161,7 +162,7 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
                     val function = "com.pharbers.process.stm.step.pptx.slider.content." + phReportContentTable.colName2FunctionName("DOT(Mn)")
                     phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
                         Map("data" -> data, "displayName" -> displayName,
-                            "ym" -> ym, "dataMap" -> dataMap, "firstRow" -> "Lilly relevant Mkt", "firstCol" -> colList.head)
+                            "ym" -> ym, "dataMap" -> dataMap, "firstRow" -> mktDisplayName, "firstCol" -> colList.head)
                     )
                 })
             })
@@ -173,7 +174,7 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
                     val function = "com.pharbers.process.stm.step.pptx.slider.content." + phReportContentTable.colName2FunctionName(colName)
                     val value = phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
                         Map("data" -> data, "displayName" -> displayName,
-                            "ym" -> ym, "dataMap" -> dataMap, "firstRow" -> "Lilly relevant Mkt", "firstCol" -> colList.head)
+                            "ym" -> ym, "dataMap" -> dataMap, "firstRow" -> mktDisplayName, "firstCol" -> colList.head)
                     )
                     row.addCell().setText(value.toString).setFontSize(10.0)
                 }))

@@ -23,7 +23,7 @@
                     description="merge data nodes data" />
             <merge
                     index="2"
-                    path="/test/ADD_RATE_Test.csv"
+                    path="/test/ADD_RATE/DOT_RATE.csv"
                     factory="com.pharbers.process.merge.phMergeWithDotImpl"
                     description="merge date with dot rate" />
         </merges>

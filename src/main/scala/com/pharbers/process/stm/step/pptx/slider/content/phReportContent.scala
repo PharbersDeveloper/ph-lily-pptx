@@ -35,7 +35,9 @@ class phReportContentForTrends extends phReportContent with phCommand {
         val content = argMap("content").asInstanceOf[JsValue]
         val text = (content \ "texts").as[JsValue]
         val table = (content \ "tables").as[JsValue]
+        val mktDisplayName = (content \ "mkt_display").as[String]
         setElementInSlider("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTextImpl", text)
-        setElementInSlider("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTrendsTable", table, data)
+        phLyFactory.getInstance("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTrendsTable").asInstanceOf[phCommand]
+                .exec(Map("ppt_inc" -> slide, "element" -> table, "data" -> data, "mkt_display" -> mktDisplayName))
     }
 }
