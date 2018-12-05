@@ -35,13 +35,20 @@ trait phGenPPT extends PharbersInjectModule {
 
 class phGenPPTImpl extends phGenPPT with phCommand {
     override def exec(args : Any) : Any = {
-        println("******************************************************************************************")
-        println(new Date())
         val format_filename = this.format.get("path").get
         val buf = Source.fromFile(format_filename)
         val format = Json.parse(buf.mkString)
         val factory = this.format.get("factory").get
-        val name = phLyFactory.getInstance(factory).asInstanceOf[phCommand].exec(format)
+        var name = ""
+        try{
+            name = phLyFactory.getInstance(factory).asInstanceOf[phCommand].exec(format).toString
+        }catch {
+            case exception: Exception => {
+                name = "error"
+                exception.printStackTrace()
+            }
+        }
+
         val ppt = phLyFactory.stssoo("ppt").asInstanceOf[XMLSlideShow]
         ppt.write(new FileOutputStream(name + ".pptx"))
         println("phGenPPTImpl")

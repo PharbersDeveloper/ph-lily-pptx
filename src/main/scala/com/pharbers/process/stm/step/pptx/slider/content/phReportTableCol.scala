@@ -81,9 +81,10 @@ class dotMn extends  phReportTableCol with phCommand {
                 .select("DOT")
                 .filter(col("DOT") >= 0)
                 .agg(Map("DOT" -> "sum"))
-                .collectAsList().get(0).toString()
-        val resultSum = sum.substring(1,sum.length-1).toDouble
-        dataMap(displayName+ym) = resultSum
+                .collectAsList().get(0)
+        var resultSum = 0.0
+        if(!sum.anyNull) resultSum = sum.toString().substring(1,sum.toString().length-1).toDouble
+        dataMap(displayName+ym) = resultSum / 1000000
         (resultSum / 1000000).toString
     }
 }
@@ -102,22 +103,18 @@ class GrowthPercentage extends phReportTableCol with phCommand {
 //        val lastymstr: String = month + " " + lastYear
 //        val lastyearymDF: DataFrame = getYmDF("MAT M"+month+" "+lastYear)
         val function = "com.pharbers.process.stm.step.pptx.slider.content." + phReportContentTable.colName2FunctionName(firstColName)
-        val lastYearResult = phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
-            Map("data" -> data,
-                "displayName" -> displayName,
-                "ym" -> lastYm,
-                "dataMap" -> dataMap,
-                "firstRow" -> "",
-                "firstCol" -> ""
-            )
-        ).asInstanceOf[String].toDouble
-//        val lastYearSum = data.filter(col("Display Name") === displayName)
-//            .join(lastyearymDF, data("DATE") === lastyearymDF("yms"))
-//            .select("DOT")
-//            .filter(col("DOT") > 0)
-//            .agg(Map("DOT" -> "sum"))
-//            .collectAsList().get(0).toString()
-//        val lasteYearResult = lastYearSum.substring(1,lastYearSum.size-1).toDouble
+        val lastYearResult = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]].getOrElse(displayName + lastYm,{
+            phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
+                Map("data" -> data,
+                    "displayName" -> displayName,
+                    "ym" -> lastYm,
+                    "dataMap" -> dataMap,
+                    "firstRow" -> "",
+                    "firstCol" -> ""
+                )
+            ).asInstanceOf[String].toDouble
+        })
+
         ((yearSum-lastYearResult)/lastYearResult)*100
     }
 }
@@ -146,11 +143,55 @@ class rmb extends phReportTableCol with phCommand {
                 .filter(col("TYPE") === "LC-RMB")
                 .join(ymDF, data("DATE") === ymDF("yms"))
                 .select("VALUE")
-                .filter(col("VALUE") > 0)
+                .filter(col("VALUE") >= 0)
                 .agg(Map("VALUE" -> "sum"))
-                .collectAsList().get(0).toString()
-        val resultSum = sum.substring(1,sum.length-1).toDouble
+                .collectAsList().get(0)
+        var resultSum = 0.0
+        if(!sum.anyNull) resultSum = sum.toString().substring(1,sum.toString().length-1).toDouble
         dataMap(displayName+ym) = resultSum
         resultSum.toLong.toString
+    }
+}
+
+class tablet extends phReportTableCol with phCommand {
+    override def exec(args: Any): Any = {
+        val argMap = args.asInstanceOf[Map[String, Any]]
+        data = argMap("data").asInstanceOf[DataFrame]
+        val displayName = argMap("displayName").asInstanceOf[String]
+        val ym = argMap("ym").asInstanceOf[String]
+        val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
+        val ymDF = getYmDF(ym)
+        val sum = data.filter(col("Display Name") === displayName)
+                .filter(col("TYPE") === "ST-CNT.UNIT")
+                .join(ymDF, data("DATE") === ymDF("yms"))
+                .select("VALUE")
+                .filter(col("VALUE") >= 0)
+                .agg(Map("VALUE" -> "sum"))
+                .collectAsList().get(0)
+        var resultSum = 0.0
+        if(!sum.anyNull) resultSum = sum.toString().substring(1,sum.toString().length-1).toDouble
+        dataMap(displayName+ym) = resultSum
+        resultSum.toLong.toString
+    }
+}
+
+class dot extends  phReportTableCol with phCommand {
+    override def exec(args: Any): Any = {
+        val argMap = args.asInstanceOf[Map[String, Any]]
+        data = argMap("data").asInstanceOf[DataFrame]
+        val displayName = argMap("displayName").asInstanceOf[String]
+        val ym = argMap("ym").asInstanceOf[String]
+        val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
+        val ymDF = getYmDF(ym)
+        val sum = data.filter(col("Display Name") === displayName)
+                .join(ymDF, data("DATE") === ymDF("yms"))
+                .select("DOT")
+                .filter(col("DOT") >= 0)
+                .agg(Map("DOT" -> "sum"))
+                .collectAsList().get(0)
+        var resultSum = 0.0
+        if(!sum.anyNull) resultSum = sum.toString().substring(1,sum.toString().length-1).toDouble
+        dataMap(displayName+ym) = resultSum
+        resultSum.toString
     }
 }

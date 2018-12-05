@@ -21,23 +21,26 @@ class phReportContentImpl extends phReportContent with phCommand {
         val data = argMap("data").asInstanceOf[DataFrame]
         val content = argMap("content").asInstanceOf[JsValue]
         val text = (content \ "texts").as[JsValue]
-        val table = (content \ "tables").as[JsValue]
+        val tables = (content \ "tables").as[List[JsValue]]
+        tables.foreach(table => {
+            val factory = (table \ "factory").as[String]
+            setElementInSlider(factory, table, data)
+        })
         setElementInSlider("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTextImpl", text)
-        setElementInSlider("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl", table, data)
     }
 }
 
-class phReportContentForTrends extends phReportContent with phCommand {
-    override def exec(args: Any): Any = {
-        val argMap = args.asInstanceOf[Map[String, Any]]
-        slide = argMap("ppt_inc").asInstanceOf[XSLFSlide]
-        val data = argMap("data").asInstanceOf[DataFrame]
-        val content = argMap("content").asInstanceOf[JsValue]
-        val text = (content \ "texts").as[JsValue]
-        val table = (content \ "tables").as[JsValue]
-        val mktDisplayName = (content \ "mkt_display").as[String]
-        setElementInSlider("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTextImpl", text)
-        phLyFactory.getInstance("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTrendsTable").asInstanceOf[phCommand]
-                .exec(Map("ppt_inc" -> slide, "element" -> table, "data" -> data, "mkt_display" -> mktDisplayName))
-    }
-}
+//class phReportContentForTrends extends phReportContent with phCommand {
+//    override def exec(args: Any): Any = {
+//        val argMap = args.asInstanceOf[Map[String, Any]]
+//        slide = argMap("ppt_inc").asInstanceOf[XSLFSlide]
+//        val data = argMap("data").asInstanceOf[DataFrame]
+//        val content = argMap("content").asInstanceOf[JsValue]
+//        val text = (content \ "texts").as[JsValue]
+//        val table = (content \ "tables").as[JsValue]
+//        val mktDisplayName = (content \ "mkt_display").as[String]
+//        setElementInSlider("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTextImpl", text)
+//        phLyFactory.getInstance("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTrendsTable").asInstanceOf[phCommand]
+//                .exec(Map("ppt_inc" -> slide, "element" -> table, "data" -> data, "mkt_display" -> mktDisplayName))
+//    }
+//}

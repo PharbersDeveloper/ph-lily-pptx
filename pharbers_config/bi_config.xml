@@ -23,7 +23,7 @@
                     description="merge data nodes data" />
             <merge
                     index="2"
-                    path="/test/ADD_RATE/DOT_RATE.csv"
+                    path="/test/ADD_RATE/DOT_RATE_20181130.csv"
                     factory="com.pharbers.process.merge.phMergeWithDotImpl"
                     description="merge date with dot rate" />
         </merges>
@@ -61,7 +61,7 @@
             <data_node index="1"
                        name="search data node"
                        descritption="what is this for"
-                       path="/test/mapTable/mCRC 3L Market (Relevant)_CHPA_ BRAND_1_MAPPING.csv"
+                       path="/test/mapTable/Insulin_CHPA_ BRAND_1_MAPPING.csv"
                        factory="com.pharbers.process.read.phReadSearchImpl"/>
         </data_nodes>
     </gen_search_set>

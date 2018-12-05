@@ -27,7 +27,7 @@ object test extends App {
     val a: XSLFTextRun = title.setText("1231111111111111111111111111111111111111111111")
     a.setFontSize(24.0)
     val table = slide.createTable(10, 10)
-    table.setAnchor(new Rectangle(20, 100, 0, 0))
+    table.setAnchor(new Rectangle(-20, 100, 0, 0))
 //    table.getRows.get(0).setHeight(100)
     table.setRowHeight(0,100)
     table.setColumnWidth(0, 240)
