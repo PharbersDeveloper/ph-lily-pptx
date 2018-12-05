@@ -45,11 +45,17 @@ trait phReportTableCol{
             }
             case 2 => {
                 val ym = ymstr.substring(1).split(" ")
-                val month = ym(0).toInt
+                val month = ym(0).replaceAll("\\D","").toInt
                 val year = 2000 + ym(1).toInt
                 ymstr.charAt(0) match {
                     case 'M' => {
                         List(s"$month/$year").map { str =>
+                            if (str.length == 7) str
+                            else "0" + str
+                        }.toDF("yms")
+                    }
+                    case 'R' => {
+                        getymlst(List(), month, year, 3).map { str =>
                             if (str.length == 7) str
                             else "0" + str
                         }.toDF("yms")
@@ -114,7 +120,7 @@ class GrowthPercentage extends phReportTableCol with phCommand {
                 )
             ).asInstanceOf[String].toDouble
         })
-
+        argMap("dataMap").asInstanceOf[mutable.Map[String, Double]](displayName + lastYm) = lastYearResult
         ((yearSum-lastYearResult)/lastYearResult)*100
     }
 }

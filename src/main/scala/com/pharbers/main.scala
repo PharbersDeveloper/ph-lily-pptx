@@ -38,10 +38,14 @@ object test extends App {
     ppt.write(new FileOutputStream("dcs.pptx"))
 }
 
-object test2 extends App {
-    new som().getYmDF("RQ M09 18").show
-    val ym = "MAT M09 18"
-    val lastYear = (ym.split(" ").last.toInt-1).toString
-    val lastYm = (ym.split(" ").take(ym.split(" ").length - 1) ++ Array(lastYear)).mkString(" ")
+object test2 extends App with phReportTableCol{
+    val ymstr = "RQ10 16"
+    val ym = ymstr.substring(1).split(" ")
+    val month = ym(0).replaceAll("\\D","").toInt
+    val year = 2000 + ym(1).toInt
+    val res = getymlst(List(), month, year, 3).map { str =>
+        if (str.length == 7) str
+        else "0" + str
+    }
     println()
 }

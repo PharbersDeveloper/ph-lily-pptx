@@ -1,9 +1,9 @@
 {
-    "title": "146-150",
+    "title": "165.2",
     "slices": [
         {
             "filter": {
-                "name": "",
+                "name": "Insulin_CHPA_ BRAND_1_MAPPING",
                 "description": "from display and timeline",
                 "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
                 "filt": []
@@ -24,173 +24,24 @@
                         ],
                         "tables": [
                             {
-                                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTrendsTable",
-                                "mkt_display": "Total Insulin",
+                                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
+                                "mkt_display": "Human Insulin",
                                 "mkt_col": "MMU",
                                 "pos": [
                                     50, 50, 500, 50
                                 ],
                                 "timeline": [
-                                    "M10 17", "M11 17", "M12 17", "M01 18", "M02 18", "M03 18",
-                                    "M04 18", "M05 18", "M06 18", "M07 18", "M08 18", "M09 18"
+                                    "M09 18", "M09 17"
                                 ],
                                 "col": [
-                                    "SOM(%)"
+                                    "MMU",
+                                    "SOM(%)",
+                                    "Growth(%)"
                                 ],
                                 "row": [
-                                    "Lilly Insulin", "NOVO Insulin",
-                                    "TONGHUA DONGBAO", "SANOFI","BJ GANLI",
-                                    "USLIN", "BIOTON Insulin"
-                                ]
-                            }
-                        ]
-                    }
-                },
-                {
-                    "title": "Prozac and Key Competitors DOT Trends in CHPA",
-                    "content": {
-                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
-                        "texts": [
-                            {
-                                "pos": [
-                                    0, 0, 100, 100
-                                ],
-                                "font": "",
-                                "text": ""
-                            }
-                        ],
-                        "tables": [
-                            {
-                                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTrendsTable",
-                                "mkt_display": "Total Insulin",
-                                "mkt_col": "MMU",
-                                "pos": [
-                                    50, 50, 500, 50
-                                ],
-                                "timeline": [
-                                    "M10 17", "M11 17", "M12 17", "M01 18", "M02 18", "M03 18",
-                                    "M04 18", "M05 18", "M06 18", "M07 18", "M08 18", "M09 18"
-                                ],
-                                "col": [
-                                    "SOM(%)"
-                                ],
-                                "row": [
-                                    "Lilly Insulin", "TONGHUA DONGBAO",
-                                    "SANOFI", "BJ GANLI","USLIN",
-                                    "BIOTON Insulin"
-                                ]
-                            }
-                        ]
-                    }
-                },
-                {
-                    "title": "Prozac and Key Competitors DOT Trends in CHPA",
-                    "content": {
-                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
-                        "texts": [
-                            {
-                                "pos": [
-                                    0, 0, 100, 100
-                                ],
-                                "font": "",
-                                "text": ""
-                            }
-                        ],
-                        "tables": [
-                            {
-                                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTrendsTable",
-                                "mkt_display": "Total Insulin",
-                                "mkt_col": "MMU",
-                                "pos": [
-                                    50, 50, 500, 50
-                                ],
-                                "timeline": [
-                                    "M10 17", "M11 17", "M12 17", "M01 18", "M02 18", "M03 18",
-                                    "M04 18", "M05 18", "M06 18", "M07 18", "M08 18", "M09 18"
-                                ],
-                                "col": [
-                                    "YoY GR(%)"
-                                ],
-                                "row": [
-                                    "Total Insulin", "Lilly Insulin", "NOVO Insulin",
-                                    "TONGHUA DONGBAO", "SANOFI","BJ GANLI",
-                                    "USLIN", "BIOTON Insulin"
-                                ]
-                            }
-                        ]
-                    }
-                },
-                {
-                    "title": "Prozac and Key Competitors DOT Trends in CHPA",
-                    "content": {
-                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
-                        "texts": [
-                            {
-                                "pos": [
-                                    0, 0, 100, 100
-                                ],
-                                "font": "",
-                                "text": ""
-                            }
-                        ],
-                        "tables": [
-                            {
-                                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTrendsTable",
-                                "mkt_display": "Total Insulin",
-                                "mkt_col": "MMU",
-                                "pos": [
-                                    50, 50, 500, 50
-                                ],
-                                "timeline": [
-                                    "M10 17", "M11 17", "M12 17", "M01 18", "M02 18", "M03 18",
-                                    "M04 18", "M05 18", "M06 18", "M07 18", "M08 18", "M09 18"
-                                ],
-                                "col": [
-                                    "SOM(%)"
-                                ],
-                                "row": [
-                                    "Lilly Insulin", "ELCATONIN",
-                                    "TERIPARATIDE", "ALENDRONIC ACID","RISEDRONIC ACID",
-                                    "ZOLEDRONIC ACID", "STRONTIUM RANELATE",
-                                    "RALOXIFENE"
-                                ]
-                            }
-                        ]
-                    }
-                },
-                {
-                    "title": "Prozac and Key Competitors DOT Trends in CHPA",
-                    "content": {
-                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
-                        "texts": [
-                            {
-                                "pos": [
-                                    0, 0, 100, 100
-                                ],
-                                "font": "",
-                                "text": ""
-                            }
-                        ],
-                        "tables": [
-                            {
-                                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTrendsTable",
-                                "mkt_display": "Total Insulin",
-                                "mkt_col": "MMU",
-                                "pos": [
-                                    50, 50, 500, 50
-                                ],
-                                "timeline": [
-                                    "M10 17", "M11 17", "M12 17", "M01 18", "M02 18", "M03 18",
-                                    "M04 18", "M05 18", "M06 18", "M07 18", "M08 18", "M09 18"
-                                ],
-                                "col": [
-                                    "SOM(%)"
-                                ],
-                                "row": [
-                                    "Lilly Insulin", "ELCATONIN",
-                                    "TERIPARATIDE", "ALENDRONIC ACID","RISEDRONIC ACID",
-                                    "ZOLEDRONIC ACID", "STRONTIUM RANELATE",
-                                    "RALOXIFENE"
+                                    "Total Human Insulin", "Humulin",
+                                    "Novolin", "TONGHUA DONGBAO", "USLIN",
+                                    "SCILIN"
                                 ]
                             }
                         ]
