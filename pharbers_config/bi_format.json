@@ -43,6 +43,27 @@
                                     "Novolin", "TONGHUA DONGBAO", "USLIN",
                                     "SCILIN"
                                 ]
+                            },
+                            {
+                                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
+                                "mkt_display": "Human Insulin",
+                                "mkt_col": "MMU",
+                                "pos": [
+                                    50, 50, 500, 50
+                                ],
+                                "timeline": [
+                                    "M09 18", "M09 17"
+                                ],
+                                "col": [
+                                    "RMB",
+                                    "SOM(%)",
+                                    "Growth(%)"
+                                ],
+                                "row": [
+                                    "Total Human Insulin", "Humulin",
+                                    "Novolin", "TONGHUA DONGBAO", "USLIN",
+                                    "SCILIN"
+                                ]
                             }
                         ]
                     }
