@@ -61,7 +61,7 @@
             <data_node index="1"
                        name="search data node"
                        descritption="what is this for"
-                       path="/test/mapTable/Insulin_CHPA_ BRAND_1_MAPPING.csv"
+                       path="/test/mapTable"
                        factory="com.pharbers.process.read.phReadSearchImpl"/>
         </data_nodes>
     </gen_search_set>

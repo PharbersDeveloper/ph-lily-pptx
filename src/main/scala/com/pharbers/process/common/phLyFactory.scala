@@ -16,7 +16,8 @@ object phLyFactory {
     var isSaveMidDoc = false
     var uuid : String = ""
 
-    def startProcess = uuid = UUID.randomUUID().toString
+    uuid = UUID.randomUUID().toString
+    def startProcess: String = uuid
     def endProcess = uuid = ""
     def setSaveMidDoc = isSaveMidDoc = true
     def saveMidProcess(name : String, path : String) = {
