@@ -5,6 +5,7 @@ import java.util.UUID
 
 import com.pharbers.phsocket.phSocketDriver
 import com.pharbers.process.common.{phCommand, phLyFactory}
+import com.pharbers.spark.phSparkDriver
 import org.apache.poi.xslf.usermodel.XSLFSlide
 import org.apache.spark.sql.DataFrame
 import play.api.libs.json.JsValue
@@ -21,7 +22,9 @@ object phReportContentTable {
         "YoY GR(%)" -> "GrowthPercentage",
         "RMB" -> "rmb",
         "DOT" -> "dot",
-        "SOM in Branded MKT(%)" -> "som"
+        "SOM in Branded MKT(%)" -> "som",
+        "Mg(Mn)" -> "dotMn",
+        "RMB(Mn)" -> "rmb"
     )
 
     def colName2FunctionName(name: String): String = {
@@ -45,6 +48,7 @@ trait phReportContentTable {
         slide = argMap("ppt_inc").asInstanceOf[XSLFSlide]
         //数据
         val data = argMap("data").asInstanceOf[DataFrame]
+
         val element = argMap("element").asInstanceOf[JsValue]
         val slideIndex = argMap("slideIndex").asInstanceOf[Int]
         val jobid = argMap("jobid").asInstanceOf[String]
@@ -60,6 +64,13 @@ trait phReportContentTable {
         val rowCount = rowList.size + 2
         //表的列数
         val colCount = colList.size * timelineList.size + 1
+
+        //Display Name to DF
+        lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
+        import sparkDriver.ss.implicits._
+        val tableDisplayName = rowList.toDF("tableDisplayName")
+        val tableDF = data.join(tableDisplayName, data("Display Name")===tableDisplayName("tableDisplayName"))
+
         //算出的数据
         var dataMap: mutable.Map[String, Double] = mutable.Map()
         val tableName = UUID.randomUUID().toString
@@ -71,7 +82,7 @@ trait phReportContentTable {
                     val colIndex = colList.size * timelineIndex + colNameIndex + 1
                     val function = "com.pharbers.process.stm.step.pptx.slider.content." + phReportContentTable.colName2FunctionName(colName)
                     val value = phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
-                        Map("data" -> data, "displayName" -> displayName,
+                        Map("data" -> tableDF, "displayName" -> displayName,
                             "ym" -> timeline, "dataMap" -> dataMap, "firstRow" -> rowList.head, "firstCol" -> colList.head)
                     )
                     val cell = (colIndex + 65).toChar.toString + rowIndex.toString
