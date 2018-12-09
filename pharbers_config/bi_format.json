@@ -1,74 +1,53 @@
 {
-    "title": "165.2",
-    "slices": [
+  "title": "161",
+  "slices": [
+    {
+      "filter": {
+        "name": "Insulin_CHPA_ BRAND_1_MAPPING",
+        "description": "from display and timeline",
+        "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
+        "filt": []
+      },
+      "sliders": [
         {
-            "filter": {
-                "name": "Insulin_CHPA_ BRAND_1_MAPPING",
-                "description": "from display and timeline",
-                "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
-                "filt": []
-            },
-            "sliders": [
-                {
-                    "title": "Prozac and Key Competitors DOT Trends in CHPA",
-                    "content": {
-                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
-                        "texts": [
-                            {
-                                "pos": [
-                                    0, 0, 100, 100
-                                ],
-                                "font": "",
-                                "text": ""
-                            }
-                        ],
-                        "tables": [
-                            {
-                                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
-                                "mkt_display": "Human Insulin",
-                                "mkt_col": "MMU",
-                                "pos": [
-                                    50, 60, 600, 200
-                                ],
-                                "timeline": [
-                                    "M09 18", "M09 17"
-                                ],
-                                "col": [
-                                    "MMU",
-                                    "SOM(%)",
-                                    "Growth(%)"
-                                ],
-                                "row": [
-                                    "Total Human Insulin", "Humulin",
-                                    "Novolin", "TONGHUA DONGBAO", "USLIN",
-                                    "SCILIN"
-                                ]
-                            },
-                            {
-                                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
-                                "mkt_display": "Human Insulin",
-                                "mkt_col": "MMU",
-                                "pos": [
-                                    50, 300, 600, 200
-                                ],
-                                "timeline": [
-                                    "M09 18", "M09 17"
-                                ],
-                                "col": [
-                                    "RMB",
-                                    "SOM(%)",
-                                    "Growth(%)"
-                                ],
-                                "row": [
-                                    "Total Human Insulin", "Humulin",
-                                    "Novolin", "TONGHUA DONGBAO", "USLIN",
-                                    "SCILIN"
-                                ]
-                            }
-                        ]
-                    }
-                }
+          "title": "Prozac and Key Competitors DOT Trends in CHPA",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  0, 0, 100, 100
+                ],
+                "font": "",
+                "text": ""
+              }
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
+                "mkt_display": "Total Rapid Analog",
+                "mkt_col": "MMU",
+                "pos": [
+                  50, 50, 500, 50
+                ],
+                "timeline": [
+                  "M09 18", "M09 17"
+                ],
+                "col": [
+                  "MMU",
+                  "SOM(%)",
+                  "Growth(%)"
+                ],
+                "row": [
+                  "Total Insulin", "Total Human Insulin", "Total Mealtime Analog",
+                  "Total Animal Insulin", "Lilly Insulin", "NOVO Insulin",
+                  "TONGHUA DONGBAO", "SANOFI", "BJ GANLI", "USLIN", "BIOTON Insulin"
+                ]
+              }
             ]
+          }
         }
-    ]
+      ]
+    }
+  ]
 }

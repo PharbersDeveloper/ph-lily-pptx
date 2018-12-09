@@ -68,5 +68,6 @@
     <gen_pages>
         <format path="pharbers_config/bi_format.json" factory="com.pharbers.process.stm.step.pptx.phJsonGenPPT" />
         <out_file path="./ppt/" />
+        <css_file path = "pharbers_config/css.json" />
     </gen_pages>
 </pharbers-modules>

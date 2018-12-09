@@ -19,7 +19,9 @@ object phReportContentTable {
         "SOM(%)" -> "som",
         "Growth(%)" -> "GrowthPercentage",
         "YoY GR(%)" -> "GrowthPercentage",
+        "GR(%)" -> "GrowthPercentage",
         "RMB" -> "rmb",
+        "RMB(Mn)" -> "rmb",
         "DOT" -> "dot",
         "SOM in Branded MKT(%)" -> "som"
     )
@@ -33,8 +35,8 @@ trait phReportContentTable {
     var slide: XSLFSlide = _
     val socketDriver = phSocketDriver()
 
-    def pushCell(jobid: String, tableName: String, cell: String, value: String, cate: String): Unit =
-        socketDriver.setExcel(jobid, tableName, cell, value, cate)
+    def pushCell(jobid: String, tableName: String, cell: String, value: String, cate: String, cssName: List[String]): Unit =
+        socketDriver.setExcel(jobid, tableName, cell, value, cate, cssName)
 
     def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit =
         socketDriver.excel2PPT(jobid, tableName, pos, sliderIndex)
