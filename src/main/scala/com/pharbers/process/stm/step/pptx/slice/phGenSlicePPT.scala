@@ -1,5 +1,7 @@
 package com.pharbers.process.stm.step.pptx.slice
 
+import java.net.Socket
+
 import com.pharbers.process.common.{phCommand, phLyFactory}
 import org.apache.spark.sql.DataFrame
 import play.api.libs.json.JsValue
@@ -16,7 +18,9 @@ trait phGenSlicePPT {
 class phGenSlicePPTImpl extends phGenSlicePPT with phCommand {
     override def exec(args: Any): Any = {
         val tmp = args.asInstanceOf[Map[String, Any]]
+        val jobid = tmp("jobid").asInstanceOf[String]
         val format = tmp("slider").asInstanceOf[JsValue]
+        val slideIndex = tmp("slideIndex").asInstanceOf[Int]
         val filter = (format \ "filter").asOpt[JsValue].get
         genSliceDataFrame(filter)
 
@@ -27,7 +31,9 @@ class phGenSlicePPTImpl extends phGenSlicePPT with phCommand {
                 Map(
                     "data" -> this.df.get,
                     "slider" -> iter,
-                    "ppt" -> tmp("ppt")
+                    "ppt" -> tmp("ppt"),
+                    "slideIndex" -> slideIndex,
+                    "jobid" -> jobid
                 )
             )
         }

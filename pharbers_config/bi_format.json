@@ -28,7 +28,7 @@
                                 "mkt_display": "Human Insulin",
                                 "mkt_col": "MMU",
                                 "pos": [
-                                    50, 50, 500, 50
+                                    50, 60, 600, 200
                                 ],
                                 "timeline": [
                                     "M09 18", "M09 17"
@@ -49,7 +49,7 @@
                                 "mkt_display": "Human Insulin",
                                 "mkt_col": "MMU",
                                 "pos": [
-                                    50, 50, 500, 50
+                                    50, 300, 600, 200
                                 ],
                                 "timeline": [
                                     "M09 18", "M09 17"

@@ -13,7 +13,9 @@ class phGenSliderImpl extends phGenSlider with phCommand {
     override def exec(args: Any): Any = {
         // TODO: 在这里获得传递进来的ppt实例，在这里创建一个slider，并添加到ppt实例中
         val tmp = args.asInstanceOf[Map[String, AnyRef]]
+        val jobid = tmp("jobid").asInstanceOf[String]
         val ppt = tmp("ppt").asInstanceOf[XMLSlideShow]
+        val slideIndex = tmp("slideIndex").asInstanceOf[Int]
         val master = ppt.getSlideMasters.get(0)
         val slider = ppt.createSlide(master.getLayout(SlideLayout.TITLE_ONLY))
         val format = tmp.get("slider").get.asInstanceOf[JsValue]
@@ -22,7 +24,9 @@ class phGenSliderImpl extends phGenSlider with phCommand {
                 asInstanceOf[phCommand].exec(
             Map(
                 "ppt_inc" -> slider, // TODO: 你创建的ppt slider实例
-                "title" -> title
+                "title" -> title,
+                "slideIndex" -> slideIndex,
+                "jobid" -> jobid
             )
         )
 
@@ -35,7 +39,9 @@ class phGenSliderImpl extends phGenSlider with phCommand {
             Map(
                 "ppt_inc" -> slider,
                 "content" -> content,
-                "data" -> data
+                "data" -> data,
+                "slideIndex" -> slideIndex,
+                "jobid" -> jobid
             )
         )
         //        println(data)

@@ -4,6 +4,7 @@ import java.awt.{Color, Rectangle}
 import java.io.{FileInputStream, FileOutputStream}
 import java.util.Date
 
+import com.pharbers.phsocket.phSocketDriver
 import com.pharbers.process.common.{phCommand, phLyFactory}
 import com.pharbers.process.stm.step.pptx.slider.content.{phReportTableCol, som}
 import org.apache.poi.sl.usermodel.SlideShow
@@ -12,9 +13,12 @@ import org.apache.poi.xslf.usermodel.{SlideLayout, XMLSlideShow, XSLFTextRun, XS
 
 object main extends App {
     println(new Date())
-    phLyFactory.startProcess
+    val jobid = phLyFactory.startProcess
+    println("jobid:" + jobid)
+    val socketDriver = phSocketDriver()
+    socketDriver.createPPT(jobid)
 //    phLyFactory.setSaveMidDoc
-    phLyFactory.getInstance("com.pharbers.process.flow.phBIFlowGenImpl").asInstanceOf[phCommand].exec(null)
+    phLyFactory.getInstance("com.pharbers.process.flow.phBIFlowGenImpl").asInstanceOf[phCommand].exec(jobid)
     phLyFactory.endProcess
     println(new Date())
 }
