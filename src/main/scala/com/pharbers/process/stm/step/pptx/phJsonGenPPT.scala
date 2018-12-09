@@ -17,7 +17,6 @@ class phJsonGenPPT extends phCommand {
         phLyFactory.stssoo += ("ppt" -> ppt)
         var slideIndex = -1
         (format \ "slices").asOpt[List[JsValue]].get.foreach{sl =>
-            slideIndex += 1
             phLyFactory.getInstance("com.pharbers.process.stm.step.pptx.slice.phGenSlicePPTImpl").asInstanceOf[phCommand].exec(
                 Map(("slider", sl), ("ppt", ppt), ("slideIndex", slideIndex), ("jobid", jobid))
             )}

@@ -20,12 +20,13 @@ class phGenSlicePPTImpl extends phGenSlicePPT with phCommand {
         val tmp = args.asInstanceOf[Map[String, Any]]
         val jobid = tmp("jobid").asInstanceOf[String]
         val format = tmp("slider").asInstanceOf[JsValue]
-        val slideIndex = tmp("slideIndex").asInstanceOf[Int]
+        var slideIndex = tmp("slideIndex").asInstanceOf[Int]
         val filter = (format \ "filter").asOpt[JsValue].get
         genSliceDataFrame(filter)
 
         val sliders = (format \ "sliders").asOpt[List[JsValue]].get
-        sliders.map { iter =>
+        sliders.foreach { iter =>
+            slideIndex += 1
             phLyFactory.getInstance("com.pharbers.process.stm.step.pptx.slider.phGenSliderImpl").
                     asInstanceOf[phCommand].exec(
                 Map(
