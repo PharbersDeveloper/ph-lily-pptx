@@ -1,5 +1,56 @@
 {
   "style1" : {
-    "factory" : ""
+    "factory" : "PhPPTGen.phCommand.phExcel.PhSetXlsCssBaseCommand",
+    "fontSize" : "10",
+    "fontColor" : "#FF0000",
+    "fontName" : "Arial",
+    "fontStyle" : ["bold"],
+    "cellColor" : "#FFFF00",
+    "cellBorders" : ["top#Thin", "bottom#Thin"]
+  },
+  "row_col_name" : {
+    "factory" : "PhPPTGen.phCommand.phExcel.PhSetXlsCssBaseCommand",
+    "fontSize" : "10",
+    "fontColor" : "#FF0000",
+    "fontName" : "Arial",
+    "fontStyle" : ["bold"],
+    "cellColor" : "#FFFF00",
+    "cellBorders" : ["top#Thin", "bottom#Thin"]
+  },
+  "style2" : {
+    "factory" : "PhPPTGen.phCommand.phExcel.PhSetXlsCssBaseCommand",
+    "fontSize" : "",
+    "fontColor" : "",
+    "fontName" : "",
+    "fontStyle" : [],
+    "cellColor" : "",
+    "cellBorders" : []
+  },
+  "style3" : {
+    "factory" : "PhPPTGen.phCommand.phExcel.PhSetXlsCssBaseCommand",
+    "fontSize" : "10",
+    "fontColor" : "#000000",
+    "fontName" : "Arial",
+    "fontStyle" : [],
+    "cellColor" : "#FFFFFF",
+    "cellBorders" : ["top#Thin", "bottom#Thin"]
+  },
+  "style4" : {
+    "factory" : "PhPPTGen.phCommand.phExcel.PhSetXlsCssBaseCommand",
+    "fontSize" : "",
+    "fontColor" : "",
+    "fontName" : "",
+    "fontStyle" : [],
+    "cellColor" : "",
+    "cellBorders" : ["right#Thin"]
+  },
+  "style5" : {
+    "factory" : "PhPPTGen.phCommand.phExcel.PhSetXlsCssBaseCommand",
+    "fontSize" : "",
+    "fontColor" : "",
+    "fontName" : "",
+    "fontStyle" : [],
+    "cellColor" : "",
+    "cellBorders" : ["left#Thin"]
   }
 }

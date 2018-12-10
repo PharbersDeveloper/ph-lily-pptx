@@ -106,6 +106,7 @@ trait createExcelCss extends phRequest with PharbersInjectModule {
     import com.pharbers.moduleConfig.ModuleConfig.fr
     implicit val f: (ConfigDefines, Node) => ConfigImpl = ((c, n) => ConfigImpl(c.md map (x =>x -> (n \ x))))
 
+    override val md: List[String] = "format" :: "out_file" :: "css_file" :: Nil
     override val id: String = "gen_pages"
     override val configPath: String = "pharbers_config/bi_config.xml"
     override lazy val config: ConfigImpl = loadConfig(configDir + "/" + configPath)
@@ -120,7 +121,9 @@ trait createExcelCss extends phRequest with PharbersInjectModule {
         phExcelCss.cell = cell
         val jsValue = Json.parse(Source.fromFile(cssPath).mkString)
         val cssJs = (jsValue \ name.head).asOpt[JsValue].getOrElse(Json.toJson(""))
-        val cssJs2 = (jsValue \ name(1)).asOpt[JsValue].getOrElse(Json.toJson(""))
+        var cssJs2 = Json.toJson("")
+        if (name.tail.nonEmpty) cssJs2 = (jsValue \ name.tail.head).asOpt[JsValue].getOrElse(Json.toJson(""))
+//        val cssJs2 = (jsValue \ name.tail).asOpt[JsValue].getOrElse(Json.toJson(""))
         phExcelCss.factory = (cssJs \ "factory").asOpt[String].getOrElse((cssJs2 \ "factory").asOpt[String].getOrElse(""))
         phExcelCss.fontSize = (cssJs \ "fontSize").asOpt[String].getOrElse((cssJs2 \ "fontSize").asOpt[String].getOrElse(""))
         phExcelCss.fontColor = (cssJs \ "fontColor").asOpt[String].getOrElse((cssJs2 \ "fontColor").asOpt[String].getOrElse(""))

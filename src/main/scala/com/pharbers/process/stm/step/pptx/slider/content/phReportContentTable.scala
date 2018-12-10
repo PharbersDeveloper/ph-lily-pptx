@@ -148,11 +148,17 @@ class phReportContentTableImpl extends phReportContentTable with phCommand {
         var dataMap = tableArgsFormat(argsTmp)("dataMap").asInstanceOf[mutable.Map[String, Double]]
         val pos = tableArgsFormat(argsTmp)("pos").asInstanceOf[List[Int]]
         val slideIndex = tableArgsFormat(argsTmp)("slideIndex").asInstanceOf[Int]
-        rowList.zipWithIndex.foreach { case (displayName, displayNameIndex) =>
+        rowList.zipWithIndex.foreach { case (displayNameAndCss, displayNameIndex) =>
             val rowIndex = displayNameIndex + 3
-            pushCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String")
-            timelineList.zipWithIndex.foreach { case (timeline, timelineIndex) =>
-                colList.zipWithIndex.foreach { case (colName, colNameIndex) =>
+            val rowCss = displayNameAndCss.split(":")(1)
+            val displayName = displayNameAndCss.split(":")(0)
+            pushCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String", List(rowCss))
+            timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+                val timeline = timelineAndCss.split(":")(0)
+                val timelineCss = timelineAndCss.split(":")(1)
+                colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+                    val colName = colNameAndCss.split(":")(0)
+                    val colCss = colNameAndCss.split(":")(1)
                     val startYm: String = getStartYm(timeline)
                     val ymMap = getTimeLineYm(timeline)
                     val month = ymMap("month").toString.length match {
@@ -164,22 +170,26 @@ class phReportContentTableImpl extends phReportContentTable with phCommand {
                     val function = "com.pharbers.process.stm.step.pptx.slider.content." + phReportContentTable.colName2FunctionName(colName)
                     val value = phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
                         Map("data" -> tableDF, "displayName" -> displayName, "ym" -> timeline, "dataMap" -> dataMap,
-                            "firstRow" -> rowList.head, "firstCol" -> colList.head, "startYm" -> startYm,
+                            "firstRow" -> rowList.head.split(":")(0), "firstCol" -> colList.head.split(":")(0), "startYm" -> startYm,
                             "lastYm" -> endYm)
                     )
                     val cell = (colIndex + 65).toChar.toString + rowIndex.toString
-                    pushCell(jobid, tableName, cell, value.toString, "Number")
+                    pushCell(jobid, tableName, cell, value.toString, "Number", List(rowCss, colCss))
                 }
             }
         }
-        timelineList.zipWithIndex.foreach { case (timeline, timelineIndex) =>
+        timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+            val timeline = timelineAndCss.split(":")(0)
+            val timelineCss = timelineAndCss.split(":")(1)
             val cellLeft = (1 + timelineIndex * colList.size + 65).toChar.toString + "1"
             val cellRight = (timelineIndex * colList.size + colList.size + 65).toChar.toString + "1"
             val timeLineCell = cellLeft + ":" + cellRight
-            pushCell(jobid, tableName, timeLineCell, timeline, "String")
-            colList.zipWithIndex.foreach { case (colName, colNameIndex) =>
+            pushCell(jobid, tableName, timeLineCell, timeline, "String", List("row_col_name", timelineCss))
+            colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+                val colName = colNameAndCss.split(":")(0)
+                val colCss = colNameAndCss.split(":")(1)
                 val colCell = (colList.size * timelineIndex + colNameIndex + 1 + 65).toChar.toString + "2"
-                pushCell(jobid, tableName, colCell, colName, "String")
+                pushCell(jobid, tableName, colCell, colName, "String", List("row_col_name", colCss))
             }
         }
         pushExcel(jobid, tableName.toString, List(pos.head, pos(1), pos(2), pos(3)), slideIndex)
@@ -216,10 +226,12 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
                 )
             })
         })
-        rowList.zipWithIndex.foreach { case (displayName, displayNameIndex) =>
+        rowList.zipWithIndex.foreach { case (displayNameAndCss, displayNameIndex) =>
+            val rowCss = displayNameAndCss.split(":")(1)
+            val displayName = displayNameAndCss.split(":")(0)
             val rowIndex = displayNameIndex + 2
             val displayCell = "A" + (displayNameIndex + 2).toString
-            pushCell(jobid, tableName, displayCell, displayName, "String")
+            pushCell(jobid, tableName, displayCell, displayName, "String", List(rowCss))
             timelineList.zipWithIndex.foreach { case (timeline, ymIndex) =>
                 val startYm: String = getStartYm(timeline)
                 val ymMap = getTimeLineYm(timeline)
@@ -229,7 +241,9 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
                 }
                 val endYm: String = ymMap("year").toString + month
                 val colIndex = ymIndex + 1
-                colList.foreach { colName =>
+                colList.foreach { colNameAndCss =>
+                    val colName = colNameAndCss.split(":")(0)
+                    val colCss = colNameAndCss.split(":")(1)
                     val function = "com.pharbers.process.stm.step.pptx.slider.content." + phReportContentTable.colName2FunctionName(colName)
                     val value = phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
                         Map("data" -> tableDF, "displayName" -> displayName, "ym" -> timeline, "dataMap" -> dataMap,
@@ -238,13 +252,15 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
 
                     )
                     val valueCell = (colIndex + 65).toChar.toString + rowIndex.toString
-                    pushCell(jobid, tableName, valueCell, value.toString, "Number")
+                    pushCell(jobid, tableName, valueCell, value.toString, "Number", List(rowCss, colCss))
                 }
             }
         }
-        timelineList.zipWithIndex.foreach { case (timeline, timelineIndex) =>
+        timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+            val timeline = timelineAndCss.split(":")(0)
+            val timelineCss = timelineAndCss.split(":")(1)
             val timeLineCell = (timelineIndex + 1 + 65).toChar.toString + "1"
-            pushCell(jobid, tableName, timeLineCell, timeline, "String")
+            pushCell(jobid, tableName, timeLineCell, timeline, "String", List(timelineCss))
         }
         pushExcel(jobid, tableName.toString, List(pos.head, pos(1), pos(2), pos(3)), slideIndex)
     }

@@ -31,17 +31,16 @@
                   50, 50, 500, 50
                 ],
                 "timeline": [
-                  "M09 18", "M09 17"
+                  "M09 18:style3", "M09 17:style3"
                 ],
                 "col": [
-                  "MMU",
-                  "SOM(%)",
-                  "Growth(%)"
+                  "MMU:style2",
+                  "SOM(%):style2",
+                  "Growth(%):style4"
                 ],
                 "row": [
-                  "Total Insulin", "Total Human Insulin", "Total Mealtime Analog",
-                  "Total Animal Insulin", "Lilly Insulin", "NOVO Insulin",
-                  "TONGHUA DONGBAO", "SANOFI", "BJ GANLI", "USLIN", "BIOTON Insulin"
+                  "Total Insulin:style1",
+                  "Total Insulin:style3"
                 ]
               }
             ]
