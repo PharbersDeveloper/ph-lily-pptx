@@ -211,10 +211,12 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
     override def exec(args: Any): Any = {
         val argsMap = args.asInstanceOf[Map[String, Any]]
         val rowList = tableArgsFormat(argsMap)("rowList").asInstanceOf[List[String]]
+        val rowTitleAndCss = tableArgsFormat(argsMap)("rowTitle").asInstanceOf[String].split(":")
         val jobid = tableArgsFormat(argsMap)("jobid").asInstanceOf[String]
         val tableName = tableArgsFormat(argsMap)("tableName").asInstanceOf[String]
         val timelineList = tableArgsFormat(argsMap)("timelineList").asInstanceOf[List[String]]
         val colList = tableArgsFormat(argsMap)("colList").asInstanceOf[List[String]]
+        val colTitleAndCss = tableArgsFormat(argsMap)("colTitle").asInstanceOf[String].split(":")
         val tableDF = tableArgsFormat(argsMap)("tableDF").asInstanceOf[DataFrame]
         var dataMap = tableArgsFormat(argsMap)("dataMap").asInstanceOf[mutable.Map[String, Double]]
         val pos = tableArgsFormat(argsMap)("pos").asInstanceOf[List[Int]]
@@ -242,7 +244,7 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
             val displayName = displayNameAndCss.split(":")(0)
             val rowIndex = displayNameIndex + 2
             val displayCell = "A" + (displayNameIndex + 2).toString
-            pushCell(jobid, tableName, displayCell, displayName, "String", List(rowCss))
+            pushCell(jobid, tableName, displayCell, displayName, "String", List(rowCss, rowTitleAndCss(1)))
             timelineList.zipWithIndex.foreach { case (timeline, ymIndex) =>
                 val startYm: String = getStartYm(timeline)
                 val ymMap = getTimeLineYm(timeline)
@@ -272,6 +274,13 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
             val timelineCss = timelineAndCss.split(":")(1)
             val timeLineCell = (timelineIndex + 1 + 65).toChar.toString + "1"
             pushCell(jobid, tableName, timeLineCell, timeline, "String", List(timelineCss))
+        }
+        (rowTitleAndCss  :: Nil).zipWithIndex.foreach{
+            case (titleANdCss, index) =>
+                val title = titleANdCss(0)
+                val css = titleANdCss(1)
+                val colCell = "A" + (index + 1)
+                pushCell(jobid, tableName, colCell, title, "String", List(colTitleAndCss(1), css))
         }
         pushExcel(jobid, tableName.toString, List(pos.head, pos(1), pos(2), pos(3)), slideIndex)
     }
