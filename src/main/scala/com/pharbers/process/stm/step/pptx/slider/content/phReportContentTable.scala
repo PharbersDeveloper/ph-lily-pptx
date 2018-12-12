@@ -24,7 +24,8 @@ object phReportContentTable {
         "DOT" -> "dot",
         "SOM in Branded MKT(%)" -> "som",
         "Mg(Mn)" -> "dotMn",
-        "RMB(Mn)" -> "rmb"
+        "MG(Mn)" -> "dotMn",
+        "RMB(Mn)" -> "rmbMn"
     )
 
     def colName2FunctionName(name: String): String = {
@@ -94,7 +95,6 @@ trait phReportContentTable {
                 case 'M' => 1
                 case 'R' => 3
             }
-
         }
     }
 
