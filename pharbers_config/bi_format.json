@@ -3,7 +3,7 @@
   "slices": [
     {
       "filter": {
-        "name": "Insulin_CHPA_ BRAND_1_MAPPING",
+        "name": "Elunate and Key Competitors DOT/CASH Performance in CHPA (MAT)",
         "description": "from display and timeline",
         "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
         "filt": []
@@ -28,20 +28,30 @@
                 "mkt_display": "Total Rapid Analog",
                 "mkt_col": "MMU",
                 "pos": [
-                  50, 50, 500, 50
+                  50, 50, 81, 81
                 ],
                 "timeline": [
-                  "M09 18:style3", "M09 17:style3"
+                  "M09 18:timeline_2", "M09 17:timeline_2"
                 ],
-                "col": [
-                  "MMU:style2",
-                  "SOM(%):style2",
-                  "Growth(%):style4"
-                ],
-                "row": [
-                  "Total Insulin:style1",
-                  "Total Insulin:style3"
-                ]
+                "col": {
+                  "title" : ":col_title_common",
+                  "count" : [
+                    "MMU:col_common",
+                    "SOM(%):col_common",
+                    "Growth(%):col_common"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_common",
+                  "display_name" : [
+                    "Total mCRC 3L Market (Relevant):row_1","AI HENG            JSH:row_1",
+                    "ELOXATIN           SG9:row_2","Other Oxaliplatin:row_2","XELODA             ROC:row_3",
+                    "Other Capecitabine:row_3","AI LI              JSH:row_4","CAMPTO             PFZ:row_4",
+                    "Other Irinotecan:row_5","AVASTIN            GTC:row_5","ERBITUX            MCK:row_5",
+                    "FLUOROURACIL:row_5","RALTITREXED:row_5","FANG KE            HNQ:row_5",
+                    "Other Tegafur:row_5","STIVARGA           BY6:row_5","AI TAN             JSH:row_5"
+              ]
+                }
               }
             ]
           }

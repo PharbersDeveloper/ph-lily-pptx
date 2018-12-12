@@ -124,13 +124,16 @@ trait createExcelCss extends phRequest with PharbersInjectModule {
         var cssJs2 = Json.toJson("")
         if (name.tail.nonEmpty) cssJs2 = (jsValue \ name.tail.head).asOpt[JsValue].getOrElse(Json.toJson(""))
 //        val cssJs2 = (jsValue \ name.tail).asOpt[JsValue].getOrElse(Json.toJson(""))
-        phExcelCss.factory = (cssJs \ "factory").asOpt[String].getOrElse((cssJs2 \ "factory").asOpt[String].getOrElse(""))
-        phExcelCss.fontSize = (cssJs \ "fontSize").asOpt[String].getOrElse((cssJs2 \ "fontSize").asOpt[String].getOrElse(""))
-        phExcelCss.fontColor = (cssJs \ "fontColor").asOpt[String].getOrElse((cssJs2 \ "fontColor").asOpt[String].getOrElse(""))
-        phExcelCss.fontName = (cssJs \ "fontName").asOpt[String].getOrElse((cssJs2 \ "fontName").asOpt[String].getOrElse(""))
+        phExcelCss.factory = (cssJs \ "factory").asOpt[String].getOrElse((cssJs2 \ "factory").asOpt[String].getOrElse(phExcelCss.factory))
+        phExcelCss.fontSize = (cssJs \ "fontSize").asOpt[String].getOrElse((cssJs2 \ "fontSize").asOpt[String].getOrElse( phExcelCss.fontSize))
+        phExcelCss.fontColor = (cssJs \ "fontColor").asOpt[String].getOrElse((cssJs2 \ "fontColor").asOpt[String].getOrElse(phExcelCss.fontColor))
+        phExcelCss.fontName = (cssJs \ "fontName").asOpt[String].getOrElse((cssJs2 \ "fontName").asOpt[String].getOrElse(phExcelCss.fontName))
         phExcelCss.fontStyle = (cssJs \ "fontStyle").asOpt[List[String]].getOrElse(Nil) ::: (cssJs2 \ "fontStyle").asOpt[List[String]].getOrElse(Nil)
-        phExcelCss.cellColor = (cssJs \ "cellColor").asOpt[String].getOrElse((cssJs2 \ "cellColor").asOpt[String].getOrElse(""))
+        phExcelCss.cellColor = (cssJs \ "cellColor").asOpt[String].getOrElse((cssJs2 \ "cellColor").asOpt[String].getOrElse(phExcelCss.cellColor))
         phExcelCss.cellBorders = (cssJs \ "cellBorders").asOpt[List[String]].getOrElse(Nil) ::: (cssJs2 \ "cellBorders").asOpt[List[String]].getOrElse(Nil)
+        phExcelCss.cellBordersColor = (cssJs \ "cellBordersColor").asOpt[String].getOrElse((cssJs2 \ "cellBordersColor").asOpt[String].getOrElse(phExcelCss.cellBordersColor))
+        phExcelCss.width = (cssJs \ "width").asOpt[String].getOrElse((cssJs2 \ "width").asOpt[String].getOrElse(phExcelCss.width))
+        phExcelCss.height = (cssJs \ "height").asOpt[String].getOrElse((cssJs2 \ "height").asOpt[String].getOrElse(phExcelCss.height))
         phExcelCss
     }
 }

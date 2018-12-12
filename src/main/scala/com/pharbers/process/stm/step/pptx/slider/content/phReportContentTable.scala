@@ -112,11 +112,13 @@ trait phReportContentTable {
         //第一行
         val timelineList = (element \ "timeline").as[List[String]]
         //第二行
-        val colList = (element \ "col").as[List[String]]
+        val colList = (element \ "col" \ "count").as[List[String]]
+        val titleCol = (element \ "col" \ "title" ).as[String]
         //第一列
-        val rowList = (element \ "row").as[List[String]]
+        val rowList = (element \ "row" \ "display_name").as[List[String]]
         val mktDisplayName = (element \ "mkt_display").as[String]
         val mktColName = (element \ "mkt_col").as[String]
+        val titleRow = (element \ "row" \ "title" ).as[String]
         //表的行数
         val rowCount = rowList.size + 2
         //表的列数
@@ -131,7 +133,7 @@ trait phReportContentTable {
         val tableName = UUID.randomUUID().toString
         Map("rowList" -> rowList, "jobid" -> jobid, "tableName" -> tableName, "timelineList" -> timelineList,
             "colList" -> colList, "tableDF" -> tableDF, "dataMap" -> dataMap, "pos" -> pos, "slideIndex" -> slideIndex,
-            "mktDisplayName" -> mktDisplayName, "mktColName" -> mktColName)
+            "mktDisplayName" -> mktDisplayName, "mktColName" -> mktColName, "colTitle" -> titleCol, "rowTitle" -> titleRow)
 
     }
 }
@@ -139,20 +141,22 @@ trait phReportContentTable {
 class phReportContentTableImpl extends phReportContentTable with phCommand {
     override def exec(args: Any): Any = {
         val argsTmp = args.asInstanceOf[Map[String, Any]]
+        val rowTitleAndCss = tableArgsFormat(argsTmp)("rowTitle").asInstanceOf[String].split(":")
         val rowList = tableArgsFormat(argsTmp)("rowList").asInstanceOf[List[String]]
         val jobid = tableArgsFormat(argsTmp)("jobid").asInstanceOf[String]
         val tableName = tableArgsFormat(argsTmp)("tableName").asInstanceOf[String]
         val timelineList = tableArgsFormat(argsTmp)("timelineList").asInstanceOf[List[String]]
+        val colTitleAndCss = tableArgsFormat(argsTmp)("colTitle").asInstanceOf[String].split(":")
         val colList = tableArgsFormat(argsTmp)("colList").asInstanceOf[List[String]]
         val tableDF = tableArgsFormat(argsTmp)("tableDF").asInstanceOf[DataFrame]
-        var dataMap = tableArgsFormat(argsTmp)("dataMap").asInstanceOf[mutable.Map[String, Double]]
+        val dataMap = tableArgsFormat(argsTmp)("dataMap").asInstanceOf[mutable.Map[String, Double]]
         val pos = tableArgsFormat(argsTmp)("pos").asInstanceOf[List[Int]]
         val slideIndex = tableArgsFormat(argsTmp)("slideIndex").asInstanceOf[Int]
         rowList.zipWithIndex.foreach { case (displayNameAndCss, displayNameIndex) =>
             val rowIndex = displayNameIndex + 3
             val rowCss = displayNameAndCss.split(":")(1)
             val displayName = displayNameAndCss.split(":")(0)
-            pushCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String", List(rowCss))
+            pushCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String", List(rowCss, rowTitleAndCss(1)))
             timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
                 val timeline = timelineAndCss.split(":")(0)
                 val timelineCss = timelineAndCss.split(":")(1)
@@ -184,13 +188,20 @@ class phReportContentTableImpl extends phReportContentTable with phCommand {
             val cellLeft = (1 + timelineIndex * colList.size + 65).toChar.toString + "1"
             val cellRight = (timelineIndex * colList.size + colList.size + 65).toChar.toString + "1"
             val timeLineCell = cellLeft + ":" + cellRight
-            pushCell(jobid, tableName, timeLineCell, timeline, "String", List("row_col_name", timelineCss))
+            pushCell(jobid, tableName, timeLineCell, timeline, "String", List(timelineCss))
             colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
                 val colName = colNameAndCss.split(":")(0)
                 val colCss = colNameAndCss.split(":")(1)
                 val colCell = (colList.size * timelineIndex + colNameIndex + 1 + 65).toChar.toString + "2"
-                pushCell(jobid, tableName, colCell, colName, "String", List("row_col_name", colCss))
+                pushCell(jobid, tableName, colCell, colName, "String", List(colTitleAndCss(1), colCss))
             }
+        }
+        (rowTitleAndCss :: colTitleAndCss :: Nil).zipWithIndex.foreach{
+            case (titleANdCss, index) =>
+                val title = titleANdCss(0)
+                val css = titleANdCss(1)
+                val colCell = "A" + (index + 1)
+                pushCell(jobid, tableName, colCell, title, "String", List(colTitleAndCss(1), css))
         }
         pushExcel(jobid, tableName.toString, List(pos.head, pos(1), pos(2), pos(3)), slideIndex)
     }
