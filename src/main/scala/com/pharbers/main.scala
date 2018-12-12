@@ -20,6 +20,7 @@ object main extends App {
     phLyFactory.getInstance("com.pharbers.process.flow.phBIFlowGenImpl").asInstanceOf[phCommand].exec(jobid)
     phLyFactory.endProcess
     println(new Date())
+    println("jobid:" + jobid)
 }
 
 //object test extends App {
