@@ -20,7 +20,7 @@ object phReportContentTable {
         "YoY GR(%)" -> "GrowthPercentage",
         "GR(%)" -> "GrowthPercentage",
         "RMB" -> "rmb",
-        "RMB(Mn)" -> "rmb",
+        "RMB(Mn)" -> "rmbMn",
         "DOT" -> "dot",
         "SOM in Branded MKT(%)" -> "som",
         "Mg(Mn)" -> "dotMn",
@@ -126,7 +126,7 @@ trait phReportContentTable {
         //Display Name to DF
         lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
         import sparkDriver.ss.implicits._
-        val tableDisplayName = rowList.toDF("tableDisplayName")
+        val tableDisplayName = rowList.map(x => x.split(":")(0)).toDF("tableDisplayName")
         val tableDF = data.join(tableDisplayName, data("Display Name") === tableDisplayName("tableDisplayName"))
         //算出的数据
         var dataMap: mutable.Map[String, Double] = mutable.Map()
@@ -224,7 +224,8 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
         val mktDisplayName = tableArgsFormat(argsMap)("mktDisplayName").asInstanceOf[String]
         val mktColName = tableArgsFormat(argsMap)("mktColName").asInstanceOf[String]
         (rowList :+ mktDisplayName).foreach(displayName => {
-            timelineList.foreach(timeline => {
+            timelineList.foreach(timelineAndCss => {
+                val timeline = timelineAndCss.split(":")(0)
                 val startYm: String = getStartYm(timeline)
                 val ymMap = getTimeLineYm(timeline)
                 val month = ymMap("month").toString.length match {
@@ -245,7 +246,8 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
             val rowIndex = displayNameIndex + 2
             val displayCell = "A" + (displayNameIndex + 2).toString
             pushCell(jobid, tableName, displayCell, displayName, "String", List(rowCss, rowTitleAndCss(1)))
-            timelineList.zipWithIndex.foreach { case (timeline, ymIndex) =>
+            timelineList.zipWithIndex.foreach { case (timelineAndCss, ymIndex) =>
+                val timeline = timelineAndCss.split(":")(0)
                 val startYm: String = getStartYm(timeline)
                 val ymMap = getTimeLineYm(timeline)
                 val month = ymMap("month").toString.length match {

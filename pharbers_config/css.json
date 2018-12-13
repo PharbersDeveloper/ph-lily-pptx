@@ -64,7 +64,18 @@
     "cellColor" : "#FFFFFF",
     "cellBorders" : ["top#Thin", "bottom#Thin"],
     "height" : "11.75",
-    "cellBordersColor" : "#F5F5F5"
+    "cellBordersColor" : "#CDFFFF"
+  },
+  "row_6" : {
+    "factory" : "PhPPTGen.phCommand.phExcel.PhSetXlsCssBaseCommand",
+    "fontSize" : "9",
+    "fontColor" : "#000000",
+    "fontName" : "Tahoma",
+    "fontStyle" : [],
+    "cellColor" : "#FFFFFF",
+    "cellBorders" : ["top#Thin", "bottom#Thin"],
+    "height" : "11.75",
+    "cellBordersColor" : "#000000"
   },
   "col_common" : {
     "factory" : "PhPPTGen.phCommand.phExcel.PhSetXlsCssBaseCommand",
@@ -74,6 +85,16 @@
     "fontStyle" : [],
     "cellColor" : "#FFFFFF",
     "cellBorders" : ["left#Thin"],
+    "width" : "12"
+  },
+  "col_som" : {
+    "factory" : "PhPPTGen.phCommand.phExcel.PhSetXlsCssBaseCommand",
+    "fontSize" : "9",
+    "fontColor" : "#000000",
+    "fontName" : "Tahoma",
+    "fontStyle" : [],
+    "cellColor" : "#FFFFFF",
+    "cellBorders" : ["left#Thin", "right#Thin"],
     "width" : "12"
   },
   "timeline_1" : {
