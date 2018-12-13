@@ -37,7 +37,7 @@ trait phReportTableCol {
         resultSum
     }
 
-    def getRMB(args: Any): Long = {
+    def getRMB(args: Any): Double = {
         val argMap = args.asInstanceOf[Map[String, Any]]
         data = argMap("data").asInstanceOf[DataFrame]
         val displayName = argMap("displayName").asInstanceOf[String]
@@ -56,7 +56,7 @@ trait phReportTableCol {
         var resultSum: Double = 0.0
         if (!sum.anyNull) resultSum = sum.toString().substring(1, sum.toString().length - 1).toDouble
         dataMap(displayName + ym) = resultSum
-        resultSum.toLong
+        resultSum
     }
 }
 
@@ -142,7 +142,7 @@ class rmbMn extends phReportTableCol with phCommand {
         val displayName = argMap("displayName").asInstanceOf[String]
         val ym = argMap("ym").asInstanceOf[String]
         dataMap(displayName + ym) = resultSum / 1000000
-        resultSum.toLong.toString
+        (resultSum / 1000000).toString
     }
 }
 
