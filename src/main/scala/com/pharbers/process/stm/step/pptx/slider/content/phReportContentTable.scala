@@ -289,3 +289,9 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
         pushExcel(jobid, tableName.toString, List(pos.head, pos(1), pos(2), pos(3)), slideIndex)
     }
 }
+
+class phReportContentTrendsChart extends phReportContentTrendsTable {
+    override def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
+        socketDriver.excel2Chart(jobid, tableName, pos, sliderIndex)
+    }
+}

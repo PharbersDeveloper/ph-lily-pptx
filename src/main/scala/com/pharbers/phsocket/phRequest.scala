@@ -80,6 +80,24 @@ trait excel2PPT extends phRequest with CirceJsonapiSupport{
         val msg = toJsonapi(request).asJson.toString()
         sendMessage(msg)
     }
+
+    def excel2Chart(jobid: String, excelName: String, pos: List[Int], sliderIndex: Int): Unit ={
+        val id: String = UUID.randomUUID().toString
+        val request = new PhRequest
+        request.id = id
+        request.`type` = "PhRequest"
+        request.command = "Excel2Chart"
+        request.jobid = jobid
+        val phExcel2PPT = new PhExcel2PPT
+        phExcel2PPT.id = UUID.randomUUID().toString
+        phExcel2PPT.`type` = "Excel2PPT"
+        phExcel2PPT.name = excelName
+        phExcel2PPT.pos = pos
+        phExcel2PPT.slider = sliderIndex
+        request.e2p = Some(phExcel2PPT)
+        val msg = toJsonapi(request).asJson.toString()
+        sendMessage(msg)
+    }
 }
 
 trait createTitle extends phRequest with CirceJsonapiSupport{
@@ -139,3 +157,4 @@ trait createExcelCss extends phRequest with PharbersInjectModule {
         phExcelCss
     }
 }
+

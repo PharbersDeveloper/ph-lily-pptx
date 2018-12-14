@@ -145,6 +145,16 @@
     "cellBorders" : ["left#Thin"],
     "width" : "10"
   },
+  "col_common4" : {
+    "factory" : "PhPPTGen.phCommand.phExcel.PhSetXlsCssBaseCommand",
+    "fontSize" : "9",
+    "fontColor" : "#002060",
+    "fontName" : "Tahoma",
+    "fontStyle" : [],
+    "cellColor" : "#FFFFFF",
+    "cellBorders" : ["left#Thin"],
+    "width" : "8.11"
+  },
   "col_chart" : {
     "factory" : "PhPPTGen.phCommand.phExcel.PhSetXlsCssBaseCommand",
     "fontSize" : "9",
