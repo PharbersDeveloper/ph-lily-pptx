@@ -25,7 +25,8 @@ object phReportContentTable {
         "SOM in Branded MKT(%)" -> "som",
         "Mg(Mn)" -> "dotMn",
         "MG(Mn)" -> "dotMn",
-        "RMB(Mn)" -> "rmbMn"
+        "RMB(Mn)" -> "rmbMn",
+        "" -> "empty"
     )
 
     def colName2FunctionName(name: String): String = {
@@ -223,7 +224,8 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
         val slideIndex = tableArgsFormat(argsMap)("slideIndex").asInstanceOf[Int]
         val mktDisplayName = tableArgsFormat(argsMap)("mktDisplayName").asInstanceOf[String]
         val mktColName = tableArgsFormat(argsMap)("mktColName").asInstanceOf[String]
-        (rowList :+ mktDisplayName).foreach(displayName => {
+        (rowList :+ mktDisplayName).foreach(displayNameAndCss => {
+            val displayName = displayNameAndCss.split(":")(0)
             timelineList.foreach(timelineAndCss => {
                 val timeline = timelineAndCss.split(":")(0)
                 val startYm: String = getStartYm(timeline)

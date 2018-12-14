@@ -58,22 +58,48 @@ trait phReportTableCol {
         dataMap(displayName + ym) = resultSum
         resultSum
     }
+
+    def getTable(args: Any): Double = {
+        val argMap = args.asInstanceOf[Map[String, Any]]
+        data = argMap("data").asInstanceOf[DataFrame]
+        val displayName = argMap("displayName").asInstanceOf[String]
+        val ym = argMap("ym").asInstanceOf[String]
+        val startYm = argMap("startYm").asInstanceOf[String]
+        val lastYm = argMap("lastYm").asInstanceOf[String]
+        val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
+        val sum = data.filter(col("Display Name") === displayName)
+                .filter(col("TYPE") === "ST-CNT.UNIT")
+                .filter(col("DATE") >= startYm)
+                .filter(col("DATE") <= lastYm)
+                .select("VALUE")
+                .filter(col("VALUE") >= 0)
+                .agg(Map("VALUE" -> "sum"))
+                .collectAsList().get(0)
+        var resultSum = 0.0
+        if (!sum.anyNull) resultSum = sum.toString().substring(1, sum.toString().length - 1).toDouble
+        dataMap(displayName + ym) = resultSum
+        resultSum.toLong
+    }
 }
 
 class dot extends phReportTableCol with phCommand {
     override def exec(args: Any): Any = {
-        val resultSum = getDot(args)
+        val argMap = args.asInstanceOf[Map[String, Any]]
+        val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
+        val displayName = argMap("displayName").asInstanceOf[String]
+        val ym = argMap("ym").asInstanceOf[String]
+        val resultSum = dataMap.getOrElse(displayName + ym, getDot(args))
         resultSum.toString
     }
 }
 
 class dotMn extends phReportTableCol with phCommand {
     override def exec(args: Any): Any = {
-        val resultSum = getDot(args)
         val argMap = args.asInstanceOf[Map[String, Any]]
         val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
         val displayName = argMap("displayName").asInstanceOf[String]
         val ym = argMap("ym").asInstanceOf[String]
+        val resultSum = dataMap.getOrElse(displayName + ym, getDot(args))
         dataMap(displayName + ym) = resultSum / 1000000
         (resultSum / 1000000).toString
     }
@@ -129,18 +155,23 @@ class som extends phReportTableCol with phCommand {
 
 class rmb extends phReportTableCol with phCommand {
     override def exec(args: Any): Any = {
-        val resultSum = getRMB(args)
+        val argMap = args.asInstanceOf[Map[String, Any]]
+        val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
+        val displayName = argMap("displayName").asInstanceOf[String]
+        val ym = argMap("ym").asInstanceOf[String]
+        val resultSum = dataMap.getOrElse(displayName + ym, getRMB(args))
         resultSum.toLong.toString
     }
 }
 
 class rmbMn extends phReportTableCol with phCommand {
     override def exec(args: Any): Any = {
-        val resultSum = getRMB(args)
         val argMap = args.asInstanceOf[Map[String, Any]]
         val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
         val displayName = argMap("displayName").asInstanceOf[String]
         val ym = argMap("ym").asInstanceOf[String]
+        val resultSum = dataMap.getOrElse(displayName + ym, getRMB(args))
+
         dataMap(displayName + ym) = resultSum / 1000000
         (resultSum / 1000000).toString
     }
@@ -149,24 +180,17 @@ class rmbMn extends phReportTableCol with phCommand {
 class tablet extends phReportTableCol with phCommand {
     override def exec(args: Any): Any = {
         val argMap = args.asInstanceOf[Map[String, Any]]
-        data = argMap("data").asInstanceOf[DataFrame]
+        val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
         val displayName = argMap("displayName").asInstanceOf[String]
         val ym = argMap("ym").asInstanceOf[String]
-        val startYm = argMap("startYm").asInstanceOf[String]
-        val lastYm = argMap("lastYm").asInstanceOf[String]
-        val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
-        val sum = data.filter(col("Display Name") === displayName)
-            .filter(col("TYPE") === "ST-CNT.UNIT")
-            .filter(col("DATE") >= startYm)
-            .filter(col("DATE") <= lastYm)
-            .select("VALUE")
-            .filter(col("VALUE") >= 0)
-            .agg(Map("VALUE" -> "sum"))
-            .collectAsList().get(0)
-        var resultSum = 0.0
-        if (!sum.anyNull) resultSum = sum.toString().substring(1, sum.toString().length - 1).toDouble
-        dataMap(displayName + ym) = resultSum
-        resultSum.toLong.toString
+        val resultSum = dataMap.getOrElse(displayName + ym, getTable(args))
+        resultSum.toString
+    }
+}
+
+class empty extends phReportTableCol with phCommand {
+    override def exec(args: Any): String = {
+        ""
     }
 }
 

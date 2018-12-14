@@ -134,6 +134,8 @@ trait createExcelCss extends phRequest with PharbersInjectModule {
         phExcelCss.cellBordersColor = (cssJs \ "cellBordersColor").asOpt[String].getOrElse((cssJs2 \ "cellBordersColor").asOpt[String].getOrElse(phExcelCss.cellBordersColor))
         phExcelCss.width = (cssJs \ "width").asOpt[String].getOrElse((cssJs2 \ "width").asOpt[String].getOrElse(phExcelCss.width))
         phExcelCss.height = (cssJs \ "height").asOpt[String].getOrElse((cssJs2 \ "height").asOpt[String].getOrElse(phExcelCss.height))
+        phExcelCss.horizontalAlignType = (cssJs \ "horizontalAlignType").asOpt[String].getOrElse((cssJs2 \ "horizontalAlignType").asOpt[String].getOrElse(phExcelCss.horizontalAlignType))
+        phExcelCss.verticalAlignType = (cssJs \ "verticalAlignType").asOpt[String].getOrElse((cssJs2 \ "verticalAlignType").asOpt[String].getOrElse(phExcelCss.verticalAlignType))
         phExcelCss
     }
 }
