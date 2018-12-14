@@ -127,7 +127,7 @@ trait phReportContentTable {
         //Display Name to DF
         lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
         import sparkDriver.ss.implicits._
-        val tableDisplayName = rowList.map(x => x.split(":")(0)).toDF("tableDisplayName")
+        val tableDisplayName = (rowList :+ mktDisplayName).map(x => x.split(":")(0)).toDF("tableDisplayName")
         val tableDF = data.join(tableDisplayName, data("Display Name") === tableDisplayName("tableDisplayName"))
         //算出的数据
         var dataMap: mutable.Map[String, Double] = mutable.Map()
