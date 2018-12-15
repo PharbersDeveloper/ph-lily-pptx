@@ -1,16 +1,16 @@
 {
-  "title": "41",
+  "title": "18",
   "slices": [
     {
       "filter": {
-        "name": "mCRC 3L Market (Relevant)_CHPA_ BRAND_1_MAPPING",
+        "name": "ONCOLOGY_CHPA_ BRAND_1_MAPPING",
         "description": "from display and timeline",
         "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
         "filt": []
       },
       "sliders": [
         {
-          "title": "Elunate and Key Competitors CASH SOM Trends in CHPA",
+          "title": "Gemzar and Alimta Key Competitors Cash Performance in CHPA (MAT)",
           "content": {
             "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
             "texts": [
@@ -24,37 +24,33 @@
             ],
             "tables": [
               {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTrendsChart",
-                "mkt_display": "Oncology Mkt",
-                "mkt_col": "RMB",
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
+                "mkt_display": "",
+                "mkt_col": "",
                 "pos": [
-                  30, 60, 600, 400
+                  30, 60, 81, 81
                 ],
                 "timeline": [
-                  "M10 17:timeline_1", "M11 17:timeline_1","M12 17:timeline_1","M01 18:timeline_1","M02 18:timeline_1","M03 18:timeline_1",
-                  "M04 18:timeline_1","M05 18:timeline_1","M06 18:timeline_1","M07 18:timeline_1","M08 18:timeline_1","M09 18:timeline_1"
+                  "MAT M09 18:timeline_2", "MAT M09 17:timeline_2"
                 ],
                 "col": {
-                  "title" : ":col_title_chart",
+                  "title" : ":col_title_common",
                   "count" : [
-                    "SOM(%):col_chart"
+                    "RMB(Mn):col_common1",
+                    "SOM(%):col_common",
+                    "Growth(%):col_common"
                   ]
                 },
                 "row": {
-                  "title" : ":row_title_chart",
+                  "title" : ":row_title_common",
                   "display_name" : [
-                    "ELUNATE            LLY:row_5","AVASTIN            GTC:row_5","ERBITUX            MCK:row_5",
-                    "AI TAN             JSH:row_5","ELOXATIN           SG9:row_5","AO XIN TAN         FKU:row_5",
-                    "Total Generic Oxaliplatin(Generic Eloxatin):row_5","XELODA             ROC:row_5",
-                    "Total Generic Capecitabine(Generic Xeloda):row_5","CAMPTO             PFZ:row_5",
-                    "Total Generic Irinotecan(Generic Campto):row_5","SAI WEI JIAN       NJ2:row_5",
-                    "ZHONGREN FU AN     S2H:row_5","Total Generic Fluorouracil(Generic ZHONGREN FU AN):row_5",
-                    "FTORAFUR           FKU:row_5","Generic Tegafur:row_5","STIVARGA           BY6:row_5"
+                    "Oncology Mkt:row_1"
                   ]
                 }
               }
-            ]
 
+
+            ]
           }
         }
       ]

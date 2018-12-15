@@ -99,9 +99,12 @@ class dotMn extends phReportTableCol with phCommand {
         val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
         val displayName = argMap("displayName").asInstanceOf[String]
         val ym = argMap("ym").asInstanceOf[String]
-        val resultSum = dataMap.getOrElse(displayName + ym, getDot(args))
-        dataMap(displayName + ym) = resultSum / 1000000
-        (resultSum / 1000000).toString
+        val resultSum = dataMap.getOrElse(displayName + ym, {
+            val result = getRMB(args)
+            dataMap(displayName + ym) = result / 1000000
+            result / 1000000
+        })
+        resultSum.toString
     }
 }
 
@@ -170,10 +173,12 @@ class rmbMn extends phReportTableCol with phCommand {
         val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
         val displayName = argMap("displayName").asInstanceOf[String]
         val ym = argMap("ym").asInstanceOf[String]
-        val resultSum = dataMap.getOrElse(displayName + ym, getRMB(args))
-
-        dataMap(displayName + ym) = resultSum / 1000000
-        (resultSum / 1000000).toString
+        val resultSum = dataMap.getOrElse(displayName + ym, {
+            val result = getRMB(args)
+            dataMap(displayName + ym) = result / 1000000
+            result / 1000000
+        })
+        resultSum.toString
     }
 }
 
