@@ -100,7 +100,7 @@ class dotMn extends phReportTableCol with phCommand {
         val displayName = argMap("displayName").asInstanceOf[String]
         val ym = argMap("ym").asInstanceOf[String]
         val resultSum = dataMap.getOrElse(displayName + ym, {
-            val result = getRMB(args)
+            val result = getDot(args)
             dataMap(displayName + ym) = result / 1000000
             result / 1000000
         })

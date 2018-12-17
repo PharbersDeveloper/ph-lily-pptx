@@ -1,16 +1,16 @@
 {
-  "title": "18",
+  "title": "63-66",
   "slices": [
     {
       "filter": {
-        "name": "ONCOLOGY_CHPA_ BRAND_1_MAPPING",
+        "name": "ANTIDEPRESSANTS_CHPA_ BRAND_1_MAPPING ",
         "description": "from display and timeline",
         "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
         "filt": []
       },
       "sliders": [
         {
-          "title": "Gemzar and Alimta Key Competitors Cash Performance in CHPA (MAT)",
+          "title": "slices 1",
           "content": {
             "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
             "texts": [
@@ -36,21 +36,325 @@
                 "col": {
                   "title" : ":col_title_common",
                   "count" : [
-                    "RMB(Mn):col_common1",
-                    "SOM(%):col_common",
-                    "Growth(%):col_common"
+                    ":col_common3"
                   ]
                 },
                 "row": {
                   "title" : ":row_title_common",
                   "display_name" : [
-                    "Oncology Mkt:row_1"
+                    "AD Branded Market:row_7"
                   ]
                 }
               }
-
-
             ]
+
+          }
+        },
+        {
+          "title": "slices 1",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  0, 0, 100, 100
+                ],
+                "font": "",
+                "text": ""
+              }
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
+                "mkt_display": "",
+                "mkt_col": "",
+                "pos": [
+                  30, 60, 81, 81
+                ],
+                "timeline": [
+                  "MAT M09 18:timeline_2", "MAT M09 17:timeline_2"
+                ],
+                "col": {
+                  "title" : ":col_title_common",
+                  "count" : [
+                    ":col_common3"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_common",
+                  "display_name" : [
+                    "AD Branded Market:row_7"
+                  ]
+                }
+              }
+            ]
+
+          }
+        },
+        {
+          "title": "slices 1",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  0, 0, 100, 100
+                ],
+                "font": "",
+                "text": ""
+              }
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
+                "mkt_display": "",
+                "mkt_col": "",
+                "pos": [
+                  30, 60, 81, 81
+                ],
+                "timeline": [
+                  "MAT M09 18:timeline_2", "MAT M09 17:timeline_2"
+                ],
+                "col": {
+                  "title" : ":col_title_common",
+                  "count" : [
+                    ":col_common3"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_common",
+                  "display_name" : [
+                    "AD Branded Market:row_7"
+                  ]
+                }
+              }
+            ]
+
+          }
+        }
+      ]
+    },
+    {
+      "filter": {
+        "name": "ANTIDEPRESSANTS_CHPA_ BRAND_1_MAPPING ",
+        "description": "from display and timeline",
+        "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
+        "filt": []
+      },
+      "sliders": [
+        {
+          "title": "slices 2",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  0, 0, 100, 100
+                ],
+                "font": "",
+                "text": ""
+              }
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
+                "mkt_display": "",
+                "mkt_col": "",
+                "pos": [
+                  30, 60, 81, 81
+                ],
+                "timeline": [
+                  "MAT M09 18:timeline_2", "MAT M09 17:timeline_2"
+                ],
+                "col": {
+                  "title" : ":col_title_common",
+                  "count" : [
+                    ":col_common3"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_common",
+                  "display_name" : [
+                    "AD Branded Market:row_7"
+                  ]
+                }
+              }
+            ]
+
+          }
+        },
+        {
+          "title": "slices 2",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  0, 0, 100, 100
+                ],
+                "font": "",
+                "text": ""
+              }
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
+                "mkt_display": "",
+                "mkt_col": "",
+                "pos": [
+                  30, 60, 81, 81
+                ],
+                "timeline": [
+                  "MAT M09 18:timeline_2", "MAT M09 17:timeline_2"
+                ],
+                "col": {
+                  "title" : ":col_title_common",
+                  "count" : [
+                    ":col_common3"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_common",
+                  "display_name" : [
+                    "AD Branded Market:row_7"
+                  ]
+                }
+              }
+            ]
+
+          }
+        }
+      ]
+    },
+    {
+      "filter": {
+        "name": "ANTIDEPRESSANTS_CHPA_ BRAND_1_MAPPING ",
+        "description": "from display and timeline",
+        "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
+        "filt": []
+      },
+      "sliders": [
+        {
+          "title": "slices 3",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  0, 0, 100, 100
+                ],
+                "font": "",
+                "text": ""
+              }
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
+                "mkt_display": "",
+                "mkt_col": "",
+                "pos": [
+                  30, 60, 81, 81
+                ],
+                "timeline": [
+                  "MAT M09 18:timeline_2", "MAT M09 17:timeline_2"
+                ],
+                "col": {
+                  "title" : ":col_title_common",
+                  "count" : [
+                    ":col_common3"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_common",
+                  "display_name" : [
+                    "AD Branded Market:row_7"
+                  ]
+                }
+              }
+            ]
+
+          }
+        },
+        {
+          "title": "slices 3",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  0, 0, 100, 100
+                ],
+                "font": "",
+                "text": ""
+              }
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
+                "mkt_display": "",
+                "mkt_col": "",
+                "pos": [
+                  30, 60, 81, 81
+                ],
+                "timeline": [
+                  "MAT M09 18:timeline_2", "MAT M09 17:timeline_2"
+                ],
+                "col": {
+                  "title" : ":col_title_common",
+                  "count" : [
+                    ":col_common3"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_common",
+                  "display_name" : [
+                    "AD Branded Market:row_7"
+                  ]
+                }
+              }
+            ]
+
+          }
+        },
+        {
+          "title": "slices 3",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  0, 0, 100, 100
+                ],
+                "font": "",
+                "text": ""
+              }
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
+                "mkt_display": "",
+                "mkt_col": "",
+                "pos": [
+                  30, 60, 81, 81
+                ],
+                "timeline": [
+                  "MAT M09 18:timeline_2", "MAT M09 17:timeline_2"
+                ],
+                "col": {
+                  "title" : ":col_title_common",
+                  "count" : [
+                    ":col_common3"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_common",
+                  "display_name" : [
+                    "AD Branded Market:row_7"
+                  ]
+                }
+              }
+            ]
+
           }
         }
       ]

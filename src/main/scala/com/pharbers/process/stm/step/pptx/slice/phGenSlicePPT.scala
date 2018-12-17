@@ -9,14 +9,14 @@ import play.api.libs.json.JsValue
 trait phGenSlicePPT {
     var df : Option[DataFrame] = None
     def genSliceDataFrame(filter : JsValue) : Unit = {
-        // TODO: 从匹配表中的信息，形成一个Filter，将主表Filter出来保存到df中
+        // 从匹配表中的信息，形成一个Filter，将主表Filter出来保存到df中
         val factory = (filter \ "factory").asOpt[String].get
         df = Some(phLyFactory.getInstance(factory).asInstanceOf[phCommand].exec(filter).asInstanceOf[DataFrame])
     }
 }
 
 class phGenSlicePPTImpl extends phGenSlicePPT with phCommand {
-    override def exec(args: Any): Any = {
+    override def exec(args: Any): Int = {
         val tmp = args.asInstanceOf[Map[String, Any]]
         val jobid = tmp("jobid").asInstanceOf[String]
         val format = tmp("slider").asInstanceOf[JsValue]
@@ -38,5 +38,6 @@ class phGenSlicePPTImpl extends phGenSlicePPT with phCommand {
                 )
             )
         }
+        slideIndex
     }
 }
