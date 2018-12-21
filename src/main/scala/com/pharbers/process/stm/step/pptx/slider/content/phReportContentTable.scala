@@ -127,7 +127,7 @@ trait phReportContentTable {
         //Display Name to DF
         lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
         import sparkDriver.ss.implicits._
-        val tableDisplayName = (rowList :+ mktDisplayName).map(x => x.split(":")(0)).toDF("tableDisplayName")
+        val tableDisplayName = (rowList.map(row=>row.replaceAll("%", "")) :+ mktDisplayName).map(x => x.split(":")(0)).toDF("tableDisplayName")
         val tableDF = data.join(tableDisplayName, data("Display Name") === tableDisplayName("tableDisplayName"))
         //算出的数据
         var dataMap: mutable.Map[String, Double] = mutable.Map()
@@ -135,7 +135,6 @@ trait phReportContentTable {
         Map("rowList" -> rowList, "jobid" -> jobid, "tableName" -> tableName, "timelineList" -> timelineList,
             "colList" -> colList, "tableDF" -> tableDF, "dataMap" -> dataMap, "pos" -> pos, "slideIndex" -> slideIndex,
             "mktDisplayName" -> mktDisplayName, "mktColName" -> mktColName, "colTitle" -> titleCol, "rowTitle" -> titleRow)
-
     }
 }
 
@@ -266,7 +265,6 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
                         Map("data" -> tableDF, "displayName" -> displayName, "ym" -> timeline, "dataMap" -> dataMap,
                             "firstRow" -> mktDisplayName, "firstCol" -> mktColName, "startYm" -> startYm,
                             "lastYm" -> endYm)
-
                     )
                     val valueCell = (colIndex + 65).toChar.toString + rowIndex.toString
                     pushCell(jobid, tableName, valueCell, value.toString, "Number", List(rowCss, colCss))
@@ -292,6 +290,95 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
 
 class phReportContentTrendsChart extends phReportContentTrendsTable {
     override def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
-        socketDriver.excel2Chart(jobid, tableName, pos, sliderIndex)
+        socketDriver.excel2Chart(jobid, tableName, pos, sliderIndex, "Line")
+    }
+}
+
+class phReportContentComboChart extends phReportContentTrendsTable {
+    override def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
+        socketDriver.excel2Chart(jobid, tableName, pos, sliderIndex, "Combo")
+    }
+}
+
+class phReportContentBlueGrowthTable extends phReportContentTrendsTable with phCommand {
+    override def exec(args: Any): Any = {
+        val argsMap = args.asInstanceOf[Map[String, Any]]
+        val rowList = tableArgsFormat(argsMap)("rowList").asInstanceOf[List[String]]
+        val rowTitleAndCss = tableArgsFormat(argsMap)("rowTitle").asInstanceOf[String].split(":")
+        val jobid = tableArgsFormat(argsMap)("jobid").asInstanceOf[String]
+        val tableName = tableArgsFormat(argsMap)("tableName").asInstanceOf[String]
+        val timelineList = tableArgsFormat(argsMap)("timelineList").asInstanceOf[List[String]]
+        val colList = tableArgsFormat(argsMap)("colList").asInstanceOf[List[String]]
+        val colTitleAndCss = tableArgsFormat(argsMap)("colTitle").asInstanceOf[String].split(":")
+        val tableDF = tableArgsFormat(argsMap)("tableDF").asInstanceOf[DataFrame]
+        var dataMap = tableArgsFormat(argsMap)("dataMap").asInstanceOf[mutable.Map[String, Double]]
+        val pos = tableArgsFormat(argsMap)("pos").asInstanceOf[List[Int]]
+        val slideIndex = tableArgsFormat(argsMap)("slideIndex").asInstanceOf[Int]
+        val mktDisplayName = tableArgsFormat(argsMap)("mktDisplayName").asInstanceOf[String]
+        val mktColName = tableArgsFormat(argsMap)("mktColName").asInstanceOf[String]
+        (rowList :+ mktDisplayName).foreach(displayNameAndCss => {
+            val displayNameTemp = displayNameAndCss.split(":")(0)
+            val displayName = displayNameTemp.replaceAll("%", "")
+            timelineList.foreach(timelineAndCss => {
+                val timeline = timelineAndCss.split(":")(0)
+                val startYm: String = getStartYm(timeline)
+                val ymMap = getTimeLineYm(timeline)
+                val month = ymMap("month").toString.length match {
+                    case 1 => "0" + ymMap("month")
+                    case _ => ymMap("month")
+                }
+                val endYm: String = ymMap("year").toString + month
+                val function = "com.pharbers.process.stm.step.pptx.slider.content." + phReportContentTable.colName2FunctionName(mktColName)
+                phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
+                    Map("data" -> tableDF, "displayName" -> displayName, "ym" -> timeline, "dataMap" -> dataMap,
+                        "firstRow" -> mktDisplayName, "firstCol" -> mktColName, "startYm" -> startYm, "lastYm" -> endYm)
+                )
+            })
+        })
+        rowList.zipWithIndex.foreach { case (displayNameAndCss, displayNameIndex) =>
+            val rowCss = displayNameAndCss.split(":")(1)
+            val displayNameTemp = displayNameAndCss.split(":")(0)
+            val displayName = displayNameTemp.replaceAll("%","")
+            val rowIndex = displayNameIndex + 2
+            val displayCell = "A" + (displayNameIndex + 1).toString + ":" + "A" + (displayNameIndex + 4).toString
+            pushCell(jobid, tableName, displayCell, displayNameTemp, "String", List(rowCss, rowTitleAndCss(1)))
+            timelineList.zipWithIndex.foreach { case (timelineAndCss, ymIndex) =>
+                val timeline = timelineAndCss.split(":")(0)
+                val startYm: String = getStartYm(timeline)
+                val ymMap = getTimeLineYm(timeline)
+                val month = ymMap("month").toString.length match {
+                    case 1 => "0" + ymMap("month")
+                    case _ => ymMap("month")
+                }
+                val endYm: String = ymMap("year").toString + month
+                val colIndex = ymIndex + 1
+                colList.foreach { colNameAndCss =>
+                    val colName = colNameAndCss.split(":")(0)
+                    val colCss = colNameAndCss.split(":")(1)
+                    val function = "com.pharbers.process.stm.step.pptx.slider.content." + phReportContentTable.colName2FunctionName(colName)
+                    val value = phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
+                        Map("data" -> tableDF, "displayName" -> displayName, "ym" -> timeline, "dataMap" -> dataMap,
+                            "firstRow" -> mktDisplayName, "firstCol" -> mktColName, "startYm" -> startYm,
+                            "lastYm" -> endYm)
+                    )
+                    val valueCell = getCellCoordinate(colIndex, rowIndex)
+                    pushCell(jobid, tableName, valueCell, value.toString, "Number", List(rowCss, colCss))
+                }
+            }
+        }
+        timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+            val timeline = timelineAndCss.split(":")(0)
+            val timelineCss = timelineAndCss.split(":")(1)
+            val timeLineCell = getCellCoordinate(timelineIndex+1, 1)
+            pushCell(jobid, tableName, timeLineCell, timeline, "String", List(timelineCss))
+        }
+        pushExcel(jobid, tableName.toString, List(pos.head, pos(1), pos(2), pos(3)), slideIndex)
+    }
+    def getCellCoordinate(colIndex: Int, rowIndex: Int): String ={
+        if (colIndex <= 12){
+            (colIndex + 65).toChar.toString + rowIndex.toString
+        }else {
+            (colIndex + 53).toChar.toString + (rowIndex + 2).toString
+        }
     }
 }

@@ -1,16 +1,16 @@
 {
-  "title": "63-66",
+  "title": "172",
   "slices": [
     {
       "filter": {
-        "name": "ANTIDEPRESSANTS_CHPA_ BRAND_1_MAPPING ",
+        "name": "Insulin_CHPA_ BRAND_1_MAPPING",
         "description": "from display and timeline",
         "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
         "filt": []
       },
       "sliders": [
         {
-          "title": "slices 1",
+          "title": "BLUE TABLE",
           "content": {
             "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
             "texts": [
@@ -24,332 +24,28 @@
             ],
             "tables": [
               {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
-                "mkt_display": "",
-                "mkt_col": "",
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentBlueGrowthTable",
+                "mkt_display": "Total CMP Relevant Market",
+                "mkt_col": "MMU",
                 "pos": [
-                  30, 60, 81, 81
+                  15, 100, 60, 60
                 ],
                 "timeline": [
-                  "MAT M09 18:timeline_2", "MAT M09 17:timeline_2"
+                  "RQ10 17:timeline_3", "RQ11 17:timeline_3","RQ12 17:timeline_3","RQ01 18:timeline_3","RQ02 18:timeline_3","RQ03 18:timeline_3",
+                  "RQ04 18:timeline_3","RQ05 18:timeline_3","RQ06 18:timeline_3","RQ07 18:timeline_3","RQ08 18:timeline_3","RQ09 18:timeline_3",
+                  "RQ10 16:timeline_3", "RQ11 16:timeline_3","RQ12 17:timeline_3","RQ01 17:timeline_3","RQ02 17:timeline_3","RQ03 17:timeline_3",
+                  "RQ04 17:timeline_3","RQ05 17:timeline_3","RQ06 17:timeline_3","RQ07 17:timeline_3","RQ08 17:timeline_3","RQ09 17:timeline_3"
                 ],
                 "col": {
-                  "title" : ":col_title_common",
+                  "title" : ":col_title_chart",
                   "count" : [
-                    ":col_common3"
+                    "Growth(%):col_chart2"
                   ]
                 },
                 "row": {
-                  "title" : ":row_title_common",
+                  "title" : ":row_title_chart2",
                   "display_name" : [
-                    "AD Branded Market:row_7"
-                  ]
-                }
-              }
-            ]
-
-          }
-        },
-        {
-          "title": "slices 1",
-          "content": {
-            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
-            "texts": [
-              {
-                "pos": [
-                  0, 0, 100, 100
-                ],
-                "font": "",
-                "text": ""
-              }
-            ],
-            "tables": [
-              {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
-                "mkt_display": "",
-                "mkt_col": "",
-                "pos": [
-                  30, 60, 81, 81
-                ],
-                "timeline": [
-                  "MAT M09 18:timeline_2", "MAT M09 17:timeline_2"
-                ],
-                "col": {
-                  "title" : ":col_title_common",
-                  "count" : [
-                    ":col_common3"
-                  ]
-                },
-                "row": {
-                  "title" : ":row_title_common",
-                  "display_name" : [
-                    "AD Branded Market:row_7"
-                  ]
-                }
-              }
-            ]
-
-          }
-        },
-        {
-          "title": "slices 1",
-          "content": {
-            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
-            "texts": [
-              {
-                "pos": [
-                  0, 0, 100, 100
-                ],
-                "font": "",
-                "text": ""
-              }
-            ],
-            "tables": [
-              {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
-                "mkt_display": "",
-                "mkt_col": "",
-                "pos": [
-                  30, 60, 81, 81
-                ],
-                "timeline": [
-                  "MAT M09 18:timeline_2", "MAT M09 17:timeline_2"
-                ],
-                "col": {
-                  "title" : ":col_title_common",
-                  "count" : [
-                    ":col_common3"
-                  ]
-                },
-                "row": {
-                  "title" : ":row_title_common",
-                  "display_name" : [
-                    "AD Branded Market:row_7"
-                  ]
-                }
-              }
-            ]
-
-          }
-        }
-      ]
-    },
-    {
-      "filter": {
-        "name": "ANTIDEPRESSANTS_CHPA_ BRAND_1_MAPPING ",
-        "description": "from display and timeline",
-        "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
-        "filt": []
-      },
-      "sliders": [
-        {
-          "title": "slices 2",
-          "content": {
-            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
-            "texts": [
-              {
-                "pos": [
-                  0, 0, 100, 100
-                ],
-                "font": "",
-                "text": ""
-              }
-            ],
-            "tables": [
-              {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
-                "mkt_display": "",
-                "mkt_col": "",
-                "pos": [
-                  30, 60, 81, 81
-                ],
-                "timeline": [
-                  "MAT M09 18:timeline_2", "MAT M09 17:timeline_2"
-                ],
-                "col": {
-                  "title" : ":col_title_common",
-                  "count" : [
-                    ":col_common3"
-                  ]
-                },
-                "row": {
-                  "title" : ":row_title_common",
-                  "display_name" : [
-                    "AD Branded Market:row_7"
-                  ]
-                }
-              }
-            ]
-
-          }
-        },
-        {
-          "title": "slices 2",
-          "content": {
-            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
-            "texts": [
-              {
-                "pos": [
-                  0, 0, 100, 100
-                ],
-                "font": "",
-                "text": ""
-              }
-            ],
-            "tables": [
-              {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
-                "mkt_display": "",
-                "mkt_col": "",
-                "pos": [
-                  30, 60, 81, 81
-                ],
-                "timeline": [
-                  "MAT M09 18:timeline_2", "MAT M09 17:timeline_2"
-                ],
-                "col": {
-                  "title" : ":col_title_common",
-                  "count" : [
-                    ":col_common3"
-                  ]
-                },
-                "row": {
-                  "title" : ":row_title_common",
-                  "display_name" : [
-                    "AD Branded Market:row_7"
-                  ]
-                }
-              }
-            ]
-
-          }
-        }
-      ]
-    },
-    {
-      "filter": {
-        "name": "ANTIDEPRESSANTS_CHPA_ BRAND_1_MAPPING ",
-        "description": "from display and timeline",
-        "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
-        "filt": []
-      },
-      "sliders": [
-        {
-          "title": "slices 3",
-          "content": {
-            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
-            "texts": [
-              {
-                "pos": [
-                  0, 0, 100, 100
-                ],
-                "font": "",
-                "text": ""
-              }
-            ],
-            "tables": [
-              {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
-                "mkt_display": "",
-                "mkt_col": "",
-                "pos": [
-                  30, 60, 81, 81
-                ],
-                "timeline": [
-                  "MAT M09 18:timeline_2", "MAT M09 17:timeline_2"
-                ],
-                "col": {
-                  "title" : ":col_title_common",
-                  "count" : [
-                    ":col_common3"
-                  ]
-                },
-                "row": {
-                  "title" : ":row_title_common",
-                  "display_name" : [
-                    "AD Branded Market:row_7"
-                  ]
-                }
-              }
-            ]
-
-          }
-        },
-        {
-          "title": "slices 3",
-          "content": {
-            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
-            "texts": [
-              {
-                "pos": [
-                  0, 0, 100, 100
-                ],
-                "font": "",
-                "text": ""
-              }
-            ],
-            "tables": [
-              {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
-                "mkt_display": "",
-                "mkt_col": "",
-                "pos": [
-                  30, 60, 81, 81
-                ],
-                "timeline": [
-                  "MAT M09 18:timeline_2", "MAT M09 17:timeline_2"
-                ],
-                "col": {
-                  "title" : ":col_title_common",
-                  "count" : [
-                    ":col_common3"
-                  ]
-                },
-                "row": {
-                  "title" : ":row_title_common",
-                  "display_name" : [
-                    "AD Branded Market:row_7"
-                  ]
-                }
-              }
-            ]
-
-          }
-        },
-        {
-          "title": "slices 3",
-          "content": {
-            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
-            "texts": [
-              {
-                "pos": [
-                  0, 0, 100, 100
-                ],
-                "font": "",
-                "text": ""
-              }
-            ],
-            "tables": [
-              {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTableImpl",
-                "mkt_display": "",
-                "mkt_col": "",
-                "pos": [
-                  30, 60, 81, 81
-                ],
-                "timeline": [
-                  "MAT M09 18:timeline_2", "MAT M09 17:timeline_2"
-                ],
-                "col": {
-                  "title" : ":col_title_common",
-                  "count" : [
-                    ":col_common3"
-                  ]
-                },
-                "row": {
-                  "title" : ":row_title_common",
-                  "display_name" : [
-                    "AD Branded Market:row_7"
+                    "Humulin%:row_8"
                   ]
                 }
               }
