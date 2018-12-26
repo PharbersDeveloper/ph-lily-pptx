@@ -1,6 +1,7 @@
 package com.pharbers.process.stm.step.pptx
 
 import java.io.FileOutputStream
+import java.util.Date
 
 import com.pharbers.baseModules.PharbersInjectModule
 import com.pharbers.moduleConfig.{ConfigDefines, ConfigImpl}
@@ -34,11 +35,25 @@ trait phGenPPT extends PharbersInjectModule {
 
 class phGenPPTImpl extends phGenPPT with phCommand {
     override def exec(args : Any) : Any = {
+        val jobid = args.asInstanceOf[String]
         val format_filename = this.format.get("path").get
         val buf = Source.fromFile(format_filename)
         val format = Json.parse(buf.mkString)
         val factory = this.format.get("factory").get
-        val name = phLyFactory.getInstance(factory).asInstanceOf[phCommand].exec(format)
+        var name = ""
+        val mapping = Map(
+            "jobid" -> jobid,
+            "format" -> format
+        )
+        try{
+            name = phLyFactory.getInstance(factory).asInstanceOf[phCommand].exec(mapping).toString
+        }catch {
+            case exception: Exception => {
+                name = "error"
+                exception.printStackTrace()
+            }
+        }
+
         val ppt = phLyFactory.stssoo("ppt").asInstanceOf[XMLSlideShow]
         ppt.write(new FileOutputStream(name + ".pptx"))
         println("phGenPPTImpl")

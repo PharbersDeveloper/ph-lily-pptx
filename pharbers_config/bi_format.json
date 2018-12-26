@@ -1,45 +1,59 @@
 {
-    "title": "alfredtest",
-    "slices": [
+  "title": "172",
+  "slices": [
+    {
+      "filter": {
+        "name": "Insulin_CHPA_ BRAND_1_MAPPING",
+        "description": "from display and timeline",
+        "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
+        "filt": []
+      },
+      "sliders": [
         {
-            "filter": {
-                "name": "",
-                "description": "from display and timeline",
-                "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
-                "display": ["SSRI ANTIDEPRESSANTS"],
-                "timeline": ["201610", "201812"],
-                "filt": []
-            },
-            "sliders": [
-                {
-                    "title": "test",
-                    "content": {
-                        "texts": [
-                            {
-                                "pos": [
-                                    0, 0, 100, 100
-                                ],
-                                "font": "",
-                                "text": "abcde"
-                            }
-                        ],
-                        "tables": [
-                            {
-                                "pos": [
-                                    0, 50, 100, 100
-                                ],
-                                "timeline": ["MAT M09 18"],
-                                "col": [
-                                    "dotMn"
-                                ],
-                                "row": [
-                                    "SSRI ANTIDEPRESSANTS"
-                                ]
-                            }
-                        ]
-                    }
+          "title": "BLUE TABLE",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  0, 0, 100, 100
+                ],
+                "font": "",
+                "text": ""
+              }
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentBlueGrowthTable",
+                "mkt_display": "Total CMP Relevant Market",
+                "mkt_col": "MMU",
+                "pos": [
+                  15, 100, 60, 60
+                ],
+                "timeline": [
+                  "RQ10 17:timeline_3", "RQ11 17:timeline_3","RQ12 17:timeline_3","RQ01 18:timeline_3","RQ02 18:timeline_3","RQ03 18:timeline_3",
+                  "RQ04 18:timeline_3","RQ05 18:timeline_3","RQ06 18:timeline_3","RQ07 18:timeline_3","RQ08 18:timeline_3","RQ09 18:timeline_3",
+                  "RQ10 16:timeline_3", "RQ11 16:timeline_3","RQ12 17:timeline_3","RQ01 17:timeline_3","RQ02 17:timeline_3","RQ03 17:timeline_3",
+                  "RQ04 17:timeline_3","RQ05 17:timeline_3","RQ06 17:timeline_3","RQ07 17:timeline_3","RQ08 17:timeline_3","RQ09 17:timeline_3"
+                ],
+                "col": {
+                  "title" : ":col_title_chart",
+                  "count" : [
+                    "Growth(%):col_chart2"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_chart2",
+                  "display_name" : [
+                    "Humulin%:row_8"
+                  ]
                 }
+              }
             ]
+
+          }
         }
-    ]
+      ]
+    }
+  ]
 }

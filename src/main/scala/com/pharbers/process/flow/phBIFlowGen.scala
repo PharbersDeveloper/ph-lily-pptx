@@ -37,6 +37,7 @@ trait phBIFlowGen extends PharbersInjectModule {
 
 class phBIFlowGenImpl extends phBIFlowGen with phCommand {
     override def exec(args : Any) : Any = {
+        val jobid = args.asInstanceOf[String]
         /**
           * 1. storage creatation
           */
@@ -50,7 +51,7 @@ class phBIFlowGenImpl extends phBIFlowGen with phCommand {
         steps.foreach { nod =>
             val ins_name = nod.get("factory").get
             val cmd = phLyFactory.getInstance(ins_name).asInstanceOf[phCommand]
-            cmd.exec(null)
+            cmd.exec(jobid)
         }
     }
 }

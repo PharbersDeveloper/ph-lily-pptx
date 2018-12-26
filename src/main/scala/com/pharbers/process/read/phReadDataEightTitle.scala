@@ -12,5 +12,5 @@ trait phReadDataEightTitle extends phReadData {
 }
 
 class phReadDataEightTitleImpl extends phReadDataEightTitle with phCommand {
-    override def exec(args : Any) : Any = this.formatDF(args.asInstanceOf[String])
+    override def exec(args : Any) : Any = this.mergeDF(args.asInstanceOf[String])
 }

@@ -11,9 +11,11 @@ trait phGenSlider {
 
 class phGenSliderImpl extends phGenSlider with phCommand {
     override def exec(args: Any): Any = {
-        // TODO: 在这里获得传递进来的ppt实例，在这里创建一个slider，并添加到ppt实例中
+        // 在这里获得传递进来的ppt实例，在这里创建一个slider，并添加到ppt实例中
         val tmp = args.asInstanceOf[Map[String, AnyRef]]
+        val jobid = tmp("jobid").asInstanceOf[String]
         val ppt = tmp("ppt").asInstanceOf[XMLSlideShow]
+        val slideIndex = tmp("slideIndex").asInstanceOf[Int]
         val master = ppt.getSlideMasters.get(0)
         val slider = ppt.createSlide(master.getLayout(SlideLayout.TITLE_ONLY))
         val format = tmp.get("slider").get.asInstanceOf[JsValue]
@@ -21,20 +23,25 @@ class phGenSliderImpl extends phGenSlider with phCommand {
         phLyFactory.getInstance("com.pharbers.process.stm.step.pptx.slider.prop.phReportTitlePropImpl").
                 asInstanceOf[phCommand].exec(
             Map(
-                "ppt_inc" -> slider, // TODO: 你创建的ppt slider实例
-                "title" -> title
+                "ppt_inc" -> slider, // 你创建的ppt slider实例
+                "title" -> title,
+                "slideIndex" -> slideIndex,
+                "jobid" -> jobid
             )
         )
 
         val data = tmp.get("data").get.asInstanceOf[DataFrame]
-        // TODO: 在这里获得传递进来的ppt实例，在这里创建一个slider，并添加到ppt实例中
+        // 在这里获得传递进来的ppt实例，在这里创建一个slider，并添加到ppt实例中
         val content = (format \ "content").asOpt[JsValue].get
-        phLyFactory.getInstance("com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl").
+        val factory = (content \ "factory").as[String]
+        phLyFactory.getInstance(factory).
                 asInstanceOf[phCommand].exec(
             Map(
                 "ppt_inc" -> slider,
                 "content" -> content,
-                "data" -> data
+                "data" -> data,
+                "slideIndex" -> slideIndex,
+                "jobid" -> jobid
             )
         )
         //        println(data)

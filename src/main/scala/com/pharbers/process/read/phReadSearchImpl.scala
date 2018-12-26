@@ -16,6 +16,6 @@ class phReadSearchImpl extends phCommand {
                 .withColumnRenamed("PRODUCT DESC", "PRODUCT_DESC_MARKET")
                 .withColumnRenamed("PACK DESC", "PACK_DESC_MARKET")
                 .withColumnRenamed("COMPS DESC", "COMPS_DESC_MARKET")
-                .select("Display Name", "COMPS_DESC_MARKET", "PRODUCT_DESC_MARKET", "PACK_DESC_MARKET")
+                .select("Display Name", "COMPS_DESC_MARKET", "PRODUCT_DESC_MARKET", "PACK_DESC_MARKET", "name")
     }
 }

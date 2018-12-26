@@ -2,10 +2,11 @@ package com.pharbers.process.read
 
 import java.util.{Calendar, Date}
 
-import com.pharbers.process.common.{phCommand, phLyDataSet, phLyFactory}
+import com.pharbers.process.common.{phLyDataSet, phLyFactory}
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.fs.{FileSystem, Path}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions._
 
 trait phReadData extends java.io.Serializable {
     val start : Int
@@ -20,7 +21,20 @@ trait phReadData extends java.io.Serializable {
 
     def genPrimaryId(text: String) : String = md5Hash(text)
 
-    def formatDF(path: String) : String = {
+    def mergeDF(path: String): String ={
+        val conf = new Configuration
+        val hdfs = FileSystem.get(conf)
+        val hdfsPath = new Path(path)
+        val filePathlst = hdfs.listStatus(hdfsPath)
+        val rdd = filePathlst.map{filePath=>
+            formatDF(filePath.getPath.toString)
+        }.reduce{(totalRDD, onerdd) => totalRDD.union(onerdd)}
+        val result = md5Hash("cui#merge" + new Date().getTime)
+        phLyFactory.setStorageWithName(result, rdd)
+        result
+    }
+
+    def formatDF(path: String) : RDD[(String, phLyDataSet)] = {
         val tmp = phLyFactory.getCalcInstance()
         val df: DataFrame = tmp.ss.read.format("com.databricks.spark.csv")
             .option("header", "false")
@@ -62,12 +76,8 @@ trait phReadData extends java.io.Serializable {
                 }
             inner.toList
         }.flatMap(x => x).filter(_._1 != "PRODUCT ID")
+        rdd
 //        rdd.distinct().take(200).foreach(println)
-        println(rdd.count())
-
-        val result = md5Hash(cat02.toString + new Date().getTime)
-        phLyFactory.setStorageWithName(result, rdd)
-        result
     }
 }
 

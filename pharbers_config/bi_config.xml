@@ -23,7 +23,7 @@
                     description="merge data nodes data" />
             <merge
                     index="2"
-                    path="/test/ADD_RATE_Test.csv"
+                    path="/test/ADD_RATE/ADD_RATE.csv"
                     factory="com.pharbers.process.merge.phMergeWithDotImpl"
                     description="merge date with dot rate" />
         </merges>
@@ -61,12 +61,13 @@
             <data_node index="1"
                        name="search data node"
                        descritption="what is this for"
-                       path="/test/ANTIDEPRESSANTS_CHPA_ BRAND_1_MAPPING.csv"
+                       path="/test/mapTable"
                        factory="com.pharbers.process.read.phReadSearchImpl"/>
         </data_nodes>
     </gen_search_set>
     <gen_pages>
         <format path="pharbers_config/bi_format.json" factory="com.pharbers.process.stm.step.pptx.phJsonGenPPT" />
         <out_file path="./ppt/" />
+        <css_file path = "pharbers_config/css.json" />
     </gen_pages>
 </pharbers-modules>

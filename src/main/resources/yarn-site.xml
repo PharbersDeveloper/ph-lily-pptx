@@ -26,6 +26,10 @@
         <value>false</value>
     </property>
     <property>
+        <name>yarn.nodemanager.pmem-check-enabled</name>
+        <value>false</value>
+    </property>
+    <property>
         <name>yarn.resourcemanager.address</name>
         <value>spark.master:8032</value>
     </property>
