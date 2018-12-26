@@ -300,6 +300,12 @@ class phReportContentComboChart extends phReportContentTrendsTable {
     }
 }
 
+class phReportContentOnlyLineChart extends phReportContentTrendsTable {
+    override def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
+        socketDriver.excel2Chart(jobid, tableName, pos, sliderIndex, "LineNoTable")
+    }
+}
+
 class phReportContentBlueGrowthTable extends phReportContentTrendsTable with phCommand {
     override def exec(args: Any): Any = {
         val argsMap = args.asInstanceOf[Map[String, Any]]
