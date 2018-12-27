@@ -14,8 +14,8 @@ object main extends App {
     println(new Date())
     val jobid = phLyFactory.startProcess
     println("jobid:" + jobid)
-    val socketDriver = phSocketDriver()
-    socketDriver.createPPT(jobid)
+//    val socketDriver = phSocketDriver()
+//    socketDriver.createPPT(jobid)
 //    phLyFactory.setSaveMidDoc
     phLyFactory.getInstance("com.pharbers.process.flow.phBIFlowGenImpl").asInstanceOf[phCommand].exec(jobid)
     phLyFactory.endProcess

@@ -1,8 +1,9 @@
 package com.pharbers.process.stm.step.pptx.slider.content
 
 import java.util.UUID
+
 import com.pharbers.phsocket.phSocketDriver
-import com.pharbers.process.common.{phCommand, phLyFactory}
+import com.pharbers.process.common.{phCommand, phLyCalData, phLyFactory}
 import com.pharbers.spark.phSparkDriver
 import org.apache.poi.xslf.usermodel.XSLFSlide
 import org.apache.spark.sql.DataFrame
@@ -38,11 +39,12 @@ trait phReportContentTable {
     var slide: XSLFSlide = _
     val socketDriver = phSocketDriver()
 
-    def pushCell(jobid: String, tableName: String, cell: String, value: String, cate: String, cssName: List[String]): Unit =
-        socketDriver.setExcel(jobid, tableName, cell, value, cate, cssName)
+    def pushCell(jobid: String, tableName: String, cell: String, value: String, cate: String, cssName: List[String]): Unit = Unit
+//        socketDriver.setExcel(jobid, tableName, cell, value, cate, cssName)
 
-    def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit =
-        socketDriver.excel2PPT(jobid, tableName, pos, sliderIndex)
+
+    def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = Unit
+//        socketDriver.excel2PPT(jobid, tableName, pos, sliderIndex)
 
     //获取timeline开始月份
     def getStartYm(timeline: String): String = {
@@ -157,36 +159,90 @@ class phReportContentTableImpl extends phReportContentTable with phCommand {
         val dataMap = tableArgsFormatMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
         val pos = tableArgsFormatMap("pos").asInstanceOf[List[Int]]
         val slideIndex = tableArgsFormatMap("slideIndex").asInstanceOf[Int]
-        rowList.zipWithIndex.foreach { case (displayNameAndCss, displayNameIndex) =>
-            val rowIndex = displayNameIndex + 3
-            val rowCss = displayNameAndCss.split(":")(1)
-            val displayName = displayNameAndCss.split(":")(0)
-            pushCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String", List(rowCss, rowTitleAndCss(1)))
-            timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
-                val timeline = timelineAndCss.split(":")(0)
-                val timelineCss = timelineAndCss.split(":")(1)
-                colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
-                    val colName = colNameAndCss.split(":")(0)
-                    val colCss = colNameAndCss.split(":")(1)
-                    val startYm: String = getStartYm(timeline)
-                    val ymMap = getTimeLineYm(timeline)
-                    val month = ymMap("month").toString.length match {
-                        case 1 => "0" + ymMap("month")
-                        case _ => ymMap("month")
-                    }
-                    val endYm: String = ymMap("year").toString + month
-                    val colIndex = colList.size * timelineIndex + colNameIndex + 1
-                    val function = "com.pharbers.process.stm.step.pptx.slider.content." + phReportContentTable.colName2FunctionName(colName)
-                    val value = phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
-                        Map("data" -> tableDF, "displayName" -> displayName, "ym" -> timeline, "dataMap" -> dataMap,
-                            "firstRow" -> rowList.head.split(":")(0), "firstCol" -> colList.head.split(":")(0), "startYm" -> startYm,
-                            "lastYm" -> endYm)
-                    )
-                    val cell = (colIndex + 65).toChar.toString + rowIndex.toString
-                    pushCell(jobid, tableName, cell, value.toString, "Number", List(rowCss, colCss))
-                }
-            }
+
+        /**
+         * 这里需要快的话，需要将一个一个计算变成一个表一起计算
+         * 1. 其原理为不管在任何情况下，右边下面的display Name都回对应到固定的产品名
+         * 那么也就是说整体的display Name是下面display Name的超集
+         * 也就是说，可以通过在计算前，计算出一个中间表，在最后通过dispaly Name在做reduce 加法
+         * 整体的表只需要做一次计算。
+         * 2. SOM 和 Growth 应该和前面的算法一起计算，要不然所有都回多次重复计算
+         */
+
+        /**
+         * 0. 整理数据源
+         */
+        val tmp = tableDF.toJavaRDD.rdd.map (x =>
+            new phLyCalData(x(0).toString, x(1).toString, x(2).toString, x(3).toString, x(4).toString,
+                BigDecimal(x(5).toString), BigDecimal(x(6).toString), BigDecimal(x(7).toString), x(8).toString))
+
+        tmp.take(10).foreach(println)
+
+        /**
+          * 1. 整理所有需要的 display Name
+          */
+        val lst = "201710" :: "201711" :: "201712" :: "201801" :: "201802" :: "201803" :: "201804" :: "201805" ::
+            "201806" :: "201807" :: "201808" :: "201809" :: Nil
+        val rows = rowList.map (x => x.split(":")(0))
+        val filter_display_name =
+            tmp.filter (x => rows.contains(x.display_name)).
+                filter(x => lst.contains(x.date)).
+                filter(x => x.tp == "LC-RMB")
+
+        filter_display_name.take(10).foreach(println)
+
+        /**
+          * 2. reduce by key 就是以display name 求和, 叫中间和
+          */
+        val mid_sum = filter_display_name.keyBy(x => x.display_name).reduceByKey { (left, right) =>
+            left.result =
+                (if (left.result == 0) {
+                    left.dot
+                } else left.result) +
+                (if (right.result == 0) {
+                    right.dot
+                } else right.result)
+            left
         }
+
+        mid_sum.take(30).foreach(println)
+
+        //        val tmp =
+//        timelineList.map { timeline =>
+//            colList.
+//        }
+
+//        rowList.zipWithIndex.foreach { case (displayNameAndCss, displayNameIndex) =>
+//            val rowIndex = displayNameIndex + 3
+//            val rowCss = displayNameAndCss.split(":")(1)
+//            val displayName = displayNameAndCss.split(":")(0)
+//            pushCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String", List(rowCss, rowTitleAndCss(1)))
+//
+//            timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+//                val timeline = timelineAndCss.split(":")(0)
+//                val timelineCss = timelineAndCss.split(":")(1)
+//                colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+//                    val colName = colNameAndCss.split(":")(0)
+//                    val colCss = colNameAndCss.split(":")(1)
+//                    val startYm: String = getStartYm(timeline)
+//                    val ymMap = getTimeLineYm(timeline)
+//                    val month = ymMap("month").toString.length match {
+//                        case 1 => "0" + ymMap("month")
+//                        case _ => ymMap("month")
+//                    }
+//                    val endYm: String = ymMap("year").toString + month
+//                    val colIndex = colList.size * timelineIndex + colNameIndex + 1
+//                    val function = "com.pharbers.process.stm.step.pptx.slider.content." + phReportContentTable.colName2FunctionName(colName)
+//                    val value = phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
+//                        Map("data" -> tableDF, "displayName" -> displayName, "ym" -> timeline, "dataMap" -> dataMap,
+//                            "firstRow" -> rowList.head.split(":")(0), "firstCol" -> colList.head.split(":")(0), "startYm" -> startYm,
+//                            "lastYm" -> endYm)
+//                    )
+//                    val cell = (colIndex + 65).toChar.toString + rowIndex.toString
+//                    pushCell(jobid, tableName, cell, value.toString, "Number", List(rowCss, colCss))
+//                }
+//            }
+//        }
         timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
             val timeline = timelineAndCss.split(":")(0)
             val timelineCss = timelineAndCss.split(":")(1)
@@ -296,19 +352,22 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
 
 class phReportContentTrendsChart extends phReportContentTrendsTable {
     override def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
-        socketDriver.excel2Chart(jobid, tableName, pos, sliderIndex, "Line")
+//        socketDriver.excel2Chart(jobid, tableName, pos, sliderIndex, "Line")
+        Unit
     }
 }
 
 class phReportContentComboChart extends phReportContentTrendsTable {
     override def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
-        socketDriver.excel2Chart(jobid, tableName, pos, sliderIndex, "Combo")
+//        socketDriver.excel2Chart(jobid, tableName, pos, sliderIndex, "Combo")
+        Unit
     }
 }
 
 class phReportContentOnlyLineChart extends phReportContentTrendsTable {
     override def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
-        socketDriver.excel2Chart(jobid, tableName, pos, sliderIndex, "LineNoTable")
+//        socketDriver.excel2Chart(jobid, tableName, pos, sliderIndex, "LineNoTable")
+        Unit
     }
 }
 

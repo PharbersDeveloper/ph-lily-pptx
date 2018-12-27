@@ -9,3 +9,6 @@ target
 .g8
 .gradle
 
+
+*.DS_Store
+*.iml

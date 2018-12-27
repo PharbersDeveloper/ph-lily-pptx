@@ -6,8 +6,8 @@ import com.pharbers.pptxmoudles._
 import com.pharbers.phsocket.phSocketDriver
 
 object tojsonapi extends App with CirceJsonapiSupport {
-    val socket = phSocketDriver().socket
-    val dataOutputStream = new DataOutputStream(socket.getOutputStream)
+//    val socket = phSocketDriver().socket
+//    val dataOutputStream = new DataOutputStream(socket.getOutputStream)
 
     val request1 = new PhRequest
     request1.id = "1"
@@ -84,8 +84,8 @@ object tojsonapi extends App with CirceJsonapiSupport {
     //    val str1 = getstr(toJsonapi(request1).asJson.toString())
     //    val str01 = new String(str1.getBytes("utf-8"), "utf-8")
         val str01 = toJsonapi(request1).asJson.toString()
-        dataOutputStream.writeUTF(str01)
-        dataOutputStream.flush()
+//        dataOutputStream.writeUTF(str01)
+//        dataOutputStream.flush()
         println(str01)
 
     //    Thread.sleep(1000)
@@ -114,13 +114,13 @@ object tojsonapi extends App with CirceJsonapiSupport {
 
     Thread.sleep(1000)
     val str05 = toJsonapi(request5).asJson.toString()
-    dataOutputStream.writeUTF(str05)
-    dataOutputStream.flush()
+//    dataOutputStream.writeUTF(str05)
+//    dataOutputStream.flush()
     println(str05)
 
     Thread.sleep(1000)
-    dataOutputStream.close()
-    socket.close()
+//    dataOutputStream.close()
+//    socket.close()
     //    } catch {
     //        case e => println(e)
     //    }

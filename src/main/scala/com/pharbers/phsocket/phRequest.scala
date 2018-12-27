@@ -15,14 +15,15 @@ import play.api.libs.json._
 import scala.io.Source
 import scala.xml.{Node, NodeSeq}
 
-trait phSocket_managers extends createPPT with setExcel with excel2PPT with createTitle
+//trait phSocket_managers extends createPPT with setExcel with excel2PPT with createTitle
+trait phSocket_managers //extends createPPT with setExcel with excel2PPT with createTitle
 
 sealed trait phRequest extends phSocket_trait {
-    val dataOutputStream = new DataOutputStream(socket.getOutputStream)
+    val dataOutputStream = ??? //new DataOutputStream(socket.getOutputStream)
     def sendMessage(msg: String): Unit ={
-        Thread.sleep(1000)
-        dataOutputStream.writeUTF(msg)
-        dataOutputStream.flush()
+//        Thread.sleep(1000)
+//        dataOutputStream.writeUTF(msg)
+//        dataOutputStream.flush()
     }
 }
 
