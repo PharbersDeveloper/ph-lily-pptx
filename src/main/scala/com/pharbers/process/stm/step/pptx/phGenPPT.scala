@@ -53,9 +53,6 @@ class phGenPPTImpl extends phGenPPT with phCommand {
                 exception.printStackTrace()
             }
         }
-
-        val ppt = phLyFactory.stssoo("ppt").asInstanceOf[XMLSlideShow]
-        ppt.write(new FileOutputStream(name + ".pptx"))
         println("phGenPPTImpl")
     }
 }
