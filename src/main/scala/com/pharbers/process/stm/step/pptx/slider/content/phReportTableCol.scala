@@ -147,12 +147,29 @@ class GrowthPercentage extends phReportTableCol with phCommand {
 class som extends phReportTableCol with phCommand {
     override def exec(args: Any): Double = {
         val argMap = args.asInstanceOf[Map[String, Any]]
+        val startYm = argMap("startYm").asInstanceOf[String]
+        val lastYm = argMap("lastYm").asInstanceOf[String]
+        val firstColName = argMap("firstCol").asInstanceOf[String]
+        val function = "com.pharbers.process.stm.step.pptx.slider.content." + phReportContentTable.colName2FunctionName(firstColName)
         data = argMap("data").asInstanceOf[DataFrame]
         val map = argMap("dataMap").asInstanceOf[collection.mutable.Map[String, Double]]
         val displayName = argMap("displayName").asInstanceOf[String]
         val ym = argMap("ym").asInstanceOf[String]
         val firstDisplayName = argMap("firstRow").asInstanceOf[String]
-        map(displayName + ym) / map(firstDisplayName + ym) * 100
+        val firstDisplayNameValue = map.getOrElse(firstDisplayName + ym, {
+            phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
+                Map("data" -> data,
+                    "displayName" -> firstDisplayName,
+                    "ym" -> ym,
+                    "dataMap" -> map,
+                    "firstRow" -> "",
+                    "firstCol" -> "",
+                    "startYm" -> startYm,
+                    "lastYm" -> lastYm
+                )
+            ).asInstanceOf[String].toDouble
+        })
+        map(displayName + ym) / firstDisplayNameValue * 100
     }
 }
 
