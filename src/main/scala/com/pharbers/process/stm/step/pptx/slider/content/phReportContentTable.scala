@@ -218,7 +218,7 @@ class phReportContentTrendsTable extends phReportContentTable with phCommand {
         val colList = tableArgsFormat(argsMap)("colList").asInstanceOf[List[String]]
         val colTitleAndCss = tableArgsFormat(argsMap)("colTitle").asInstanceOf[String].split(":")
         val tableDF = tableArgsFormat(argsMap)("tableDF").asInstanceOf[DataFrame]
-        var dataMap = tableArgsFormat(argsMap)("dataMap").asInstanceOf[mutable.Map[String, Double]]
+        val dataMap = tableArgsFormat(argsMap)("dataMap").asInstanceOf[mutable.Map[String, Double]]
         val pos = tableArgsFormat(argsMap)("pos").asInstanceOf[List[Int]]
         val slideIndex = tableArgsFormat(argsMap)("slideIndex").asInstanceOf[Int]
         val mktDisplayName = tableArgsFormat(argsMap)("mktDisplayName").asInstanceOf[String]
