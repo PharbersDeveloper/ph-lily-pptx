@@ -1,14 +1,8 @@
 package com.pharbers
 
-import java.awt.{Color, Rectangle}
-import java.io.FileOutputStream
 import java.util.Date
-
 import com.pharbers.phsocket.phSocketDriver
 import com.pharbers.process.common.{phCommand, phLyFactory}
-import com.pharbers.process.stm.step.pptx.slider.content.{phReportTableCol, som}
-import org.apache.poi.sl.usermodel.TableCell.BorderEdge
-import org.apache.poi.xslf.usermodel.{SlideLayout, XMLSlideShow, XSLFTextRun, XSLFTextShape}
 
 object main extends App {
     println(new Date())
