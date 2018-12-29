@@ -19,15 +19,27 @@ trait phSocket_managers extends createPPT with setExcel with excel2PPT with crea
 
 sealed trait phRequest extends phSocket_trait {
     val dataOutputStream = new DataOutputStream(socket.getOutputStream)
-    def sendMessage(msg: String): Unit ={
-        Thread.sleep(1000)
-        dataOutputStream.writeUTF(msg)
+
+    def sendMessage(msg: String): Unit = {
+
+        val tmp = msg.getBytes()
+        dataOutputStream.write(int2Bytes(tmp.length).union(tmp))
         dataOutputStream.flush()
+    }
+
+    def int2Bytes(value: Int): Array[Byte] = {
+        val result = new Array[Byte](4)
+        result(3) = ((value >> 24) & 0xFF).toByte
+        result(2) = ((value >> 16) & 0xFF).toByte
+        result(1) = ((value >> 8) & 0xFF).toByte
+        result(0) = (value & 0xFF).toByte
+        result
     }
 }
 
-trait createPPT extends phRequest with CirceJsonapiSupport{
-    def createPPT(jobid: String): Unit ={
+
+trait createPPT extends phRequest with CirceJsonapiSupport {
+    def createPPT(jobid: String): Unit = {
         val id: String = UUID.randomUUID().toString
         val request = new PhRequest
         request.id = id
@@ -40,7 +52,7 @@ trait createPPT extends phRequest with CirceJsonapiSupport{
     }
 }
 
-trait setExcel extends phRequest with CirceJsonapiSupport with createExcelCss{
+trait setExcel extends phRequest with CirceJsonapiSupport with createExcelCss {
     def setExcel(jobid: String, excelName: String, cell: String, value: String, cate: String, cssName: List[String]): Unit = {
         val id: String = UUID.randomUUID().toString
         val request = new PhRequest
@@ -54,7 +66,7 @@ trait setExcel extends phRequest with CirceJsonapiSupport with createExcelCss{
         phExcelPush.name = excelName
         phExcelPush.cell = cell
         phExcelPush.css = Some(createCss(cssName, cell))
-        phExcelPush.cate = cate    //Number or String
+        phExcelPush.cate = cate //Number or String
         phExcelPush.value = value
         request.push = Some(phExcelPush)
         val msg = toJsonapi(request).asJson.toString()
@@ -62,8 +74,8 @@ trait setExcel extends phRequest with CirceJsonapiSupport with createExcelCss{
     }
 }
 
-trait excel2PPT extends phRequest with CirceJsonapiSupport{
-    def excel2PPT(jobid: String, excelName: String, pos: List[Int], sliderIndex: Int): Unit ={
+trait excel2PPT extends phRequest with CirceJsonapiSupport {
+    def excel2PPT(jobid: String, excelName: String, pos: List[Int], sliderIndex: Int): Unit = {
         val id: String = UUID.randomUUID().toString
         val request = new PhRequest
         request.id = id
@@ -81,7 +93,7 @@ trait excel2PPT extends phRequest with CirceJsonapiSupport{
         sendMessage(msg)
     }
 
-    def excel2Chart(jobid: String, excelName: String, pos: List[Int], sliderIndex: Int, chartType: String): Unit ={
+    def excel2Chart(jobid: String, excelName: String, pos: List[Int], sliderIndex: Int, chartType: String): Unit = {
         val id: String = UUID.randomUUID().toString
         val request = new PhRequest
         request.id = id
@@ -101,8 +113,8 @@ trait excel2PPT extends phRequest with CirceJsonapiSupport{
     }
 }
 
-trait createTitle extends phRequest with CirceJsonapiSupport{
-    def createTitle(jobid: String, content: String, pos: List[Int], slider: Int, css: String): Unit ={
+trait createTitle extends phRequest with CirceJsonapiSupport {
+    def createTitle(jobid: String, content: String, pos: List[Int], slider: Int, css: String): Unit = {
         val id: String = UUID.randomUUID().toString
         val request = new PhRequest
         request.id = id
@@ -122,8 +134,10 @@ trait createTitle extends phRequest with CirceJsonapiSupport{
 }
 
 trait createExcelCss extends phRequest with PharbersInjectModule {
+
     import com.pharbers.moduleConfig.ModuleConfig.fr
-    implicit val f: (ConfigDefines, Node) => ConfigImpl = ((c, n) => ConfigImpl(c.md map (x =>x -> (n \ x))))
+
+    implicit val f: (ConfigDefines, Node) => ConfigImpl = ((c, n) => ConfigImpl(c.md map (x => x -> (n \ x))))
 
     override val md: List[String] = "format" :: "out_file" :: "css_file" :: Nil
     override val id: String = "gen_pages"
@@ -134,7 +148,7 @@ trait createExcelCss extends phRequest with PharbersInjectModule {
         (iter._2.asInstanceOf[NodeSeq] \\ "@path").toString()
     }.getOrElse(throw new Exception("配置文件错误，phGenPPT => out_file"))
 
-    def createCss(name:List[String], cell: String): PhExcelCss ={
+    def createCss(name: List[String], cell: String): PhExcelCss = {
         val phExcelCss = new PhExcelCss
         phExcelCss.id = UUID.randomUUID().toString
         phExcelCss.cell = cell
@@ -142,9 +156,9 @@ trait createExcelCss extends phRequest with PharbersInjectModule {
         val cssJs = (jsValue \ name.head).asOpt[JsValue].getOrElse(Json.toJson(""))
         var cssJs2 = Json.toJson("")
         if (name.tail.nonEmpty) cssJs2 = (jsValue \ name.tail.head).asOpt[JsValue].getOrElse(Json.toJson(""))
-//        val cssJs2 = (jsValue \ name.tail).asOpt[JsValue].getOrElse(Json.toJson(""))
+        //        val cssJs2 = (jsValue \ name.tail).asOpt[JsValue].getOrElse(Json.toJson(""))
         phExcelCss.factory = (cssJs \ "factory").asOpt[String].getOrElse((cssJs2 \ "factory").asOpt[String].getOrElse(phExcelCss.factory))
-        phExcelCss.fontSize = (cssJs \ "fontSize").asOpt[String].getOrElse((cssJs2 \ "fontSize").asOpt[String].getOrElse( phExcelCss.fontSize))
+        phExcelCss.fontSize = (cssJs \ "fontSize").asOpt[String].getOrElse((cssJs2 \ "fontSize").asOpt[String].getOrElse(phExcelCss.fontSize))
         phExcelCss.fontColor = (cssJs \ "fontColor").asOpt[String].getOrElse((cssJs2 \ "fontColor").asOpt[String].getOrElse(phExcelCss.fontColor))
         phExcelCss.fontName = (cssJs \ "fontName").asOpt[String].getOrElse((cssJs2 \ "fontName").asOpt[String].getOrElse(phExcelCss.fontName))
         phExcelCss.fontStyle = (cssJs \ "fontStyle").asOpt[List[String]].getOrElse(Nil) ::: (cssJs2 \ "fontStyle").asOpt[List[String]].getOrElse(Nil)
