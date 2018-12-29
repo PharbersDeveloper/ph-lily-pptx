@@ -38,13 +38,21 @@ object phReportContentTable {
 
 trait phReportContentTable extends phCommand {
     val socketDriver = phSocketDriver()
+    var cells: List[String] = Nil
+    def pushCell(jobid: String, tableName: String, cell: String, value: String, cate: String, cssName: List[String]): Unit ={
+        val css = cssName.mkString("*")
+        cells = cells :+ s"-c#$cell-s#$css-t#$cate-v#$value"
+    }
 
-    def pushCell(jobid: String, tableName: String, cell: String, value: String, cate: String, cssName: List[String]): Unit =
-        socketDriver.setExcel(jobid, tableName, cell, value, cate, cssName)
 
 
-    def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit =
+    def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit ={
+        cells.sliding(30, 30).foreach(x => {
+            socketDriver.setExcel(jobid, tableName, x)
+        })
         socketDriver.excel2PPT(jobid, tableName, pos, sliderIndex)
+    }
+
 
     override def exec(args: Any): Any = {
         val colArgs = getColArgs(args)
@@ -166,7 +174,7 @@ class phReportContentTableBaseImpl extends phReportContentTable {
                 val title = titleANdCss._1
                 val css = titleANdCss._2
                 val colCell = "A" + (index + 1)
-                pushCell(jobid, tableName, colCell, title, "String", List(colTitle._2, css))
+                pushCell(jobid, tableName, colCell, title, "String", List(css, colTitle._2))
         }
 
         timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
@@ -180,7 +188,7 @@ class phReportContentTableBaseImpl extends phReportContentTable {
                 val colName = colNameAndCss._1
                 val colCss = colNameAndCss._2
                 val colCell = (colList.size * timelineIndex + colNameIndex + 1 + 65).toChar.toString + "2"
-                pushCell(jobid, tableName, colCell, colName, "String", List(colTitle._2, colCss))
+                pushCell(jobid, tableName, colCell, colName, "String", List(colCss, colTitle._2))
             }
         }
 
@@ -188,7 +196,7 @@ class phReportContentTableBaseImpl extends phReportContentTable {
             val rowIndex = displayNameIndex + 3
             val rowCss = displayNameAndCss._2
             val displayName = displayNameAndCss._1
-            pushCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String", List(rowCss, rowTitle._2))
+            pushCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String", List(rowTitle._2, rowCss))
 
             timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
                 val timeline = timelineAndCss._1
@@ -198,7 +206,7 @@ class phReportContentTableBaseImpl extends phReportContentTable {
                     val colCss = colNameAndCss._2
                     val colIndex = colList.size * timelineIndex + colNameIndex + 1
                     val cellIndex = (colIndex + 65).toChar.toString + rowIndex.toString
-                    cellMap = cellMap ++ Map((s"$displayName#$timeline", colName) -> cell(jobid, tableName, cellIndex, "", "Number", List(rowCss, colCss)))
+                    cellMap = cellMap ++ Map((s"$displayName#$timeline", colName) -> cell(jobid, tableName, cellIndex, "", "Number", List(colCss, rowCss)))
                 }
             }
         }
@@ -249,7 +257,7 @@ class phReportContentTrendsTable extends phReportContentTableBaseImpl {
                 val title = titleANdCss._1
                 val css = titleANdCss._2
                 val colCell = "A" + (index + 1)
-                pushCell(jobid, tableName, colCell, title, "String", List(colTitle._1, css))
+                pushCell(jobid, tableName, colCell, title, "String", List(css, colTitle._1))
         }
 
         rowList.zipWithIndex.foreach { case (displayNameAndCss, displayNameIndex) =>
@@ -257,7 +265,7 @@ class phReportContentTrendsTable extends phReportContentTableBaseImpl {
             val displayName = displayNameAndCss._1
             val rowIndex = displayNameIndex + 2
             val displayCell = "A" + (displayNameIndex + 2).toString
-            pushCell(jobid, tableName, displayCell, displayName, "String", List(rowCss, rowTitle._2))
+            pushCell(jobid, tableName, displayCell, displayName, "String", List(rowTitle._2, rowCss))
             timelineList.zipWithIndex.foreach { case (timelineAndCss, ymIndex) =>
                 val timeline = timelineAndCss._1
                 val colIndex = ymIndex + 1
@@ -265,7 +273,7 @@ class phReportContentTrendsTable extends phReportContentTableBaseImpl {
                     val colName = colMap.getOrElse(colNameAndCss._1, colNameAndCss._1)
                     val colCss = colNameAndCss._2
                     val valueCell = (colIndex + 65).toChar.toString + rowIndex.toString
-                    cellMap = cellMap ++ Map((s"$displayName#$timeline", colName) -> cell(jobid, tableName, valueCell, "", "Number", List(rowCss, colCss)))
+                    cellMap = cellMap ++ Map((s"$displayName#$timeline", colName) -> cell(jobid, tableName, valueCell, "", "Number", List(colCss, rowCss)))
                 }
             }
         }
@@ -319,7 +327,7 @@ class phReportContentBlueGrowthTable extends phReportContentTrendsTable {
             val displayName = displayNameTemp.replaceAll("%", "")
             val rowIndex = displayNameIndex + 2
             val displayCell = "A" + (displayNameIndex + 1).toString + ":" + "A" + (displayNameIndex + 4).toString
-            pushCell(jobid, tableName, displayCell, displayNameTemp, "String", List(rowCss, rowTitle._2))
+            pushCell(jobid, tableName, displayCell, displayNameTemp, "String", List(rowTitle._2, rowCss))
             timelineList.zipWithIndex.foreach { case (timelineAndCss, ymIndex) =>
                 val timeline = timelineAndCss._1
                 val colIndex = ymIndex + 1
@@ -327,7 +335,7 @@ class phReportContentBlueGrowthTable extends phReportContentTrendsTable {
                     val colName = colMap.getOrElse(colNameAndCss._1, colNameAndCss._1)
                     val colCss = colNameAndCss._2
                     val valueCell = getCellCoordinate(colIndex, rowIndex)
-                    cellMap = cellMap ++ Map((s"$displayName#$timeline", colName) -> cell(jobid, tableName, valueCell, "", "Number", List(rowCss, colCss)))
+                    cellMap = cellMap ++ Map((s"$displayName#$timeline", colName) -> cell(jobid, tableName, valueCell, "", "Number", List(colCss, rowCss)))
                 }
             }
         }

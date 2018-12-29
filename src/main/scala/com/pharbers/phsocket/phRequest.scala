@@ -53,7 +53,7 @@ trait createPPT extends phRequest with CirceJsonapiSupport {
 }
 
 trait setExcel extends phRequest with CirceJsonapiSupport with createExcelCss {
-    def setExcel(jobid: String, excelName: String, cell: String, value: String, cate: String, cssName: List[String]): Unit = {
+    def setExcel(jobid: String, excelName: String, cells: List[String]): Unit = {
         val id: String = UUID.randomUUID().toString
         val request = new PhRequest
         request.id = id
@@ -64,10 +64,7 @@ trait setExcel extends phRequest with CirceJsonapiSupport with createExcelCss {
         phExcelPush.id = UUID.randomUUID().toString
         phExcelPush.`type` = "PhExcelPush"
         phExcelPush.name = excelName
-        phExcelPush.cell = cell
-        phExcelPush.css = Some(createCss(cssName, cell))
-        phExcelPush.cate = cate //Number or String
-        phExcelPush.value = value
+        phExcelPush.cells = cells
         request.push = Some(phExcelPush)
         val msg = toJsonapi(request).asJson.toString()
         sendMessage(msg)
