@@ -1,9 +1,10 @@
 package com.pharbers.process.stm.step.pptx.slider.content
 
-import com.pharbers.process.common.{phCommand, phLyFactory, phLycalData}
+import com.pharbers.process.common.{phCommand, phLyFactory, phLyGrowthData, phLycalData}
 import com.pharbers.spark.phSparkDriver
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.col
+
 import scala.collection.mutable
 
 trait phReportTableCol {
@@ -74,9 +75,7 @@ trait phReportTableCol {
         dataMap(displayName + ym) = resultSum
         resultSum.toLong
     }
-}
 
-class valueDF extends phCommand with phReportTableCol {
     //获取timeline开始月份
     def getStartYm(timeline: String): String = {
         val ymMap: Map[String, Int] = getTimeLineYm(timeline)
@@ -132,6 +131,18 @@ class valueDF extends phCommand with phReportTableCol {
         monthCount
     }
 
+
+    def getAllTimeline(timelineList: List[String]): List[String] = {
+        val resultList = timelineList ::: timelineList.map { timeline =>
+            val lastYear = (timeline.split(" ").last.toInt - 1).toString
+            val lastTimeLine = (timeline.split(" ").take(timeline.split(" ").length - 1) ++ Array(lastYear)).mkString(" ")
+            lastTimeLine
+        }
+        resultList.distinct
+    }
+}
+
+class valueDF extends phCommand with phReportTableCol {
     override def exec(args: Any): DataFrame = {
         val argsMap = args.asInstanceOf[Map[String, Any]]
         val data: DataFrame = argsMap("data").asInstanceOf[DataFrame]
@@ -139,7 +150,12 @@ class valueDF extends phCommand with phReportTableCol {
         val colList: List[String] = argsMap("colList").asInstanceOf[List[String]]
         val timelineList: List[String] = argsMap("timelineList").asInstanceOf[List[String]]
         val primaryValueName: String = argsMap("primaryValueName").asInstanceOf[String]
-        val allTimelst: List[String] = timelineList.map { timeline =>
+        val allTimelineList: List[String] = if (colList.contains("Growth(%)")) {
+            getAllTimeline(timelineList)
+        } else {
+            timelineList
+        }
+        val allTimelst: List[String] = allTimelineList.map { timeline =>
             val startYm: String = getStartYm(timeline)
             val ymMap = getTimeLineYm(timeline)
             val month = ymMap("month").toString.length match {
@@ -176,7 +192,7 @@ class valueDF extends phCommand with phReportTableCol {
         //        }
         //        mid_sum.take(30).foreach(println)
 
-        val mid_sum = timelineList.map { timeline =>
+        val mid_sum = allTimelineList.map { timeline =>
             val startYm: String = getStartYm(timeline)
             val ymMap = getTimeLineYm(timeline)
             val month = ymMap("month").toString.length match {
@@ -186,7 +202,7 @@ class valueDF extends phCommand with phReportTableCol {
             val endYm: String = ymMap("year").toString + month
             filter_display_name.filter(x => x.date >= startYm)
                 .filter(x => x.date <= endYm)
-                .keyBy(x => (x.display_name + "#" + timeline, timeline))
+                .keyBy(x => (x.display_name, timeline))
                 .reduceByKey { (left, right) =>
                     left.result =
                         (if (left.result == 0) {
@@ -199,12 +215,11 @@ class valueDF extends phCommand with phReportTableCol {
                 }
         }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
 
-
         lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
         import sparkDriver.ss.implicits._
         val result: DataFrame = mid_sum.map(iter =>
-            (iter._1._1, iter._2.result, iter._2.display_name, iter._1._2)
-        ).toDF("DISPLAY_NAME_AND_TIMELINE", "RESULT", "DISPLAY_NAME", "TIMELINE")
+            (iter._2.display_name, iter._1._2, iter._2.result)
+        ).toDF("DISPLAY_NAME", "TIMELINE", "RESULT")
         result
     }
 }
@@ -215,22 +230,47 @@ class som extends phCommand with phReportTableCol {
         val mktDisplayName = argsMap("mktDisplayName").asInstanceOf[String]
         val data = argsMap("data").asInstanceOf[DataFrame]
         val timelineList = argsMap("timelineList").asInstanceOf[List[String]]
-        val resultDF = timelineList.map { timline =>
-            val dataTmp = data.filter(col("TIMELINE") === timline)
+        val resultDF = timelineList.map { timeline =>
+            val dataTmp = data.filter(col("TIMELINE") === timeline)
             val totalResult = dataTmp.filter(col("DISPLAY_NAME") === mktDisplayName)
                 .select("RESULT")
                 .collect().head.toString()
                 .replaceAll("[\\[\\]]", "")
-            dataTmp.withColumn("SOM in "+mktDisplayName, (col("RESULT")/totalResult)*100)
-        }.reduce((df1,df2)=>df1.union(df2))
-        //            data.withColumn("SOM in "+mktDisplayName, (col("RESULT")/totalResult)*100)
+            dataTmp.withColumn("SOM in " + mktDisplayName, (col("RESULT") / totalResult) * 100)
+        }.reduce((df1, df2) => df1.union(df2))
         resultDF
     }
 }
 
 class growth extends phCommand with phReportTableCol {
     override def exec(args: Any): Any = {
-
+        val argsMap = args.asInstanceOf[Map[String, Any]]
+        val data = argsMap("data").asInstanceOf[DataFrame]
+        val timelineList = argsMap("timelineList").asInstanceOf[List[String]]
+        val tmpRDD = data.toJavaRDD.rdd.map(x => phLyGrowthData(x(0).toString, x(1).toString, x(2).toString.toDouble,
+            0.toString.toDouble))
+        tmpRDD.take(10).foreach(println)
+        val resultRDD = timelineList.map { timeline =>
+            val allTimelineList = getAllTimeline(List(timeline))
+            tmpRDD.filter(x => allTimelineList.contains(x.timeline))
+                .keyBy(x => x.display_name)
+                .reduceByKey { (left, right) =>
+                    if (left.timeline == timeline) {
+                        left.growth = (left.result - right.result) / right.result * 100
+                        left
+                    } else {
+                        right.growth = (right.result - left.result) / left.result * 100
+                        right
+                    }
+                }
+        }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
+        resultRDD.take(10).foreach(println)
+        lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
+        import sparkDriver.ss.implicits._
+        val resultDF = resultRDD.map(iter =>
+            (iter._2.display_name, iter._2.timeline, iter._2.result, iter._2.growth)
+        ).toDF("DISPLAY_NAME", "TIMELINE", "RESULT", "GROWTH")
+        resultDF
     }
 }
 

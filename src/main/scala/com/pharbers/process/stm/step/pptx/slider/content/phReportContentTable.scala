@@ -134,21 +134,23 @@ class phReportContentTableBaseImpl extends phReportContentTable {
 
     override def colOtherValue(colArgs: colArgs, data: DataFrame): DataFrame = {
         val rowList = colArgs.rowList
-        val colList = colArgs.colList
+        val colList = colArgs.colList.sorted
         val timelineList = colArgs.timelineList
         val mktDisplayName = colArgs.mktDisplayName
         val somCommand: phCommand = new som
         val growthCommand: phCommand = new growth
         val empty: phCommand = new phCommand {
-            override def exec(args: Any): Any = null
+            override def exec(args: Any): Any = args.asInstanceOf[Map[String, Any]]("data")
         }
+        var dataFrame = data
         val colMap = Map("SOM(%)" -> somCommand, "Growth(%)" -> growthCommand)
-        colList.map(x => {
+        colList.foreach(x => {
             val mktDisplay = x.split(" (in|of) ").tail.headOption.getOrElse(mktDisplayName)
-            colMap.getOrElse(x.split(" (in|of) ").head, empty).exec(Map(
-                "data" -> data, "mktDisplayName" -> mktDisplayName, "timelineList" -> timelineList
-            ))
-        }).last.asInstanceOf[DataFrame]
+            dataFrame = colMap.getOrElse(x.split(" (in|of) ").head, empty).exec(Map(
+                "data" -> dataFrame, "mktDisplayName" -> mktDisplay, "timelineList" -> timelineList
+            )).asInstanceOf[DataFrame]
+        })
+        dataFrame
     }
 
     override def createTable(tableArgs: tableArgs, data: DataFrame): Unit = {
@@ -157,8 +159,8 @@ class phReportContentTableBaseImpl extends phReportContentTable {
         pushTable(cellList, tableArgs.pos, tableArgs.slideIndex)
     }
 
-    def createTableStyle(tableArgs: tableArgs): Map[(String, String), cell] = {
-        var cellMap: Map[(String, String), cell] = Map()
+    def createTableStyle(tableArgs: tableArgs): Map[(String, String, String), cell] = {
+        var cellMap: Map[(String, String, String), cell] = Map()
         val tableName = UUID.randomUUID().toString
         val rowTitle = tableArgs.rowTitle
         val colTitle = tableArgs.colTitle
@@ -168,7 +170,7 @@ class phReportContentTableBaseImpl extends phReportContentTable {
         val jobid = tableArgs.jobid
         val mktDisplayName = tableArgs.mktDisplayName
         val colMap = Map("SOM(%)" -> ("SOM in " + mktDisplayName),
-            "RMB(Mn)" -> "result")
+            "RMB(Mn)" -> "result", "Growth(%)" -> "Growth")
         (rowTitle :: colTitle :: Nil).zipWithIndex.foreach {
             case (titleANdCss, index) =>
                 val title = titleANdCss._1
@@ -206,18 +208,20 @@ class phReportContentTableBaseImpl extends phReportContentTable {
                     val colCss = colNameAndCss._2
                     val colIndex = colList.size * timelineIndex + colNameIndex + 1
                     val cellIndex = (colIndex + 65).toChar.toString + rowIndex.toString
-                    cellMap = cellMap ++ Map((s"$displayName#$timeline", colName) -> cell(jobid, tableName, cellIndex, "", "Number", List(colCss, rowCss)))
+                    cellMap = cellMap ++ Map((displayName, timeline, colName) -> cell(jobid, tableName, cellIndex, "", "Number", List(colCss, rowCss)))
                 }
             }
         }
         cellMap
     }
 
-    def putTableValue(dataFrame: DataFrame, cellMap: Map[(String, String), cell]): List[cell] = {
+    def putTableValue(dataFrame: DataFrame, cellMap: Map[(String, String, String), cell]): List[cell] = {
         cellMap.map(x => {
-            val displayNameAndTimeline = x._1._1
-            val colName = x._1._2
-            x._2.value = dataFrame.filter(col("DISPLAY_NAME_AND_TIMELINE") === displayNameAndTimeline)
+            val displayName = x._1._1
+            val timeline = x._1._2
+            val colName = x._1._3
+            x._2.value = dataFrame.filter(col("DISPLAY_NAME") === displayName)
+                    .filter(col("TIMELINE") === timeline)
                 .select(colName).collectAsList().get(0).toString().replaceAll("[\\[\\]]", "")
             x._2
         }).toList
@@ -235,8 +239,8 @@ class phReportContentTableImpl extends phReportContentTableBaseImpl {
 
 class phReportContentTrendsTable extends phReportContentTableBaseImpl {
 
-    override def createTableStyle(tableArgs: tableArgs): Map[(String, String), cell] = {
-        var cellMap: Map[(String, String), cell] = Map()
+    override def createTableStyle(tableArgs: tableArgs): Map[(String, String, String), cell] = {
+        var cellMap: Map[(String, String, String), cell] = Map()
         val tableName = UUID.randomUUID().toString
         val rowTitle = tableArgs.rowTitle
         val colTitle = tableArgs.colTitle
@@ -245,7 +249,8 @@ class phReportContentTrendsTable extends phReportContentTableBaseImpl {
         val timelineList = tableArgs.timelineList
         val jobid = tableArgs.jobid
         val mktDisplayName = tableArgs.mktDisplayName
-        val colMap = Map("SOM" -> ("SOM in " + mktDisplayName))
+        val colMap = Map("SOM(%)" -> ("SOM in " + mktDisplayName),
+            "RMB(Mn)" -> "result", "Growth(%)" -> "Growth")
         timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
             val timeline = timelineAndCss._1
             val timelineCss = timelineAndCss._2
@@ -273,7 +278,7 @@ class phReportContentTrendsTable extends phReportContentTableBaseImpl {
                     val colName = colMap.getOrElse(colNameAndCss._1, colNameAndCss._1)
                     val colCss = colNameAndCss._2
                     val valueCell = (colIndex + 65).toChar.toString + rowIndex.toString
-                    cellMap = cellMap ++ Map((s"$displayName#$timeline", colName) -> cell(jobid, tableName, valueCell, "", "Number", List(colCss, rowCss)))
+                    cellMap = cellMap ++ Map((displayName, timeline, colName) -> cell(jobid, tableName, valueCell, "", "Number", List(colCss, rowCss)))
                 }
             }
         }
@@ -304,8 +309,8 @@ class phReportContentOnlyLineChart extends phReportContentTrendsTable {
 
 class phReportContentBlueGrowthTable extends phReportContentTrendsTable {
 
-    override def createTableStyle(tableArgs: tableArgs): Map[(String, String), cell] = {
-        var cellMap: Map[(String, String), cell] = Map()
+    override def createTableStyle(tableArgs: tableArgs): Map[(String, String, String), cell] = {
+        var cellMap: Map[(String, String, String), cell] = Map()
         val tableName = UUID.randomUUID().toString
         val rowTitle = tableArgs.rowTitle
         val colTitle = tableArgs.colTitle
@@ -314,7 +319,8 @@ class phReportContentBlueGrowthTable extends phReportContentTrendsTable {
         val timelineList = tableArgs.timelineList
         val jobid = tableArgs.jobid
         val mktDisplayName = tableArgs.mktDisplayName
-        val colMap = Map("SOM" -> ("SOM in " + mktDisplayName))
+        val colMap = Map("SOM(%)" -> ("SOM in " + mktDisplayName),
+            "RMB(Mn)" -> "result", "Growth(%)" -> "Growth")
         timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
             val timeline = timelineAndCss._1
             val timelineCss = timelineAndCss._2
@@ -335,7 +341,7 @@ class phReportContentBlueGrowthTable extends phReportContentTrendsTable {
                     val colName = colMap.getOrElse(colNameAndCss._1, colNameAndCss._1)
                     val colCss = colNameAndCss._2
                     val valueCell = getCellCoordinate(colIndex, rowIndex)
-                    cellMap = cellMap ++ Map((s"$displayName#$timeline", colName) -> cell(jobid, tableName, valueCell, "", "Number", List(colCss, rowCss)))
+                    cellMap = cellMap ++ Map((displayName, timeline, colName) -> cell(jobid, tableName, valueCell, "", "Number", List(colCss, rowCss)))
                 }
             }
         }
