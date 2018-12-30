@@ -15,6 +15,7 @@ object main extends App {
     phLyFactory.endProcess
     println(new Date())
     println("jobid:" + jobid)
+    Thread.sleep(5000)
 }
 
 //object test extends App {

@@ -50,6 +50,7 @@ trait phReportContentTable extends phCommand {
         cells.sliding(30, 30).foreach(x => {
             socketDriver.setExcel(jobid, tableName, x)
         })
+        Thread.sleep(3000)
         socketDriver.excel2PPT(jobid, tableName, pos, sliderIndex)
     }
 
@@ -143,7 +144,15 @@ class phReportContentTableBaseImpl extends phReportContentTable {
             override def exec(args: Any): Any = args.asInstanceOf[Map[String, Any]]("data")
         }
         var dataFrame = data
-        val colMap = Map("SOM(%)" -> somCommand, "Growth(%)" -> growthCommand)
+        val colMap = Map(
+            "SOM(%)" -> somCommand,
+            "SOM" -> somCommand,
+            "SOM%" -> somCommand,
+            "Growth(%)" -> growthCommand,
+            "YoY GR(%)" -> growthCommand,
+            "GR(%)" -> growthCommand,
+            "SOM in Branded MKT(%)" -> somCommand
+            )
         colList.foreach(x => {
             val mktDisplay = x.split(" (in|of) ").tail.headOption.getOrElse(mktDisplayName)
             dataFrame = colMap.getOrElse(x.split(" (in|of) ").head, empty).exec(Map(
@@ -169,8 +178,22 @@ class phReportContentTableBaseImpl extends phReportContentTable {
         val timelineList = tableArgs.timelineList
         val jobid = tableArgs.jobid
         val mktDisplayName = tableArgs.mktDisplayName
-        val colMap = Map("SOM(%)" -> ("SOM in " + mktDisplayName),
-            "RMB(Mn)" -> "result", "Growth(%)" -> "Growth")
+        val colMap = Map("DOT(Mn)" -> "RESULT",
+            "MMU" -> "RESULT",
+            "Tablet" -> "RESULT",
+            "SOM(%)" -> ("SOM in " + mktDisplayName),
+            "SOM" -> ("SOM in " + mktDisplayName),
+            "SOM%" -> ("SOM in " + mktDisplayName),
+            "Growth(%)" -> "GROWTH",
+            "YoY GR(%)" -> "GROWTH",
+            "GR(%)" -> "GROWTH",
+            "RMB" -> "RESULT",
+            "RMB(Mn)" -> "RESULT",
+            "DOT" -> "RESULT",
+            "SOM in Branded MKT(%)" -> ("SOM in " + mktDisplayName),
+            "Mg(Mn)" -> "RESULT",
+            "MG(Mn)" -> "RESULT",
+            "RMB(Mn)" -> "RESULT")
         (rowTitle :: colTitle :: Nil).zipWithIndex.foreach {
             case (titleANdCss, index) =>
                 val title = titleANdCss._1
@@ -216,15 +239,36 @@ class phReportContentTableBaseImpl extends phReportContentTable {
     }
 
     def putTableValue(dataFrame: DataFrame, cellMap: Map[(String, String, String), cell]): List[cell] = {
-        cellMap.map(x => {
-            val displayName = x._1._1
-            val timeline = x._1._2
-            val colName = x._1._3
-            x._2.value = dataFrame.filter(col("DISPLAY_NAME") === displayName)
-                    .filter(col("TIMELINE") === timeline)
-                .select(colName).collectAsList().get(0).toString().replaceAll("[\\[\\]]", "")
-            x._2
-        }).toList
+        val comman: String => String = x => x
+        val mn: String => String = x => (x.toDouble / 1000000).toString
+        val colUnitMap = Map(
+            "DOT(Mn)" -> mn,
+            "RMB(Mn)" -> mn,
+            "Tablet(Mn)" -> mn,
+            "Mg(Mn)" -> mn,
+            "MG(Mn)" -> mn,
+            "RMB(Mn)" -> mn
+        )
+        val dataColNames = dataFrame.columns
+        dataFrame.collect().foreach(x => {
+            val row = x.toSeq.zip(dataColNames).toList
+            val displayName = row.find(x => x._2.equals("DISPLAY_NAME")).get._1.toString
+            val timeline = row.find(x => x._2.equals("TIMELINE")).get._1.toString
+            row.foreach(x => {
+                cellMap.getOrElse((displayName, timeline, x._2),cell("","","","","",Nil)).value = colUnitMap.getOrElse(x._2, comman)(x._1.toString)
+            })
+        })
+//        cellMap.map(x => {
+//            val displayName = x._1._1
+//            val timeline = x._1._2
+//            val colName = x._1._3
+//            val unit = colUnitMap.getOrElse(colName,comman)
+//            x._2.value = unit(dataFrame.filter(col("DISPLAY_NAME") === displayName)
+//                    .filter(col("TIMELINE") === timeline)
+//                .select(colName).collectAsList().get(0).toString().replaceAll("[\\[\\]]", ""))
+//            x._2
+//        }).toList
+        cellMap.values.toList
     }
 
     def pushTable(cellList: List[cell], pos: List[Int], slideIndex: Int): Unit = {
@@ -249,8 +293,22 @@ class phReportContentTrendsTable extends phReportContentTableBaseImpl {
         val timelineList = tableArgs.timelineList
         val jobid = tableArgs.jobid
         val mktDisplayName = tableArgs.mktDisplayName
-        val colMap = Map("SOM(%)" -> ("SOM in " + mktDisplayName),
-            "RMB(Mn)" -> "result", "Growth(%)" -> "Growth")
+        val col2dataColMap =  Map("DOT(Mn)" -> "RESULT",
+            "MMU" -> "RESULT",
+            "Tablet" -> "RESULT",
+            "SOM(%)" -> ("SOM in " + mktDisplayName),
+            "SOM" -> ("SOM in " + mktDisplayName),
+            "SOM%" -> ("SOM in " + mktDisplayName),
+            "Growth(%)" -> "GROWTH",
+            "YoY GR(%)" -> "GROWTH",
+            "GR(%)" -> "GROWTH",
+            "RMB" -> "RESULT",
+            "RMB(Mn)" -> "RESULT",
+            "DOT" -> "RESULT",
+            "SOM in Branded MKT(%)" -> ("SOM in " + mktDisplayName),
+            "Mg(Mn)" -> "RESULT",
+            "MG(Mn)" -> "RESULT",
+            "RMB(Mn)" -> "RESULT")
         timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
             val timeline = timelineAndCss._1
             val timelineCss = timelineAndCss._2
@@ -275,7 +333,7 @@ class phReportContentTrendsTable extends phReportContentTableBaseImpl {
                 val timeline = timelineAndCss._1
                 val colIndex = ymIndex + 1
                 colList.foreach { colNameAndCss =>
-                    val colName = colMap.getOrElse(colNameAndCss._1, colNameAndCss._1)
+                    val colName = col2dataColMap.getOrElse(colNameAndCss._1, colNameAndCss._1)
                     val colCss = colNameAndCss._2
                     val valueCell = (colIndex + 65).toChar.toString + rowIndex.toString
                     cellMap = cellMap ++ Map((displayName, timeline, colName) -> cell(jobid, tableName, valueCell, "", "Number", List(colCss, rowCss)))
@@ -319,8 +377,22 @@ class phReportContentBlueGrowthTable extends phReportContentTrendsTable {
         val timelineList = tableArgs.timelineList
         val jobid = tableArgs.jobid
         val mktDisplayName = tableArgs.mktDisplayName
-        val colMap = Map("SOM(%)" -> ("SOM in " + mktDisplayName),
-            "RMB(Mn)" -> "result", "Growth(%)" -> "Growth")
+        val colMap =  Map("DOT(Mn)" -> "RESULT",
+            "MMU" -> "RESULT",
+            "Tablet" -> "RESULT",
+            "SOM(%)" -> ("SOM in " + mktDisplayName),
+            "SOM" -> ("SOM in " + mktDisplayName),
+            "SOM%" -> ("SOM in " + mktDisplayName),
+            "Growth(%)" -> "GROWTH",
+            "YoY GR(%)" -> "GROWTH",
+            "GR(%)" -> "GROWTH",
+            "RMB" -> "RESULT",
+            "RMB(Mn)" -> "RESULT",
+            "DOT" -> "RESULT",
+            "SOM in Branded MKT(%)" -> ("SOM in " + mktDisplayName),
+            "Mg(Mn)" -> "RESULT",
+            "MG(Mn)" -> "RESULT",
+            "RMB(Mn)" -> "RESULT")
         timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
             val timeline = timelineAndCss._1
             val timelineCss = timelineAndCss._2
