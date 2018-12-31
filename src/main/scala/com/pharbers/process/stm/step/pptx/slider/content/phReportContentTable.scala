@@ -3,9 +3,10 @@ package com.pharbers.process.stm.step.pptx.slider.content
 import java.util.UUID
 
 import com.pharbers.phsocket.phSocketDriver
-import com.pharbers.process.common.phCommand
+import com.pharbers.process.common.{phCommand, phLycalData}
 import com.pharbers.spark.phSparkDriver
 import org.apache.poi.xslf.usermodel.XSLFSlide
+import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
 import play.api.libs.json.JsValue
 import org.apache.spark.sql.functions.col
@@ -286,6 +287,36 @@ class phReportContentTableImpl extends phReportContentTableBaseImpl {
 
 class phReportContentTrendsTable extends phReportContentTableBaseImpl {
 
+    override def exec(args: Any): Any = {
+        val colArgs = getColArgs(args)
+        val tableArgs = getTableArgs(args)
+        val data = colValue(colArgs)
+//        createTable(tableArgs, data)
+    }
+    def colValue(colArgs: colArgs): Any = {
+        val colMap = Map(
+            "DOT(Mn)" -> "dot",
+            "MMU" -> "dot",
+            "Tablet" -> "dot",
+            "RMB" -> "LC-RMB",
+            "RMB(Mn)" -> "LC-RMB",
+            "DOT" -> "dot",
+            "Mg(Mn)" -> "dot",
+            "MG(Mn)" -> "dot",
+            "RMB(Mn)" -> "LC-RMB",
+            "" -> "empty"
+        )
+        val funDot: phLycalData => Boolean = phLycalData => {
+            phLycalData.dot > 0
+        }
+
+        val funRMB:phLycalData => Boolean = phLycalData => {
+            phLycalData.tp == "LC-RMB"
+        }
+        val result: Any = new valueDF().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName, colArgs.primaryValueName), "func" -> funDot))
+        result
+    }
     override def createTableStyle(tableArgs: tableArgs): Map[(String, String, String), cell] = {
         var cellMap: Map[(String, String, String), cell] = Map()
         val tableName = UUID.randomUUID().toString
