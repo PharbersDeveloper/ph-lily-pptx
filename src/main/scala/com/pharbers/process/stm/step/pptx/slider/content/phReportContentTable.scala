@@ -3,7 +3,7 @@ package com.pharbers.process.stm.step.pptx.slider.content
 import java.util.UUID
 
 import com.pharbers.phsocket.phSocketDriver
-import com.pharbers.process.common.{phCommand, phLycalData}
+import com.pharbers.process.common.{phCommand, phLycalArray, phLycalData}
 import com.pharbers.spark.phSparkDriver
 import org.apache.poi.xslf.usermodel.XSLFSlide
 import org.apache.spark.rdd.RDD
@@ -291,32 +291,50 @@ class phReportContentTrendsTable extends phReportContentTableBaseImpl {
         val colArgs = getColArgs(args)
         val tableArgs = getTableArgs(args)
         val data = colValue(colArgs)
-//        createTable(tableArgs, data)
+        createTable(tableArgs, data)
     }
     def colValue(colArgs: colArgs): Any = {
-        val colMap = Map(
-            "DOT(Mn)" -> "dot",
-            "MMU" -> "dot",
-            "Tablet" -> "dot",
-            "RMB" -> "LC-RMB",
-            "RMB(Mn)" -> "LC-RMB",
-            "DOT" -> "dot",
-            "Mg(Mn)" -> "dot",
-            "MG(Mn)" -> "dot",
-            "RMB(Mn)" -> "LC-RMB",
-            "" -> "empty"
-        )
         val funDot: phLycalData => Boolean = phLycalData => {
             phLycalData.dot > 0
         }
 
-        val funRMB:phLycalData => Boolean = phLycalData => {
+        val funRMB: phLycalData => Boolean = phLycalData => {
             phLycalData.tp == "LC-RMB"
         }
-        val result: Any = new valueDF().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
-            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName, colArgs.primaryValueName), "func" -> funDot))
+
+        val colMap = Map(
+            "DOT(Mn)" -> funDot,
+            "MMU" -> funDot,
+            "Tablet" -> funDot,
+            "RMB" -> funRMB,
+            "RMB(Mn)" -> funRMB,
+            "DOT" -> funDot,
+            "Mg(Mn)" -> funDot,
+            "MG(Mn)" -> funDot,
+            "RMB(Mn)" -> funRMB,
+            "" -> "empty"
+        )
+
+        val result: Any = new allValueRDD().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+            "timelineList" -> colArgs.timelineList, "func" -> colMap.getOrElse(colArgs.primaryValueName,funDot)))
         result
     }
+
+    def createTable(tableArgs: tableArgs, data: Any): Unit = {
+        val cellMap = createTableStyle(tableArgs)
+        val cellList = putTableValue(data, cellMap)
+        pushTable(cellList, tableArgs.pos, tableArgs.slideIndex)
+    }
+
+    def putTableValue(data: Any, cellMap: Map[(String, String, String), cell]): List[cell] = {
+        val rdd = data.asInstanceOf[RDD[(String, phLycalArray)]]
+        val resultMap = rdd.collect().toMap
+        cellMap.foreach(x => {
+            x._2.value = resultMap(x._1._1).reVal(x._1._2.toInt).bigDecimal.toString
+        })
+        cellMap.values.toList
+    }
+
     override def createTableStyle(tableArgs: tableArgs): Map[(String, String, String), cell] = {
         var cellMap: Map[(String, String, String), cell] = Map()
         val tableName = UUID.randomUUID().toString
@@ -355,7 +373,7 @@ class phReportContentTrendsTable extends phReportContentTableBaseImpl {
                     val colName = col2dataColMap.getOrElse(colNameAndCss._1, colNameAndCss._1)
                     val colCss = colNameAndCss._2
                     val valueCell = (colIndex + 65).toChar.toString + rowIndex.toString
-                    cellMap = cellMap ++ Map((displayName, timeline, colName) -> cell(jobid, tableName, valueCell, "", "Number", List(colCss, rowCss)))
+                    cellMap = cellMap ++ Map((displayName, colIndex.toString, colName) -> cell(jobid, tableName, valueCell, "", "Number", List(colCss, rowCss)))
                 }
             }
         }
