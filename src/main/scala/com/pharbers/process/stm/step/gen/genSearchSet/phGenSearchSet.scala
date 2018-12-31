@@ -46,7 +46,5 @@ class phGenSearchSetImpl extends phGenSearchSet with phCommand {
         })
         val command = phLyFactory.getInstance(merge_func("factory")).asInstanceOf[phCommand]
         phLyFactory.stssoo += ("DF_gen_search_set" -> command.exec(dfLst))
-        //        println(merge_func)
-        //        println("gen search set")
     }
 }

@@ -1,6 +1,6 @@
 package com.pharbers.process.stm.step.pptx.slider.content
 
-import com.pharbers.process.common.{phCommand, phLyFactory, phLyGrowthData, phLycalData}
+import com.pharbers.process.common._
 import com.pharbers.spark.phSparkDriver
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.col
@@ -131,7 +131,6 @@ trait phReportTableCol {
         monthCount
     }
 
-
     def getAllTimeline(timelineList: List[String]): List[String] = {
         val resultList = timelineList ::: timelineList.map { timeline =>
             val lastYear = (timeline.split(" ").last.toInt - 1).toString
@@ -139,6 +138,98 @@ trait phReportTableCol {
             lastTimeLine
         }
         resultList.distinct
+    }
+
+    def getAllym(year: Int, month: Int, forward: Int, lst: List[String]): List[String] = {
+        if (forward == 0) {
+            lst
+        }
+        else {
+            val ym = if (month < 10) {
+                year.toString + "0" + month.toString
+            } else {
+                year.toString + month.toString
+            }
+            if (month == 1) getAllym(year - 1, 12, forward - 1, lst ::: List(ym))
+            else getAllym(year, month - 1, forward - 1, lst ::: List(ym))
+        }
+    }
+
+    def getValue(args: Any): Any = {
+        val argsMap = args.asInstanceOf[Map[String, Any]]
+        val data: DataFrame = argsMap("data").asInstanceOf[DataFrame]
+        val displayNamelList: List[String] = argsMap("allDisplayNames").asInstanceOf[List[String]]
+        val colList: List[String] = argsMap("colList").asInstanceOf[List[String]]
+        //timeline
+        val timelineList: List[String] = argsMap("timelineList").asInstanceOf[List[String]]
+        //        val primaryValueName: String = argsMap("primaryValueName").asInstanceOf[String]
+        val func: phLycalData => Boolean = argsMap("func").asInstanceOf[phLycalData => Boolean]
+        val forward: Int = timelineYmCount(timelineList.head)
+        //需要计算出真正值的所有timeline
+        val allTimelineList: List[String] = if (colList.contains("Growth(%)")) {
+            getAllTimeline(timelineList)
+        } else {
+            timelineList
+        }
+        //为了筛选数据
+        val allTimelst: List[String] = allTimelineList.map { timeline =>
+            val startYm: String = getStartYm(timeline)
+            val ymMap = getTimeLineYm(timeline)
+            val month = ymMap("month").toString.length match {
+                case 1 => "0" + ymMap("month")
+                case _ => ymMap("month")
+            }
+            val endYm: String = ymMap("year").toString + month
+            List(startYm, endYm)
+        }.reduce((lst1, lst2) => (lst1 ::: lst2).distinct).sorted
+        val rddTemp = data.toJavaRDD.rdd.map(x => phLycalData(x(0).toString, x(1).toString, x(2).toString, x(3).toString, x(4).toString,
+            BigDecimal(x(5).toString), BigDecimal(x(6).toString), BigDecimal(x(7).toString), x(8).toString))
+        rddTemp.take(20).take(20).foreach(println)
+        /**
+          * 1. 整理所有需要的 display Name
+          */
+        val filter_display_name = rddTemp.filter(x => displayNamelList.contains(x.display_name))
+            .filter(x => x.date >= allTimelst.min)
+            .filter(x => x.date <= allTimelst.max)
+            .filter(x => func(x))
+        filter_display_name.take(20).foreach(println)
+
+//        val allTimelineYMList: List[Map[String, Int]] = allTimelst.map(x => Map("year" -> x.take(4).toInt,
+//            "month" -> x.takeRight(2).toInt))
+//
+//        val allYmList = allTimelineYMList.map(x => getAllym(x("year"), x("month"), forward, List())).reduce((lst1, lst2) =>
+//            (lst1 ::: lst2).distinct
+//        ).sorted
+
+        val mid_sum = filter_display_name.map { x =>
+            val idx = allTimelst.indexOf(x.date)
+            val lst = if (idx > -1) {
+                List.fill(idx)(BigDecimal(0)) :::
+                    List.fill(forward)(x.dot) :::
+                    List.fill(allTimelst.length - idx - forward)(BigDecimal(0))
+            } else List.fill(allTimelst.length)(BigDecimal(0))
+            (x, phLycalArray(lst))
+        }.keyBy(_._1.display_name)
+            .reduceByKey { (left, rigth) =>
+                val lst = left._2.reVal.zip(rigth._2.reVal).map(x => x._1 + x._2)
+                (left._1, phLycalArray(lst))
+            }.map(x => (x._1, x._2._2.reVal.reverse))
+        mid_sum.take(20).foreach(println)
+
+        val result = mid_sum.map { iter =>
+            val growth = iter._2.zipWithIndex.map { case (value, idx) =>
+                if (idx > timelineList.length) {
+                    BigDecimal(20181231)
+                } else {
+                    val m = iter._2.apply(idx + 12)
+                    ((value - m) / m) * 100
+                }
+            }
+            (iter._1, growth.take(timelineList.length).reverse)
+        }
+
+        result.take(20).foreach(println)
+        result
     }
 }
 
@@ -170,50 +261,69 @@ class valueDF extends phCommand with phReportTableCol {
         /**
           * 1. 整理所有需要的 display Name
           */
-        val filter_display_name =
-            rddTemp.filter(x => displayNamelList.contains(x.display_name))
+        val filter_display_name = primaryValueName match {
+            case "LC-RMB" => rddTemp.filter(x => displayNamelList.contains(x.display_name))
                 .filter(x => x.date >= allTimelst.min)
                 .filter(x => x.date <= allTimelst.max)
                 .filter(x => x.tp == primaryValueName)
-        filter_display_name.take(10).foreach(println)
+            case "dot" => rddTemp.filter(x => displayNamelList.contains(x.display_name))
+                .filter(x => x.date >= allTimelst.min)
+                .filter(x => x.date <= allTimelst.max)
+                .filter(x => x.dot >= 0)
+        }
+
 
         /**
           * 2. reduce by key 就是以display name 求和, 叫中间和
           */
-        //        val mid_sum = filter_display_name.keyBy(x => x.display_name).reduceByKey { (left, right) =>
-        //            left.result =
-        //                (if (left.result == 0) {
-        //                    left.dot
-        //                } else left.result) +
-        //                    (if (right.result == 0) {
-        //                        right.dot
-        //                    } else right.result)
-        //            left
-        //        }
-        //        mid_sum.take(30).foreach(println)
 
-        val mid_sum = allTimelineList.map { timeline =>
-            val startYm: String = getStartYm(timeline)
-            val ymMap = getTimeLineYm(timeline)
-            val month = ymMap("month").toString.length match {
-                case 1 => "0" + ymMap("month")
-                case _ => ymMap("month")
-            }
-            val endYm: String = ymMap("year").toString + month
-            filter_display_name.filter(x => x.date >= startYm)
-                .filter(x => x.date <= endYm)
-                .keyBy(x => (x.display_name, timeline))
-                .reduceByKey { (left, right) =>
-                    left.result =
-                        (if (left.result == 0) {
-                            left.dot
-                        } else left.result) +
-                            (if (right.result == 0) {
-                                right.dot
-                            } else right.result)
-                    left
+        val mid_sum = primaryValueName match{
+            case "dot" =>allTimelineList.map { timeline =>
+                val startYm: String = getStartYm(timeline)
+                val ymMap = getTimeLineYm(timeline)
+                val month = ymMap("month").toString.length match {
+                    case 1 => "0" + ymMap("month")
+                    case _ => ymMap("month")
                 }
-        }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
+                val endYm: String = ymMap("year").toString + month
+                filter_display_name.filter(x => x.date >= startYm)
+                    .filter(x => x.date <= endYm)
+                    .keyBy(x => (x.display_name, timeline))
+                    .reduceByKey { (left, right) =>
+                        left.result =
+                            (if (left.result == 0) {
+                                left.dot
+                            } else left.result) +
+                                (if (right.result == 0) {
+                                    right.dot
+                                } else right.result)
+                        left
+                    }
+            }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
+            case "LC-RMB" => allTimelineList.map { timeline =>
+                val startYm: String = getStartYm(timeline)
+                val ymMap = getTimeLineYm(timeline)
+                val month = ymMap("month").toString.length match {
+                    case 1 => "0" + ymMap("month")
+                    case _ => ymMap("month")
+                }
+                val endYm: String = ymMap("year").toString + month
+                filter_display_name.filter(x => x.date >= startYm)
+                    .filter(x => x.date <= endYm)
+                    .keyBy(x => (x.display_name, timeline))
+                    .reduceByKey { (left, right) =>
+                        left.result =
+                            (if (left.result == 0) {
+                                left.value
+                            } else left.result) +
+                                (if (right.result == 0) {
+                                    right.value
+                                } else right.result)
+                        left
+                    }
+            }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
+        }
+
 
         lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
         import sparkDriver.ss.implicits._
@@ -222,6 +332,10 @@ class valueDF extends phCommand with phReportTableCol {
         ).toDF("DISPLAY_NAME", "TIMELINE", "RESULT")
         result
     }
+}
+
+class growthTable extends phCommand with phReportTableCol {
+    override def exec(args: Any): Any = getValue(args)
 }
 
 class som extends phCommand with phReportTableCol {
@@ -249,7 +363,6 @@ class growth extends phCommand with phReportTableCol {
         val timelineList = argsMap("timelineList").asInstanceOf[List[String]]
         val tmpRDD = data.toJavaRDD.rdd.map(x => phLyGrowthData(x(0).toString, x(1).toString, x(2).toString.toDouble,
             0.toString.toDouble))
-        tmpRDD.take(10).foreach(println)
         val resultRDD = timelineList.map { timeline =>
             val allTimelineList = getAllTimeline(List(timeline))
             tmpRDD.filter(x => allTimelineList.contains(x.timeline))
@@ -264,7 +377,6 @@ class growth extends phCommand with phReportTableCol {
                     }
                 }
         }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
-        resultRDD.take(10).foreach(println)
         lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
         import sparkDriver.ss.implicits._
         val resultDF = resultRDD.map(iter =>
@@ -273,138 +385,3 @@ class growth extends phCommand with phReportTableCol {
         resultDF
     }
 }
-
-//class dot extends phReportTableCol with phCommand {
-//    override def exec(args: Any): Any = {
-//        val argMap = args.asInstanceOf[Map[String, Any]]
-//        val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
-//        val displayName = argMap("displayName").asInstanceOf[String]
-//        val ym = argMap("ym").asInstanceOf[String]
-//        val resultSum = dataMap.getOrElse(displayName + ym, getDot(args))
-//        resultSum.toString
-//    }
-//}
-//
-//class dotMn extends phReportTableCol with phCommand {
-//    override def exec(args: Any): Any = {
-//        val argMap = args.asInstanceOf[Map[String, Any]]
-//        val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
-//        val displayName = argMap("displayName").asInstanceOf[String]
-//        val ym = argMap("ym").asInstanceOf[String]
-//        val resultSum = dataMap.getOrElse(displayName + ym, {
-//            val result = getDot(args)
-//            dataMap(displayName + ym) = result / 1000000
-//            result / 1000000
-//        })
-//        resultSum.toString
-//    }
-//}
-//
-//class GrowthPercentage extends phReportTableCol with phCommand {
-//    override def exec(args: Any): Double = {
-//        val argMap = args.asInstanceOf[Map[String, Any]]
-//        data = argMap("data").asInstanceOf[DataFrame]
-//        val dataMap = argMap("dataMap").asInstanceOf[collection.mutable.Map[String, Double]]
-//        val displayName = argMap("displayName").asInstanceOf[String]
-//        val ym = argMap("ym").asInstanceOf[String]
-//        val startYm = argMap("startYm").asInstanceOf[String]
-//        val lastYm = argMap("lastYm").asInstanceOf[String]
-//        val firstColName = argMap("firstCol").asInstanceOf[String]
-//        val yearSum: Double = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]](displayName + ym)
-//        val lastYear = (ym.split(" ").last.toInt - 1).toString
-//        val lastTimeLine = (ym.split(" ").take(ym.split(" ").length - 1) ++ Array(lastYear)).mkString(" ")
-//        //        val lastymstr: String = month + " " + lastYear
-//        //        val lastyearymDF: DataFrame = getYmDF("MAT M"+month+" "+lastYear)
-//        val lastYear_startYm = (startYm.substring(0, 4).toInt - 1).toString + startYm.takeRight(2)
-//        val lastYear_lastYm = (lastYm.substring(0, 4).toInt - 1).toString + lastYm.takeRight(2)
-//        val function = "com.pharbers.process.stm.step.pptx.slider.content." + phReportContentTable.colName2FunctionName(firstColName)
-//        val lastYearResult = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]].getOrElse(displayName + lastTimeLine, {
-//            phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
-//                Map("data" -> data,
-//                    "displayName" -> displayName,
-//                    "ym" -> lastTimeLine,
-//                    "dataMap" -> dataMap,
-//                    "firstRow" -> "",
-//                    "firstCol" -> "",
-//                    "startYm" -> lastYear_startYm,
-//                    "lastYm" -> lastYear_lastYm
-//                )
-//            ).asInstanceOf[String].toDouble
-//        })
-//        argMap("dataMap").asInstanceOf[mutable.Map[String, Double]](displayName + lastTimeLine) = lastYearResult
-//        ((yearSum - lastYearResult) / lastYearResult) * 100
-//    }
-//}
-//
-//class som extends phReportTableCol with phCommand {
-//    override def exec(args: Any): Double = {
-//        val argMap = args.asInstanceOf[Map[String, Any]]
-//        val startYm = argMap("startYm").asInstanceOf[String]
-//        val lastYm = argMap("lastYm").asInstanceOf[String]
-//        val firstColName = argMap("firstCol").asInstanceOf[String]
-//        val function = "com.pharbers.process.stm.step.pptx.slider.content." + phReportContentTable.colName2FunctionName(firstColName)
-//        data = argMap("data").asInstanceOf[DataFrame]
-//        val map = argMap("dataMap").asInstanceOf[collection.mutable.Map[String, Double]]
-//        val displayName = argMap("displayName").asInstanceOf[String]
-//        val ym = argMap("ym").asInstanceOf[String]
-//        val firstDisplayName = argMap("firstRow").asInstanceOf[String]
-//        val firstDisplayNameValue = map.getOrElse(firstDisplayName + ym, {
-//            phLyFactory.getInstance(function).asInstanceOf[phCommand].exec(
-//                Map("data" -> data,
-//                    "displayName" -> firstDisplayName,
-//                    "ym" -> ym,
-//                    "dataMap" -> map,
-//                    "firstRow" -> "",
-//                    "firstCol" -> "",
-//                    "startYm" -> startYm,
-//                    "lastYm" -> lastYm
-//                )
-//            ).asInstanceOf[String].toDouble
-//        })
-//        map(displayName + ym) / firstDisplayNameValue * 100
-//    }
-//}
-//
-//class rmb extends phReportTableCol with phCommand {
-//    override def exec(args: Any): Any = {
-//        val argMap = args.asInstanceOf[Map[String, Any]]
-//        val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
-//        val displayName = argMap("displayName").asInstanceOf[String]
-//        val ym = argMap("ym").asInstanceOf[String]
-//        val resultSum = dataMap.getOrElse(displayName + ym, getRMB(args))
-//        resultSum.toLong.toString
-//    }
-//}
-//
-//class rmbMn extends phReportTableCol with phCommand {
-//    override def exec(args: Any): Any = {
-//        val argMap = args.asInstanceOf[Map[String, Any]]
-//        val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
-//        val displayName = argMap("displayName").asInstanceOf[String]
-//        val ym = argMap("ym").asInstanceOf[String]
-//        val resultSum = dataMap.getOrElse(displayName + ym, {
-//            val result = getRMB(args)
-//            dataMap(displayName + ym) = result / 1000000
-//            result / 1000000
-//        })
-//        resultSum.toString
-//    }
-//}
-//
-//class tablet extends phReportTableCol with phCommand {
-//    override def exec(args: Any): Any = {
-//        val argMap = args.asInstanceOf[Map[String, Any]]
-//        val dataMap: mutable.Map[String, Double] = argMap("dataMap").asInstanceOf[mutable.Map[String, Double]]
-//        val displayName = argMap("displayName").asInstanceOf[String]
-//        val ym = argMap("ym").asInstanceOf[String]
-//        val resultSum = dataMap.getOrElse(displayName + ym, getTable(args))
-//        resultSum.toString
-//    }
-//}
-//
-//class empty extends phReportTableCol with phCommand {
-//    override def exec(args: Any): String = {
-//        ""
-//    }
-//}
-

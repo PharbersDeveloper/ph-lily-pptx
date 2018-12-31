@@ -315,7 +315,7 @@ class phReportContentTrendsTable extends phReportContentTableBaseImpl {
             "" -> "empty"
         )
 
-        val result: Any = new allValueRDD().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+        val result: Any = new growthTable().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
             "timelineList" -> colArgs.timelineList, "func" -> colMap.getOrElse(colArgs.primaryValueName,funDot)))
         result
     }
@@ -327,10 +327,10 @@ class phReportContentTrendsTable extends phReportContentTableBaseImpl {
     }
 
     def putTableValue(data: Any, cellMap: Map[(String, String, String), cell]): List[cell] = {
-        val rdd = data.asInstanceOf[RDD[(String, phLycalArray)]]
+        val rdd = data.asInstanceOf[RDD[(String, List[BigDecimal])]]
         val resultMap = rdd.collect().toMap
         cellMap.foreach(x => {
-            x._2.value = resultMap(x._1._1).reVal(x._1._2.toInt).bigDecimal.toString
+            x._2.value = resultMap(x._1._1)(x._1._2.toInt).bigDecimal.toString
         })
         cellMap.values.toList
     }
@@ -373,7 +373,7 @@ class phReportContentTrendsTable extends phReportContentTableBaseImpl {
                     val colName = col2dataColMap.getOrElse(colNameAndCss._1, colNameAndCss._1)
                     val colCss = colNameAndCss._2
                     val valueCell = (colIndex + 65).toChar.toString + rowIndex.toString
-                    cellMap = cellMap ++ Map((displayName, colIndex.toString, colName) -> cell(jobid, tableName, valueCell, "", "Number", List(colCss, rowCss)))
+                    cellMap = cellMap ++ Map((displayName, ymIndex.toString, colName) -> cell(jobid, tableName, valueCell, "", "Number", List(colCss, rowCss)))
                 }
             }
         }
