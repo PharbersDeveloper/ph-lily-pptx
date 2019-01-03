@@ -82,7 +82,7 @@ class phReportContentTableBaseImpl extends phReportContentTable {
             "SOM in Branded MKT(%)" -> "som")
         val argsMap = args.asInstanceOf[Map[String, Any]]
         val element = argsMap("element").asInstanceOf[JsValue]
-        val rowList = (element \ "row" \ "display_name").as[List[String]].map(x => x.split(":").head)
+        val rowList = (element \ "row" \ "display_name").as[List[String]].map(x => x.split(":").head.replace("%", ""))
         val colList = (element \ "col" \ "count").as[List[String]].map(x => col2DataColMap.getOrElse(x.split(":").head,x.split(":").head))
         val timelineList = (element \ "timeline").as[List[String]].map(x => x.split(":").head)
         val mktDisplayName = ((element \ "mkt_display").as[String] :: rowList.head :: Nil).filter(x => x != "").head
@@ -304,7 +304,6 @@ class phReportContentTrendsTable extends phReportContentTableBaseImpl {
             "RMB(Mn)" -> "rmb",
             "" -> "empty"
         )
-
         val result: Any = new growthTable().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
             "timelineList" -> colArgs.timelineList, "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName,"dot"), "mktDisplayName" -> colArgs.mktDisplayName))
         result
@@ -317,10 +316,10 @@ class phReportContentTrendsTable extends phReportContentTableBaseImpl {
     }
 
     def putTableValue(data: Any, cellMap: Map[(String, String, String), cell]): List[cell] = {
-        val rdd = data.asInstanceOf[RDD[(String, List[BigDecimal])]]
+        val rdd = data.asInstanceOf[RDD[(String, List[String])]]
         val resultMap = rdd.collect().toMap
         cellMap.foreach(x => {
-            x._2.value = resultMap(x._1._1)(x._1._2.toInt).bigDecimal.toString
+            x._2.value = resultMap.getOrElse(x._1._1,List.fill(24)("0"))(x._1._2.toInt)
         })
         cellMap.values.toList
     }
