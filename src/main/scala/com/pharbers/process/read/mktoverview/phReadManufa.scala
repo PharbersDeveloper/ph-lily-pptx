@@ -2,7 +2,7 @@ package com.pharbers.process.read.mktoverview
 
 import java.util.Calendar
 
-import com.pharbers.process.common.{phCommand, phLyFactory, phLyManufaData}
+import com.pharbers.process.common.{phCommand, phLyFactory, phLyMOVData}
 import com.pharbers.spark.phSparkDriver
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
@@ -51,16 +51,16 @@ trait phReadManufa extends java.io.Serializable{
                     val tt = if (idx < start + (cat - 1) * step) cat01
                     else cat02
 
-                    if (row._1  == "CORPORATE") row._1 -> phLyManufaData(row._2(this.primary.head).toString, "DATE", "TYPE", 0)
-                    else row._1 -> phLyManufaData(row._2(this.primary.head).toString, cal_str, tt.toString, BigDecimal(row._2(idx).toString))
+                    if (row._1  == "CORPORATE") row._1 -> phLyMOVData(row._2(this.primary.head).toString, "DATE", "TYPE", 0)
+                    else row._1 -> phLyMOVData(row._2(this.primary.head).toString, cal_str, tt.toString, BigDecimal(row._2(idx).toString))
                 }
             inner.toList
         }.flatMap(x => x).filter(_._1 != "CORPORATE")
         lazy val sparkDriver: phSparkDriver = phSparkDriver("cui-test")
 
         import sparkDriver.ss.implicits._
-        val resultDF = rdd.map(iter => (iter._2.corporate, iter._2.date, iter._2.tp, iter._2.value))
-            .toDF("CORPORATE", "DATE", "TYPE","VALUE")
+        val resultDF = rdd.map(iter => (iter._2.id, iter._2.date, iter._2.tp, iter._2.value))
+            .toDF("ID", "DATE", "TYPE","VALUE")
         phLyFactory.setStorageWithDFName(resultName, resultDF)
     }
 }

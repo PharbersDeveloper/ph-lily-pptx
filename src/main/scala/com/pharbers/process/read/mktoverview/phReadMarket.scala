@@ -2,7 +2,7 @@ package com.pharbers.process.read.mktoverview
 
 import java.util.Calendar
 
-import com.pharbers.process.common.{phCommand, phLyFactory, phLyMktData}
+import com.pharbers.process.common.{phCommand, phLyFactory, phLyMOVData}
 import com.pharbers.spark.phSparkDriver
 import org.apache.spark.sql.DataFrame
 
@@ -43,16 +43,16 @@ trait phReadMarket extends java.io.Serializable {
                     cal.add(2 /*Month*/, offset)
                     val cal_str = dt_f.format(cal.getTime)
 
-                    if (row._1  == "MANUF_TYPE") row._1 -> phLyMktData(row._2(this.primary.head).toString, "DATE", 0)
-                    else row._1 -> phLyMktData(row._2(this.primary.head).toString, cal_str, BigDecimal(row._2(idx).toString))
+                    if (row._1  == "MANUF_TYPE") row._1 -> phLyMOVData(row._2(this.primary.head).toString, "DATE", "LC-RMB", 0)
+                    else row._1 -> phLyMOVData(row._2(this.primary.head).toString, cal_str, "LC-RMB", BigDecimal(row._2(idx).toString))
                 }
             inner.toList
         }.flatMap(x => x).filter(_._1 != "MANUF_TYPE")
         lazy val sparkDriver: phSparkDriver = phSparkDriver("cui-test")
 
         import sparkDriver.ss.implicits._
-        val resultDF = rdd.map(iter => (iter._2.manuf_type, iter._2.date, iter._2.value))
-            .toDF("MANUF", "DATE", "VALUE")
+        val resultDF = rdd.map(iter => (iter._2.id, iter._2.date, iter._2.tp, iter._2.value))
+            .toDF("ID", "DATE", "TYPE", "VALUE")
         phLyFactory.setStorageWithDFName("market", resultDF)
     }
 }
