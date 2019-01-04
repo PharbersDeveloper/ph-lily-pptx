@@ -1,10 +1,10 @@
 package com.pharbers.process.common
 
-case class phLyProdData(
-                          product: String,
+case class phLyMOVData(
+                          id: String,
                           date: String,
                           tp: String,
                           value: BigDecimal
                           ) {
-    override def toString: String = s"$product, $tp, $value"
+    override def toString: String = s"$id, $date, $tp, $value"
 }
