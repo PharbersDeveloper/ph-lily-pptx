@@ -77,7 +77,6 @@ trait phReadData extends java.io.Serializable {
             inner.toList
         }.flatMap(x => x).filter(_._1 != "PRODUCT ID")
         rdd
-//        rdd.distinct().take(200).foreach(println)
     }
 }
 

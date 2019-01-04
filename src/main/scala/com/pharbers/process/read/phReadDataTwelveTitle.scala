@@ -1,8 +1,6 @@
 package com.pharbers.process.read
 
-import com.pharbers.process.common.{phCommand, phLyFactory}
-import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions.{col, lit, when}
+import com.pharbers.process.common.phCommand
 
 trait phReadDataTwelveTitle extends phReadData {
     override val start = 12
