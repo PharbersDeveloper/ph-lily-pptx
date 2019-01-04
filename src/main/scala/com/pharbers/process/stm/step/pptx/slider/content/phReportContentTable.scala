@@ -4,6 +4,7 @@ import java.util.UUID
 
 import com.pharbers.phsocket.phSocketDriver
 import com.pharbers.process.common.{phCommand, phLycalArray, phLycalData}
+import com.pharbers.process.stm.step.pptx.slider.content.overview.col.PieTableCol
 import com.pharbers.spark.phSparkDriver
 import org.apache.poi.xslf.usermodel.XSLFSlide
 import org.apache.spark.rdd.RDD
@@ -53,7 +54,7 @@ trait phReportContentTable extends phCommand {
 
     def colOtherValue(colArgs: colArgs, data: DataFrame): DataFrame
 
-    def createTable(tableArgs: tableArgs, data: DataFrame): Unit
+    def createTable(tableArgs: tableArgs, data: Any): Unit
 
 }
 
@@ -169,9 +170,10 @@ class phReportContentTableBaseImpl extends phReportContentTable {
         dataFrame
     }
 
-    override def createTable(tableArgs: tableArgs, data: DataFrame): Unit = {
+    override def createTable(tableArgs: tableArgs, data: Any): Unit = {
+
         val cellMap = createTableStyle(tableArgs)
-        val cellList = putTableValue(data, cellMap)
+        val cellList = putTableValue(data.asInstanceOf[DataFrame], cellMap)
         pushTable(cellList, tableArgs.pos, tableArgs.slideIndex)
     }
 
@@ -241,7 +243,8 @@ class phReportContentTableBaseImpl extends phReportContentTable {
         cellMap
     }
 
-    def putTableValue(dataFrame: DataFrame, cellMap: Map[(String, String, String), (cell, String => String)]): List[cell] = {
+    def putTableValue(data: Any, cellMap: Map[(String, String, String), (cell, String => String)]): List[cell] = {
+        val dataFrame = data.asInstanceOf[DataFrame]
         val common: String => String = x => x
         val dataColNames = dataFrame.columns
         dataFrame.collect().foreach(x => {
@@ -303,19 +306,19 @@ class phReportContentTrendsTable extends phReportContentTableBaseImpl {
         result
     }
 
-    def createTable(tableArgs: tableArgs, data: Any): Unit = {
-        val cellMap = createTableStyle(tableArgs).map(x => (x._1, x._2._1))
+    override def createTable(tableArgs: tableArgs, data: Any): Unit = {
+        val cellMap = createTableStyle(tableArgs)
         val cellList = putTableValue(data, cellMap)
         pushTable(cellList, tableArgs.pos, tableArgs.slideIndex)
     }
 
-    def putTableValue(data: Any, cellMap: Map[(String, String, String), cell]): List[cell] = {
+    override def putTableValue(data: Any, cellMap: Map[(String, String, String), (cell, String => String)]): List[cell] = {
         val rdd = data.asInstanceOf[RDD[(String, List[String])]]
         val resultMap = rdd.collect().toMap
         cellMap.foreach(x => {
-            x._2.value = resultMap.getOrElse(x._1._1,List.fill(24)("0"))(x._1._2.toInt)
+            x._2._1.value = resultMap.getOrElse(x._1._1,List.fill(24)("0"))(x._1._2.toInt)
         })
-        cellMap.values.toList
+        cellMap.values.map(x => x._1).toList
     }
 
     override def createTableStyle(tableArgs: tableArgs): Map[(String, String, String), (cell, String => String)] = {
@@ -502,6 +505,46 @@ class phReportContentDotAndRmbTable extends phReportContentTableBaseImpl {
 }
 
 class phReportContent3DPieChart extends phReportContentTrendsTable {
+    override def exec(args: Any): Any = {
+        val colArgs = getColArgs(args)
+        val tableArgs = getTableArgs(args)
+        val data: Any = colValue(colArgs)
+        createTable(tableArgs, data)
+    }
+
+    override def colValue(colArgs: colArgs): DataFrame = {
+        val colMap = Map(
+            "DOT(Mn)" -> "dot",
+            "MMU" -> "dot",
+            "Tablet" -> "dot",
+            "RMB" -> "LC-RMB",
+            "RMB(Mn)" -> "LC-RMB",
+            "DOT" -> "dot",
+            "Mg(Mn)" -> "dot",
+            "MG(Mn)" -> "dot",
+            "RMB(Mn)" -> "LC-RMB",
+            "" -> "empty"
+        )
+        val result: DataFrame = new PieTableCol().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName, colArgs.primaryValueName)))
+        result
+    }
+
+    override def putTableValue(data: Any, cellMap: Map[(String, String, String),  (cell, String => String)]): List[cell] = {
+        val dataFrame = data.asInstanceOf[DataFrame]
+        val dataColNames = dataFrame.columns
+        val common: String => String = x => x
+        dataFrame.collect().foreach(x => {
+            val row = x.toSeq.zip(dataColNames).toList
+            val displayName = row.find(x => x._2.equals("DISPLAY_NAME")).get._1.toString
+            row.foreach(x => {
+                val oneCell = cellMap.getOrElse((displayName, "0", x._2),(cell("","","","","",Nil),common ))
+                oneCell._1.value = x._1.toString
+            })
+        })
+        cellMap.values.map(x => x._1).toList
+    }
+
     override def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
         Thread.sleep(3000)
         socketDriver.excel2Chart(jobid, tableName, pos, sliderIndex, "Pie3D")
@@ -512,6 +555,6 @@ case class tableArgs(rowList: List[(String, String)], colList: List[(String, Str
                      jobid: String, pos: List[Int], colTitle: (String, String), rowTitle: (String, String), slideIndex: Int, col2DataColMap: Map[String, String])
 
 case class colArgs(rowList: List[String], colList: List[String], var timelineList: List[String], displayNameList: List[String],
-                   mktDisplayName: String, var primaryValueName: String, data: DataFrame)
+                   mktDisplayName: String, var primaryValueName: String, data: Any)
 
 case class cell(jobid: String, tableName: String, cell: String, var value: String, cate: String, cssName: List[String])

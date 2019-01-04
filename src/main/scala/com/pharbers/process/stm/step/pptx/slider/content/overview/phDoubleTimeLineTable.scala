@@ -1,9 +1,10 @@
 package com.pharbers.process.stm.step.pptx.slider.content.overview
 
 import com.pharbers.process.stm.step.pptx.slider.content.{cell, phReportContentDotAndRmbTable, phReportContentTrendsTable, tableArgs}
+import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
 
-class phDoubleTimeLineTable extends phReportContentDotAndRmbTable{
+class phDoubleTimeLineTable extends phReportContentTrendsTable {
     override def exec(args: Any): Any = {
         val colArgs = getColArgs(args)
         val tableArgs = getTableArgs(args)
@@ -15,23 +16,13 @@ class phDoubleTimeLineTable extends phReportContentDotAndRmbTable{
         createTable(tableArgs, dataList)
     }
 
-    override def createTableStyle(tableArgs: tableArgs): Map[(String, String, String), (cell, String => String)] = {
-        new phReportContentTrendsTable().createTableStyle(tableArgs)
-    }
 
-    override def putTableValue(dataFrameList: List[DataFrame], cellMap: Map[(String, String, String), (cell, String => String)]): List[cell] = {
-        dataFrameList.foreach(data => {
-            val dataFrame = data
-            val common: String => String = x => x
-            val dataColNames = dataFrame.columns
-            dataFrame.collect().foreach(x => {
-                val row = x.toSeq.zip(dataColNames).toList
-                val displayName = row.find(x => x._2.equals("DISPLAY_NAME")).get._1.toString
-                val timeline = row.find(x => x._2.equals("TIMELINE")).get._1.toString
-                row.foreach(x => {
-                    val oneCell = cellMap.getOrElse((displayName, timeline, x._2),(cell("","","","","",Nil),common))
-                    oneCell._1.value = oneCell._2(x._1.toString)
-                })
+
+    override def putTableValue(data: Any, cellMap: Map[(String, String, String), (cell, String => String)]): List[cell] = {
+        data.asInstanceOf[List[DataFrame]].foreach(rdd => {
+            val resultMap = rdd.asInstanceOf[RDD[(String, List[String])]].collect().toMap
+            cellMap.foreach(x => {
+                x._2._1.value = resultMap.getOrElse(x._1._1,List.fill(24)("0"))(x._1._2.toInt)
             })
         })
         cellMap.values.map(x => x._1).toList

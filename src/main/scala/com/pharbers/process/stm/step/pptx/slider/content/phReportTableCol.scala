@@ -185,7 +185,6 @@ trait phReportTableCol {
         }.reduce((lst1, lst2) => (lst1 ::: lst2).distinct).sorted
         val rddTemp = data.toJavaRDD.rdd.map(x => phLycalData(x(0).toString, x(1).toString, x(2).toString, x(3).toString, x(4).toString,
             BigDecimal(x(5).toString), BigDecimal(x(6).toString), BigDecimal(x(7).toString), x(8).toString))
-        rddTemp.take(20).take(20).foreach(println)
         /**
           * 1. 整理所有需要的 display Name
           */
