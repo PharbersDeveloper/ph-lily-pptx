@@ -374,7 +374,7 @@ class som extends phCommand with phReportTableCol {
                 .replaceAll("[\\[\\]]", "")
             dataTmp.withColumn("SOM in " + mktDisplayName, (col("RESULT") / totalResult) * 100)
         }.reduce((df1, df2) => df1.union(df2))
-        resultDF
+        resultDF.na.fill(Double.NaN)
     }
 }
 
