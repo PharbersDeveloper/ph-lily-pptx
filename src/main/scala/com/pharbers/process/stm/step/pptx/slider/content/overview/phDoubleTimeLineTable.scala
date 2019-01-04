@@ -1,6 +1,7 @@
 package com.pharbers.process.stm.step.pptx.slider.content.overview
 
-import com.pharbers.process.stm.step.pptx.slider.content.{cell, phReportContentDotAndRmbTable, phReportContentTrendsTable, tableArgs}
+import com.pharbers.process.stm.step.pptx.slider.content._
+import com.pharbers.process.stm.step.pptx.slider.content.overview.col.lilyGroupGrowthCol
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
 
@@ -11,11 +12,28 @@ class phDoubleTimeLineTable extends phReportContentTrendsTable {
         val timeList = colArgs.timelineList
         val dataList = timeList.map(x => {
             colArgs.timelineList = List(x)
-            colOtherValue(colArgs, colPrimaryValue(colArgs))
+            colValue(colArgs)
         })
         createTable(tableArgs, dataList)
     }
 
+    override def colValue(colArgs: colArgs): Any = {
+        val colMap = Map(
+            "DOT(Mn)" -> "dot",
+            "MMU" -> "dot",
+            "Tablet" -> "dot",
+            "RMB" -> "rmb",
+            "RMB(Mn)" -> "rmb",
+            "DOT" -> "dot",
+            "Mg(Mn)" -> "dot",
+            "MG(Mn)" -> "dot",
+            "RMB(Mn)" -> "rmb",
+            "" -> "empty"
+        )
+        val result: Any = new lilyGroupGrowthCol().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName,"dot"), "mktDisplayName" -> colArgs.mktDisplayName))
+        result
+    }
 
 
     override def putTableValue(data: Any, cellMap: Map[(String, String, String), (cell, String => String)]): List[cell] = {
