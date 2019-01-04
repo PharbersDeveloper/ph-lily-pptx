@@ -1,14 +1,9 @@
 package com.pharbers.process.stm.step.pptx
 
-import java.io.FileOutputStream
-import java.util.Date
-
 import com.pharbers.baseModules.PharbersInjectModule
 import com.pharbers.moduleConfig.{ConfigDefines, ConfigImpl}
 import com.pharbers.process.common.{phCommand, phLyFactory}
-import org.apache.poi.xslf.usermodel.XMLSlideShow
 import play.api.libs.json._
-
 import scala.io.Source
 import scala.xml.{Node, NodeSeq}
 

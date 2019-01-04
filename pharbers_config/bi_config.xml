@@ -6,10 +6,13 @@
             <flow_node index="1" factory="com.pharbers.process.stm.step.gen.genDataSet.phGenDataSetImpl"
                        name="gen data set"
                        description="the abstraction gather all the source file to generate data set" />
-            <flow_node index="2" factory="com.pharbers.process.stm.step.gen.genSearchSet.phGenSearchSetImpl"
+            <flow_node index="2" factory="com.pharbers.process.stm.step.gen.genMktOverViewSet.phGenMOVSetImpl"
+                       name = "gen mov set"
+                       description="the abstraction gather all the market over view file to generate data set" />
+            <flow_node index="3" factory="com.pharbers.process.stm.step.gen.genSearchSet.phGenSearchSetImpl"
                        name="gen search set"
                        description="the abstraction gather all the search file to generate search set" />
-            <flow_node index="3" factory="com.pharbers.process.stm.step.pptx.phGenPPTImpl"
+            <flow_node index="4" factory="com.pharbers.process.stm.step.pptx.phGenPPTImpl"
                        name="gen page"
                        description="calculate and generate ppt" />
         </flow_nodes>
@@ -55,6 +58,30 @@
                        factory="com.pharbers.process.read.phReadDataFourTitleImpl"/>
         </data_nodes>
     </gen_data_set>
+    <gen_mov_set>
+        <data_nodes>
+            <data_node index="1"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/source_file_20181118/marketoverview/LLY PRODUCTS.CSV"
+                       factory="com.pharbers.process.read.mktoverview.phReadLLYProdImpl"/>
+            <data_node index="2"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/source_file_20181118/marketoverview/MANUFACTURER.CSV"
+                       factory="com.pharbers.process.read.mktoverview.phReadManufaImpl"/>
+            <data_node index="3"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/source_file_20181118/marketoverview/MANUFACTURER_MNC.CSV"
+                       factory="com.pharbers.process.read.mktoverview.phReadManufaMNCImpl"/>
+            <data_node index="4"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/source_file_20181118/marketoverview/MARKET.CSV"
+                       factory="com.pharbers.process.read.mktoverview.phReadMarketImpl"/>
+        </data_nodes>
+    </gen_mov_set>
     <gen_search_set>
         <merge factory="com.pharbers.process.merge.phMergeSearch" description="" />
         <data_nodes>

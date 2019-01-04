@@ -1,6 +1,6 @@
 package com.pharbers.process.read
 
-import com.pharbers.process.common.{phCommand, phLyFactory}
+import com.pharbers.process.common.phCommand
 
 trait phReadDataFourTitle extends phReadData {
     override val start = 4
