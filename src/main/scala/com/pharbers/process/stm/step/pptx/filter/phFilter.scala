@@ -30,12 +30,18 @@ class phMOVFilterImpl extends phFilter with phCommand {
         val js = args.asInstanceOf[JsValue]
         val name = (js \ "name").as[List[String]]
         val movSourceList = List("LLYProd", "Manufa", "ManufaMNC", "market")
+
+//        val mapping2Market:DataFrame => DataFrame => DataFrame = markt => mapping => {
+//            markt.join(mapping, markt("ID") === mapping("ID"))
+//        }
+//        val mappingSourceList = List("movMktOne", "movMktTow", "movMktThree")
         val getDF: String => DataFrame = str => {
             phLyFactory.getStorageWithDFName(str)
-    }
-        name.map(x => (x,
-            if (x.contains(movSourceList)) getDF(x).withColumn("DATE", formatYm(col("DATE")))
-            else getDF(x)
+        }
+        val result = name.map(x => (x,
+                if (movSourceList.contains(x)) getDF(x).withColumn("DATE", formatYm(col("DATE")))
+                else getDF(x)
         )).toMap
+        result
     }
 }

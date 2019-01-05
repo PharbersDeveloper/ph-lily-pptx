@@ -19,7 +19,7 @@ class phReportContentImpl extends phReportContent with phCommand {
         val argMap = args.asInstanceOf[Map[String, Any]]
         slide = argMap("ppt_inc").asInstanceOf[XSLFSlide]
         val jobid = argMap("jobid").asInstanceOf[String]
-        val data = argMap("data").asInstanceOf[DataFrame]
+        val data = argMap("data")
         val slideIndex = argMap("slideIndex").asInstanceOf[Int]
         val content = argMap("content").asInstanceOf[JsValue]
         val text = (content \ "texts").as[JsValue]

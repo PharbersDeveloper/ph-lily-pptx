@@ -7,11 +7,11 @@ import org.apache.spark.sql.DataFrame
 import play.api.libs.json.JsValue
 
 trait phGenSlicePPT {
-    var df : Option[DataFrame] = None
+    var df : Any = _
     def genSliceDataFrame(filter : JsValue) : Unit = {
         // 从匹配表中的信息，形成一个Filter，将主表Filter出来保存到df中
         val factory = (filter \ "factory").asOpt[String].get
-        df = Some(phLyFactory.getInstance(factory).asInstanceOf[phCommand].exec(filter).asInstanceOf[DataFrame])
+        df = phLyFactory.getInstance(factory).asInstanceOf[phCommand].exec(filter)
     }
 }
 
@@ -30,7 +30,7 @@ class phGenSlicePPTImpl extends phGenSlicePPT with phCommand {
             phLyFactory.getInstance("com.pharbers.process.stm.step.pptx.slider.phGenSliderImpl").
                     asInstanceOf[phCommand].exec(
                 Map(
-                    "data" -> this.df.get,
+                    "data" -> this.df,
                     "slider" -> iter,
                     "ppt" -> tmp("ppt"),
                     "slideIndex" -> slideIndex,

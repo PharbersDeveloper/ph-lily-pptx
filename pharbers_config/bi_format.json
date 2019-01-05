@@ -1,16 +1,16 @@
 {
-  "title": "172",
+  "title": "193",
   "slices": [
     {
       "filter": {
-        "name": "Insulin_CHPA_ BRAND_1_MAPPING",
-        "description": "from display and timeline",
-        "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
+        "name": ["Manufa","market","movMktOne"],
+        "description": "187-194",
+        "factory": "com.pharbers.process.stm.step.pptx.filter.phMOVFilterImpl",
         "filt": []
       },
       "sliders": [
         {
-          "title": "BLUE TABLE",
+          "title": "GLP-1 Market DOT MTH SOM & GR Trend in last two years",
           "content": {
             "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
             "texts": [
@@ -24,33 +24,28 @@
             ],
             "tables": [
               {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentBlueGrowthTable",
-                "mkt_display": "Total CMP Relevant Market",
-                "mkt_col": "MMU",
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.overview.phDoubleTimeLineTable",
+                "mkt_display": "",
+                "mkt_col": "RMB",
                 "pos": [
-                  15, 100, 60, 60
+                  30, 60, 600, 400
                 ],
                 "timeline": [
-                  "RQ10 17:timeline_3", "RQ11 17:timeline_3","RQ12 17:timeline_3","RQ01 18:timeline_3","RQ02 18:timeline_3","RQ03 18:timeline_3",
-                  "RQ04 18:timeline_3","RQ05 18:timeline_3","RQ06 18:timeline_3","RQ07 18:timeline_3","RQ08 18:timeline_3","RQ09 18:timeline_3",
-                  "RQ10 16:timeline_3", "RQ11 16:timeline_3","RQ12 17:timeline_3","RQ01 17:timeline_3","RQ02 17:timeline_3","RQ03 17:timeline_3",
-                  "RQ04 17:timeline_3","RQ05 17:timeline_3","RQ06 17:timeline_3","RQ07 17:timeline_3","RQ08 17:timeline_3","RQ09 17:timeline_3"
-                ],
+                  "MAT M09 18:timeline_1", "M09 18:timeline_1"],
                 "col": {
                   "title" : ":col_title_chart",
                   "count" : [
-                    "Growth(%):col_chart2"
+                    "Growth(%):col_chart"
                   ]
                 },
                 "row": {
-                  "title" : ":row_title_chart2",
+                  "title" : ":row_title_chart",
                   "display_name" : [
-                    "Humulin%:row_8"
+                    "lily:row_chart"
                   ]
                 }
               }
             ]
-
           }
         }
       ]

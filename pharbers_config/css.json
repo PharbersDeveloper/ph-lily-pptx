@@ -157,7 +157,7 @@
     "fontStyle" : [],
     "cellColor" : "#FFFFFF",
     "cellBorders" : ["left#Thin"],
-    "width" : "10"
+    "width" : "11"
   },
   "col_common4" : {
     "factory" : "PhPPTGen.phCommand.phExcel.PhSetXlsCssBaseCommand",

@@ -1,6 +1,6 @@
 package com.pharbers.process.stm.step.pptx.slider.content.overview.col
 
-import com.pharbers.process.common.{phCommand, phLyManufaData, phLycalArray, phLycalData}
+import com.pharbers.process.common._
 import com.pharbers.process.stm.step.pptx.slider.content.phReportTableCol
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
@@ -34,22 +34,25 @@ class lilyGroupGrowthCol extends phCommand with phReportTableCol {
             val endYm: String = ymMap("year").toString + month
             List(startYm, endYm)
         }.reduce((lst1, lst2) => (lst1 ::: lst2).distinct).sorted
-        val rddTemp = data.toJavaRDD.rdd.map(x =>  phLyManufaData(x(0).toString, x(1).toString, x(2).toString, BigDecimal(x(3).toString)))
-        rddTemp.take(20).take(20).foreach(println)
+        val rddTemp = data.toJavaRDD.rdd.map(x =>  phLyMOVData(x(0).toString, x(1).toString, x(2).toString, BigDecimal(x(3).toString)))
+//        rddTemp.take(20).take(20).foreach(println)
         /**
           * 1. 整理所有需要的 display Name
           */
-        val filter_func_rmb: phLyManufaData => Boolean = phLyManufaData => {
-            phLyManufaData.tp == "LC-RMB"
+        val filter_func_rmb: phLyMOVData => Boolean = phLyMOVData => {
+            phLyMOVData.tp == "LC-RMB"
         }
-        val normal: phLyManufaData => Boolean = phLyManufaData => {
-            phLyManufaData.tp == "LC-RMB"
+        val normal: phLyMOVData => Boolean = phLyMOVData => {
+            true
         }
-        val funcFileter: Map[String, phLyManufaData => Boolean] = Map("rmb" -> filter_func_rmb)
-        val filter_display_name = rddTemp.filter(x => displayNamelList.contains(x.corporate))
+        val funcFileter: Map[String, phLyMOVData => Boolean] = Map("rmb" -> filter_func_rmb)
+        val filter_display_name = rddTemp.filter(x => displayNamelList.contains(x.id))
                 .filter(x => x.date >= allTimelst.min)
                 .filter(x => x.date <= allTimelst.max)
                 .filter(x => funcFileter.getOrElse(primaryValueName,normal)(x))
+//        print("............................................")
+//
+//        filter_display_name.take(20).take(20).foreach(println)
 //        val func_rmb: phLycalData => BigDecimal = phLycalData => {
 //            phLycalData.value
 //        }
@@ -65,11 +68,14 @@ class lilyGroupGrowthCol extends phCommand with phReportTableCol {
                         List.fill(allTimelst.length - idx - forward)(BigDecimal(0))
             } else List.fill(allTimelst.length)(BigDecimal(0))
             (x, phLycalArray(lst))
-        }.keyBy(_._1.corporate)
+        }.keyBy(_._1.id)
                 .reduceByKey { (left, right) =>
                     val lst = left._2.reVal.zip(right._2.reVal).map(x => x._1 + x._2)
                     (left._1, phLycalArray(lst))
-                }.map(x => (displayNamelList.head, x._2._2.reVal.reverse))
+                }.map(x => (x._1, x._2._2.reVal.reverse))
+
+//        println("***************************************************")
+//        mid_sum.take(20).foreach(println)
         val func_growth: RDD[(String, List[BigDecimal])] => RDD[(String, List[String])] = mid_sum => {
             mid_sum.map { iter =>
                 val growth: List[String] = iter._2.zipWithIndex.map { case (value, idx) =>

@@ -30,7 +30,7 @@ class phGenSliderImpl extends phGenSlider with phCommand {
             )
         )
 
-        val data = tmp.get("data").get.asInstanceOf[DataFrame]
+        val data = tmp.get("data").get
         // 在这里获得传递进来的ppt实例，在这里创建一个slider，并添加到ppt实例中
         val content = (format \ "content").asOpt[JsValue].get
         val factory = (content \ "factory").as[String]
