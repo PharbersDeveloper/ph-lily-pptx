@@ -580,6 +580,26 @@ class phReportContentPieChart extends phReportContent3DPieChart {
     }
 }
 
+class rankTable extends phReportContentTableBaseImpl {
+    override def colPrimaryValue(colArgs: colArgs): DataFrame = {
+        val colMap = Map(
+            "DOT(Mn)" -> "dot",
+            "MMU" -> "dot",
+            "Tablet" -> "dot",
+            "RMB" -> "LC-RMB",
+            "RMB(Mn)" -> "LC-RMB",
+            "DOT" -> "dot",
+            "Mg(Mn)" -> "dot",
+            "MG(Mn)" -> "dot",
+            "RMB(Mn)" -> "LC-RMB",
+            "" -> "empty"
+        )
+        val result: DataFrame = new rank().exec(Map("data" -> colArgs.data, "colList" -> colArgs.colList,
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName, colArgs.primaryValueName)))
+        result
+    }
+}
+
 case class tableArgs(rowList: List[(String, String)], colList: List[(String, String)], timelineList: List[(String, String)], mktDisplayName: String,
                      jobid: String, pos: List[Int], colTitle: (String, String), rowTitle: (String, String), slideIndex: Int, col2DataColMap: Map[String, String])
 
