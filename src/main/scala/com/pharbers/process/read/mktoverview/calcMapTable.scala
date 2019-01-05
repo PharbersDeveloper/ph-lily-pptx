@@ -12,7 +12,7 @@ trait calcMapTable extends java.io.Serializable {
             .option("delimiter", ",")
             .load(path)
         val resultDF = df.filter(col("_c0") =!= "Display Name")
-            .withColumnRenamed("_c0", "DISPLAYNAME")
+            .withColumnRenamed("_c0", "DISPLAY_NAME")
             .withColumnRenamed("_c1", "ID")
         phLyFactory.setStorageWithDFName(resultName, resultDF)
     }

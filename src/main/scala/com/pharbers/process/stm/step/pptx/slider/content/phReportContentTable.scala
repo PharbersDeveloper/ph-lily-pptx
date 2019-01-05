@@ -4,7 +4,7 @@ import java.util.UUID
 
 import com.pharbers.phsocket.phSocketDriver
 import com.pharbers.process.common.{phCommand, phLycalArray, phLycalData}
-import com.pharbers.process.stm.step.pptx.slider.content.overview.col.PieTableCol
+import com.pharbers.process.stm.step.pptx.slider.content.overview.col.{PieTableCol, PieTableCol2}
 import com.pharbers.spark.phSparkDriver
 import org.apache.poi.xslf.usermodel.XSLFSlide
 import org.apache.spark.rdd.RDD
@@ -525,7 +525,8 @@ class phReportContent3DPieChart extends phReportContentTrendsTable {
             "RMB(Mn)" -> "LC-RMB",
             "" -> "empty"
         )
-        val result: DataFrame = new PieTableCol().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+        val dataMap = colArgs.data.asInstanceOf[Map[String, DataFrame]]
+        val result: DataFrame = new PieTableCol().exec(Map("data" -> dataMap("market"), "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
             "timelineList" -> colArgs.timelineList, "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName, colArgs.primaryValueName)))
         result
     }
@@ -548,6 +549,34 @@ class phReportContent3DPieChart extends phReportContentTrendsTable {
     override def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
         Thread.sleep(3000)
         socketDriver.excel2Chart(jobid, tableName, pos, sliderIndex, "Pie3D")
+    }
+}
+
+class phReportContentPieChart extends phReportContent3DPieChart {
+
+    override def colValue(colArgs: colArgs): DataFrame = {
+        val colMap = Map(
+            "DOT(Mn)" -> "dot",
+            "MMU" -> "dot",
+            "Tablet" -> "dot",
+            "RMB" -> "LC-RMB",
+            "RMB(Mn)" -> "LC-RMB",
+            "DOT" -> "dot",
+            "Mg(Mn)" -> "dot",
+            "MG(Mn)" -> "dot",
+            "RMB(Mn)" -> "LC-RMB",
+            "" -> "empty"
+        )
+        val dataMap = colArgs.data.asInstanceOf[Map[String, DataFrame]]
+        val result: DataFrame = new PieTableCol2().exec(Map("data" -> dataMap("LLYProd"),"mapping" -> dataMap("movMktTwo"), "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName, colArgs.primaryValueName)))
+        result
+    }
+
+
+    override def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
+        Thread.sleep(3000)
+        socketDriver.excel2Chart(jobid, tableName, pos, sliderIndex, "Pie")
     }
 }
 

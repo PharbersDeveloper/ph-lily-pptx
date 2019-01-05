@@ -7,37 +7,38 @@ import com.pharbers.process.stm.step.pptx.slider.content.overview.col.lilyGroupG
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
 
-class phDoubleTimeLineTable extends phReportContentTrendsTable {
+class phDoubleTimeLineTable extends phReportContentDotAndRmbTable {
     override def exec(args: Any): Any = {
         val colArgs = getColArgs(args)
         val tableArgs = getTableArgs(args)
         val dataMap = colArgs.data.asInstanceOf[Map[String, DataFrame]]
         val timeList = colArgs.timelineList
         val dataList = timeList.map(x => {
-            colArgs.data = dataMap("Manufa")
+//            colArgs.data = dataMap("Manufa")
             colArgs.timelineList = List(x)
-            colValue(colArgs)
+            val data = colPrimaryValue(colArgs)
+            colOtherValue(colArgs,data)
         })
         createTable(tableArgs, dataList)
     }
-    override def colValue(colArgs: colArgs): Any = {
+    override def colPrimaryValue(colArgs: colArgs): DataFrame = {
         val colMap = Map(
             "DOT(Mn)" -> "dot",
             "MMU" -> "dot",
             "Tablet" -> "dot",
-            "RMB" -> "rmb",
-            "RMB(Mn)" -> "rmb",
+            "RMB" -> "LC-RMB",
+            "RMB(Mn)" -> "LC-RMB",
             "DOT" -> "dot",
             "Mg(Mn)" -> "dot",
             "MG(Mn)" -> "dot",
-            "RMB(Mn)" -> "rmb",
+            "RMB(Mn)" -> "LC-RMB",
             "" -> "empty"
         )
-        val rowMap = Map("lily" -> "ELI LILLY GROUP")
+        val rowMap = Map("Lilly" -> "ELI LILLY GROUP")
         val allDisplayNames =  colArgs.displayNameList.map( x => rowMap.getOrElse(x,x))
-        val result: Any = new lilyGroupGrowthCol().exec(Map("data" -> colArgs.data, "allDisplayNames" -> allDisplayNames, "colList" -> colArgs.colList,
+        val result = new lilyGroupGrowthCol().exec(Map("data" -> colArgs.data, "allDisplayNames" -> allDisplayNames, "colList" -> colArgs.colList,
             "timelineList" -> colArgs.timelineList, "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName,"dot"), "mktDisplayName" -> colArgs.mktDisplayName))
-        result
+        result.asInstanceOf[DataFrame]
     }
 
     override def createTableStyle(tableArgs: tableArgs): Map[(String, String, String), (cell, String => String)] = {
@@ -52,7 +53,7 @@ class phDoubleTimeLineTable extends phReportContentTrendsTable {
         val col2dataColMap = tableArgs.col2DataColMap
         val common: String => String = x => x
         val mn: String => String = x => (x.toDouble / 1000000).toString
-        val row2DataMap = Map("lily" -> "ELI LILLY GROUP")
+        val row2DataMap = Map("Lilly" -> "ELI LILLY GROUP")
         val data2ValueMap = Map("DOT(Mn)" -> mn,
             "MMU" -> common,
             "Tablet" -> common,
@@ -90,20 +91,31 @@ class phDoubleTimeLineTable extends phReportContentTrendsTable {
                     val data2Value = data2ValueMap.getOrElse(colNameAndCss._1,common)
                     val colCss = colNameAndCss._2
                     val valueCell = (colIndex + 65).toChar.toString + rowIndex.toString
-                    cellMap = cellMap ++ Map((displayName, ymIndex.toString, colName) -> (cell(jobid, tableName, valueCell, "", "Number", List(colCss, rowCss)), data2Value))
+                    cellMap = cellMap ++ Map((row2DataMap.getOrElse(displayName, displayName), timeline, colName) -> (cell(jobid, tableName, valueCell, "", "Number", List(colCss, rowCss)), data2Value))
                 }
             }
         }
         cellMap
     }
 
-    override def putTableValue(data: Any, cellMap: Map[(String, String, String), (cell, String => String)]): List[cell] = {
-        data.asInstanceOf[List[Any]].foreach(rdd => {
-            val resultMap = rdd.asInstanceOf[RDD[(String, List[String])]].collect().toMap
-            cellMap.foreach(x => {
-                x._2._1.value = resultMap.getOrElse(x._1._1,List.fill(24)("0"))(x._1._2.toInt)
+
+    override def putTableValue(dataFrameList: List[DataFrame], cellMap: Map[(String, String, String), (cell, String => String)]): List[cell] = {
+        dataFrameList.zip(List("DOT ","RMB ")).foreach(data => {
+            val dataFrame = data._1
+            val common: String => String = x => x
+            val dataColNames = dataFrame.columns
+            dataFrame.collect().foreach(x => {
+                val row = x.toSeq.zip(dataColNames).toList
+                val displayName = row.find(x => x._2.equals("DISPLAY_NAME")).get._1.toString
+                val timeline = row.find(x => x._2.equals("TIMELINE")).get._1.toString
+                row.foreach(x => {
+                    val oneCell = cellMap.getOrElse((displayName, timeline, x._2),(cell("","","","","",Nil),common))
+                    oneCell._1.value = oneCell._2(x._1.toString)
+                })
             })
         })
         cellMap.values.map(x => x._1).toList
+
     }
+
 }
