@@ -67,6 +67,7 @@ class phReportContentTableBaseImpl extends phReportContentTable {
             "SOM%" -> "som",
             "Share" -> "som",
             "Growth(%)" -> "Growth(%)",
+            "GROWTH(%)" -> "Growth(%)",
             "YoY GR(%)" -> "Growth(%)",
             "YoY GR" -> "Growth(%)",
             "YOY GR" -> "Growth(%)",

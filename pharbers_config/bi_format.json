@@ -1,16 +1,16 @@
 {
-  "title": "193",
+  "title": "10",
   "slices": [
     {
       "filter": {
-        "name": ["Manufa","market","movMktOne"],
-        "description": "187-194",
+        "name": ["Manufa"],
+        "description": "9",
         "factory": "com.pharbers.process.stm.step.pptx.filter.phMOVFilterImpl",
         "filt": []
       },
       "sliders": [
         {
-          "title": "GLP-1 Market DOT MTH SOM & GR Trend in last two years",
+          "title": "Lilly and Top MNCs Cash SOM Trends in CHPA Monthly ",
           "content": {
             "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
             "texts": [
@@ -24,24 +24,31 @@
             ],
             "tables": [
               {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.overview.phDoubleTimeLineTable",
-                "mkt_display": "",
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.overview.phOverViewRankLineTable",
+                "mkt_display": "CHPA Total Mkt",
                 "mkt_col": "RMB",
                 "pos": [
                   30, 60, 600, 400
                 ],
                 "timeline": [
-                  "MAT M09 18:timeline_1", "M09 18:timeline_1"],
+                  "MAT M09 18:timeline_1"
+                ],
+                "rank_timeline": ["MAT M09 18:timeline_1","MAT M09 17:timeline_1","M09 18:timeline_1","M09 17:timeline_1"],
+                "data": "Manufa",
+                "mapping": "",
                 "col": {
                   "title" : ":col_title_chart",
                   "count" : [
-                    "Growth(%):col_chart"
+                    "RMB(Bn):col_chart",
+                    "GROWTH(%):col_chart",
+                    "SOM(%):col_chart",
+                    "EV:col_chart"
                   ]
                 },
                 "row": {
                   "title" : ":row_title_chart",
                   "display_name" : [
-                    "lily:row_chart"
+                    "ELI LILLY GROUP:row_chart"
                   ]
                 }
               }
