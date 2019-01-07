@@ -1,26 +1,48 @@
-package com.pharbers.process.stm.step.pptx.slider.content.overview.TableCol
+package com.pharbers.process.stm.step.pptx.slider.content.overview
 
 import java.util.UUID
 
 import com.pharbers.process.stm.step.pptx.slider.content._
-import com.pharbers.process.stm.step.pptx.slider.content.overview.phOverViewRankColumnTable
+import com.pharbers.process.stm.step.pptx.slider.content.overview.TableCol.overViewGrowthTable
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions._
-import play.api.libs.json.JsValue
 
 class phOverViewRankLineTable extends phOverViewRankColumnTable{
     override def exec(args: Any): Any = {
         val colArgs = getColArgs(args)
         val tableArgs = getTableArgs(args)
+        val timelineList = colArgs.timelineList
+        val dataAll = colArgs.data
         colArgs.data = mapping(colArgs.data.asInstanceOf[DataFrame], colArgs.mapping.asInstanceOf[DataFrame])
+        colArgs.timelineList = timelineList.head :: Nil
         var data = colPrimaryValue(colArgs)
         data = getTopData(data, 10, colArgs.displayNameList)
         val displayNameList = getDisplayName(data)
         colArgs.displayNameList = displayNameList
+        colArgs.timelineList = timelineList
+        colArgs.data = dataAll
         val dataRDD = colValue(colArgs)
         tableArgs.rowList = displayNameList.map(x => (x, "row_5"))
         createTable(tableArgs, dataRDD)
+    }
+
+    override def colValue(colArgs: colArgs): Any = {
+        val colMap = Map(
+            "DOT(Mn)" -> "dot",
+            "MMU" -> "dot",
+            "Tablet" -> "dot",
+            "RMB" -> "rmb",
+            "RMB(Mn)" -> "rmb",
+            "DOT" -> "dot",
+            "Mg(Mn)" -> "dot",
+            "MG(Mn)" -> "dot",
+            "RMB(Mn)" -> "rmb",
+            "" -> "empty"
+        )
+        val result: Any = new overViewGrowthTable().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName,"dot"), "mktDisplayName" -> colArgs.mktDisplayName))
+        result
     }
 
     override def createTable(tableArgs: tableArgs, data: Any): Unit = {
@@ -106,13 +128,14 @@ class phOverViewRankLineTable extends phOverViewRankColumnTable{
         var displayNameList: List[String] = Nil
         rows.foreach(x => {
             val withName = x.toSeq.zip(colName).toList
+            println(withName)
             displayNameList = displayNameList :+ withName.find(x => x._2.equals("DISPLAY_NAME")).get._1.toString
         })
         displayNameList
     }
 
     def mapping(dataFrame: DataFrame, mappingDF: DataFrame): DataFrame ={
-        val displayNameList = getDisplayName(mappingDF)
+        val displayNameList = getDisplayName(mappingDF.withColumnRenamed("ID","DISPLAY_NAME"))
         dataFrame.filter(col("ID").isin(displayNameList: _*))
     }
 }

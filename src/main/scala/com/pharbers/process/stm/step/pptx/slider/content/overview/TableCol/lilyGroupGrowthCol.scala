@@ -1,4 +1,4 @@
-package com.pharbers.process.stm.step.pptx.slider.content.overview.col
+package com.pharbers.process.stm.step.pptx.slider.content.overview.TableCol
 
 import com.pharbers.process.common._
 import com.pharbers.process.stm.step.pptx.slider.content.phReportTableCol
