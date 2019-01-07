@@ -7,5 +7,5 @@ case class phLyMOVData(
                           value: BigDecimal,
                           var result: BigDecimal = 0
                           ) {
-    override def toString: String = s"$id, $date, $tp, $value"
+    override def toString: String = s"$id, $date, $tp, $value, $result"
 }

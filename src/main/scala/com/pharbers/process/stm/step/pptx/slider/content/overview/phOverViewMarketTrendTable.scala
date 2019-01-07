@@ -1,7 +1,7 @@
 package com.pharbers.process.stm.step.pptx.slider.content.overview
 
 import com.pharbers.process.stm.step.pptx.slider.content._
-import com.pharbers.process.stm.step.pptx.slider.content.overview.col. marketGrowthCol
+import com.pharbers.process.stm.step.pptx.slider.content.overview.TableCol. marketGrowthCol
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
 

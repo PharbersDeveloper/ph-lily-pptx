@@ -1,6 +1,6 @@
 package com.pharbers.process.stm.step.pptx.slider.content.overview
 
-import com.pharbers.process.stm.step.pptx.slider.content.overview.col.{marketGrowthCol, marketSomCol}
+import com.pharbers.process.stm.step.pptx.slider.content.overview.TableCol.{marketGrowthCol, marketSomCol}
 import com.pharbers.process.stm.step.pptx.slider.content.{colArgs, phReportContentTrendsChart}
 import org.apache.spark.sql.DataFrame
 

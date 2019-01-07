@@ -4,7 +4,7 @@ import java.util.UUID
 
 import com.pharbers.phsocket.phSocketDriver
 import com.pharbers.process.common.{phCommand, phLycalArray, phLycalData}
-import com.pharbers.process.stm.step.pptx.slider.content.overview.col.{PieTableCol, PieTableCol2}
+import com.pharbers.process.stm.step.pptx.slider.content.overview.TableCol.{PieTableCol, PieTableCol2}
 import com.pharbers.spark.phSparkDriver
 import org.apache.poi.xslf.usermodel.XSLFSlide
 import org.apache.spark.rdd.RDD
@@ -600,10 +600,10 @@ class rankTable extends phReportContentTableBaseImpl {
     }
 }
 
-case class tableArgs(rowList: List[(String, String)], colList: List[(String, String)], timelineList: List[(String, String)], mktDisplayName: String,
+case class tableArgs(var rowList: List[(String, String)], colList: List[(String, String)], timelineList: List[(String, String)], mktDisplayName: String,
                      jobid: String, pos: List[Int], colTitle: (String, String), rowTitle: (String, String), slideIndex: Int, col2DataColMap: Map[String, String])
 
-case class colArgs(rowList: List[String], colList: List[String], var timelineList: List[String], displayNameList: List[String],
-                   mktDisplayName: String, var primaryValueName: String, var data: Any)
+case class colArgs(var rowList: List[String], var colList: List[String], var timelineList: List[String], var displayNameList: List[String],
+                   var mktDisplayName: String, var primaryValueName: String, var data: Any, var mapping: Any = null)
 
 case class cell(jobid: String, tableName: String, cell: String, var value: String, cate: String, cssName: List[String])

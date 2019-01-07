@@ -1,44 +1,41 @@
-package com.pharbers.process.stm.step.pptx.slider.content.overview
+package com.pharbers.process.stm.step.pptx.slider.content.overview.TableCol
 
 import java.util.UUID
 
 import com.pharbers.process.stm.step.pptx.slider.content._
-import com.pharbers.process.stm.step.pptx.slider.content.overview.TableCol.lilyGroupGrowthCol
+import com.pharbers.process.stm.step.pptx.slider.content.overview.phOverViewRankColumnTable
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.functions._
+import play.api.libs.json.JsValue
 
-class phDoubleTimeLineTable extends phReportContentDotAndRmbTable {
+class phOverViewRankLineTable extends phOverViewRankColumnTable{
     override def exec(args: Any): Any = {
         val colArgs = getColArgs(args)
         val tableArgs = getTableArgs(args)
-        val dataMap = colArgs.data.asInstanceOf[Map[String, DataFrame]]
-        val timeList = colArgs.timelineList
-        val dataList = timeList.map(x => {
-//            colArgs.data = dataMap("Manufa")
-            colArgs.timelineList = List(x)
-            val data = colPrimaryValue(colArgs)
-            colOtherValue(colArgs,data)
-        })
-        createTable(tableArgs, dataList)
+        colArgs.data = mapping(colArgs.data.asInstanceOf[DataFrame], colArgs.mapping.asInstanceOf[DataFrame])
+        var data = colPrimaryValue(colArgs)
+        data = getTopData(data, 10, colArgs.displayNameList)
+        val displayNameList = getDisplayName(data)
+        colArgs.displayNameList = displayNameList
+        val dataRDD = colValue(colArgs)
+        tableArgs.rowList = displayNameList.map(x => (x, "row_5"))
+        createTable(tableArgs, dataRDD)
     }
-    override def colPrimaryValue(colArgs: colArgs): DataFrame = {
-        val colMap = Map(
-            "DOT(Mn)" -> "dot",
-            "MMU" -> "dot",
-            "Tablet" -> "dot",
-            "RMB" -> "LC-RMB",
-            "RMB(Mn)" -> "LC-RMB",
-            "DOT" -> "dot",
-            "Mg(Mn)" -> "dot",
-            "MG(Mn)" -> "dot",
-            "RMB(Mn)" -> "LC-RMB",
-            "" -> "empty"
-        )
-        val rowMap = Map("Lilly" -> "ELI LILLY GROUP")
-        val allDisplayNames =  colArgs.displayNameList.map( x => rowMap.getOrElse(x,x))
-        val result = new lilyGroupGrowthCol().exec(Map("data" -> colArgs.data, "allDisplayNames" -> allDisplayNames, "colList" -> colArgs.colList,
-            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName,"dot"), "mktDisplayName" -> colArgs.mktDisplayName))
-        result.asInstanceOf[DataFrame]
+
+    override def createTable(tableArgs: tableArgs, data: Any): Unit = {
+        val cellMap = createTableStyle(tableArgs)
+        val cellList = putTableValue(data, cellMap)
+        pushTable(cellList, tableArgs.pos, tableArgs.slideIndex)
+    }
+
+    override def putTableValue(data: Any, cellMap: Map[(String, String, String), (cell, String => String)]): List[cell] = {
+        val rdd = data.asInstanceOf[RDD[(String, List[String])]]
+        val resultMap = rdd.collect().toMap
+        cellMap.foreach(x => {
+            x._2._1.value = resultMap.getOrElse(x._1._1,List.fill(24)("0"))(x._1._2.toInt)
+        })
+        cellMap.values.map(x => x._1).toList
     }
 
     override def createTableStyle(tableArgs: tableArgs): Map[(String, String, String), (cell, String => String)] = {
@@ -50,10 +47,10 @@ class phDoubleTimeLineTable extends phReportContentDotAndRmbTable {
         val colList = tableArgs.colList
         val timelineList = tableArgs.timelineList
         val jobid = tableArgs.jobid
+        val mktDisplayName = tableArgs.mktDisplayName
         val col2dataColMap = tableArgs.col2DataColMap
         val common: String => String = x => x
         val mn: String => String = x => (x.toDouble / 1000000).toString
-        val row2DataMap = Map("Lilly" -> "ELI LILLY GROUP")
         val data2ValueMap = Map("DOT(Mn)" -> mn,
             "MMU" -> common,
             "Tablet" -> common,
@@ -91,31 +88,31 @@ class phDoubleTimeLineTable extends phReportContentDotAndRmbTable {
                     val data2Value = data2ValueMap.getOrElse(colNameAndCss._1,common)
                     val colCss = colNameAndCss._2
                     val valueCell = (colIndex + 65).toChar.toString + rowIndex.toString
-                    cellMap = cellMap ++ Map((row2DataMap.getOrElse(displayName, displayName), timeline, colName) -> (cell(jobid, tableName, valueCell, "", "Number", List(colCss, rowCss)), data2Value))
+                    cellMap = cellMap ++ Map((displayName, ymIndex.toString, colName) -> (cell(jobid, tableName, valueCell, "", "Number", List(colCss, rowCss)), data2Value))
                 }
             }
         }
         cellMap
     }
 
-
-    override def putTableValue(dataFrameList: List[DataFrame], cellMap: Map[(String, String, String), (cell, String => String)]): List[cell] = {
-        dataFrameList.zip(List("DOT ","RMB ")).foreach(data => {
-            val dataFrame = data._1
-            val common: String => String = x => x
-            val dataColNames = dataFrame.columns
-            dataFrame.collect().foreach(x => {
-                val row = x.toSeq.zip(dataColNames).toList
-                val displayName = row.find(x => x._2.equals("DISPLAY_NAME")).get._1.toString
-                val timeline = row.find(x => x._2.equals("TIMELINE")).get._1.toString
-                row.foreach(x => {
-                    val oneCell = cellMap.getOrElse((displayName, timeline, x._2),(cell("","","","","",Nil),common))
-                    oneCell._1.value = oneCell._2(x._1.toString)
-                })
-            })
-        })
-        cellMap.values.map(x => x._1).toList
-
+    override def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
+        Thread.sleep(3000)
+        socketDriver.excel2Chart(jobid, tableName, pos, sliderIndex, "Line")
     }
 
+    def getDisplayName(dataFrame: DataFrame): List[String] ={
+        val colName = dataFrame.columns
+        val rows = dataFrame.collect()
+        var displayNameList: List[String] = Nil
+        rows.foreach(x => {
+            val withName = x.toSeq.zip(colName).toList
+            displayNameList = displayNameList :+ withName.find(x => x._2.equals("DISPLAY_NAME")).get._1.toString
+        })
+        displayNameList
+    }
+
+    def mapping(dataFrame: DataFrame, mappingDF: DataFrame): DataFrame ={
+        val displayNameList = getDisplayName(mappingDF)
+        dataFrame.filter(col("ID").isin(displayNameList: _*))
+    }
 }
