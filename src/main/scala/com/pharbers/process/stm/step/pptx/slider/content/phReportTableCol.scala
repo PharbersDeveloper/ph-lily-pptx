@@ -131,9 +131,9 @@ trait phReportTableCol {
         }
         val funcFileter: Map[String, phLycalData => Boolean] = Map("rmb" -> filter_func_rmb, "dot" -> filter_func_dot)
         val filter_display_name = rddTemp.filter(x => displayNamelList.contains(x.display_name))
-                .filter(x => x.date >= allTimelst.min)
-                .filter(x => x.date <= allTimelst.max)
-                .filter(x => funcFileter(primaryValueName)(x))
+            .filter(x => x.date >= allTimelst.min)
+            .filter(x => x.date <= allTimelst.max)
+            .filter(x => funcFileter(primaryValueName)(x))
         val func_rmb: phLycalData => BigDecimal = phLycalData => {
             phLycalData.value
         }
@@ -145,15 +145,15 @@ trait phReportTableCol {
             val idx = allTimelst.indexOf(x.date)
             val lst = if (idx > -1) {
                 List.fill(idx)(BigDecimal(0)) :::
-                        List.fill(forward)(valueFuncMap(primaryValueName)(x)) :::
-                        List.fill(allTimelst.length - idx - forward)(BigDecimal(0))
+                    List.fill(forward)(valueFuncMap(primaryValueName)(x)) :::
+                    List.fill(allTimelst.length - idx - forward)(BigDecimal(0))
             } else List.fill(allTimelst.length)(BigDecimal(0))
             (x, phLycalArray(lst))
         }.keyBy(_._1.display_name)
-                .reduceByKey { (left, rigth) =>
-                    val lst = left._2.reVal.zip(rigth._2.reVal).map(x => x._1 + x._2)
-                    (left._1, phLycalArray(lst))
-                }.map(x => (x._1, x._2._2.reVal.reverse))
+            .reduceByKey { (left, rigth) =>
+                val lst = left._2.reVal.zip(rigth._2.reVal).map(x => x._1 + x._2)
+                (left._1, phLycalArray(lst))
+            }.map(x => (x._1, x._2._2.reVal.reverse))
         val func_growth: RDD[(String, List[BigDecimal])] => RDD[(String, List[String])] = mid_sum => {
             mid_sum.map { iter =>
                 val growth: List[String] = iter._2.zipWithIndex.map { case (value, idx) =>
@@ -218,68 +218,52 @@ class valueDF extends phCommand with phReportTableCol {
         /**
           * 1. 整理所有需要的 display Name
           */
-        val filter_display_name = primaryValueName match {
-            case "LC-RMB" => rddTemp.filter(x => displayNamelList.contains(x.display_name))
-                    .filter(x => x.date >= allTimelst.min)
-                    .filter(x => x.date <= allTimelst.max)
-                    .filter(x => x.tp == primaryValueName)
-            case "dot" => rddTemp.filter(x => displayNamelList.contains(x.display_name))
-                    .filter(x => x.date >= allTimelst.min)
-                    .filter(x => x.date <= allTimelst.max)
-                    .filter(x => x.dot >= 0)
+        val func_rmb: phLycalData => Boolean = phLycalData => {
+            phLycalData.tp == primaryValueName
         }
+        val func_dot: phLycalData => Boolean = phLycalData => {
+            phLycalData.dot >= 0
+        }
+        val filterMap = Map("LC-RMB" -> func_rmb, "dot" -> func_dot)
+        val filter_display_name = rddTemp.filter(x => displayNamelList.contains(x.display_name))
+            .filter(x => x.date >= allTimelst.min)
+            .filter(x => x.date <= allTimelst.max)
+            .filter(x => filterMap(primaryValueName)(x))
 
 
         /**
           * 2. reduce by key 就是以display name 求和, 叫中间和
           */
 
-        val mid_sum = primaryValueName match {
-            case "dot" => allTimelineList.map { timeline =>
-                val startYm: String = getStartYm(timeline)
-                val ymMap = getTimeLineYm(timeline)
-                val month = ymMap("month").toString.length match {
-                    case 1 => "0" + ymMap("month")
-                    case _ => ymMap("month")
-                }
-                val endYm: String = ymMap("year").toString + month
-                filter_display_name.filter(x => x.date >= startYm)
-                        .filter(x => x.date <= endYm)
-                        .keyBy(x => (x.display_name, timeline))
-                        .reduceByKey { (left, right) =>
-                            left.result =
-                                    (if (left.result == 0) {
-                                        left.dot
-                                    } else left.result) +
-                                            (if (right.result == 0) {
-                                                right.dot
-                                            } else right.result)
-                            left
-                        }
-            }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
-            case "LC-RMB" => allTimelineList.map { timeline =>
-                val startYm: String = getStartYm(timeline)
-                val ymMap = getTimeLineYm(timeline)
-                val month = ymMap("month").toString.length match {
-                    case 1 => "0" + ymMap("month")
-                    case _ => ymMap("month")
-                }
-                val endYm: String = ymMap("year").toString + month
-                filter_display_name.filter(x => x.date >= startYm)
-                        .filter(x => x.date <= endYm)
-                        .keyBy(x => (x.display_name, timeline))
-                        .reduceByKey { (left, right) =>
-                            left.result =
-                                    (if (left.result == 0) {
-                                        left.value
-                                    } else left.result) +
-                                            (if (right.result == 0) {
-                                                right.value
-                                            } else right.result)
-                            left
-                        }
-            }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
+        val func_rmb_value: phLycalData => BigDecimal = phLycalData => {
+            phLycalData.value
         }
+        val func_dot_value: phLycalData => BigDecimal = phLycalData => {
+            phLycalData.dot
+        }
+        val valueMap = Map("LC_RMB" -> func_rmb_value, "dot" -> func_dot_value)
+        val mid_sum = allTimelineList.map { timeline =>
+            val startYm: String = getStartYm(timeline)
+            val ymMap = getTimeLineYm(timeline)
+            val month = ymMap("month").toString.length match {
+                case 1 => "0" + ymMap("month")
+                case _ => ymMap("month")
+            }
+            val endYm: String = ymMap("year").toString + month
+            filter_display_name.filter(x => x.date >= startYm)
+                .filter(x => x.date <= endYm)
+                .keyBy(x => (x.display_name, timeline))
+                .reduceByKey { (left, right) =>
+                    left.result =
+                        (if (left.result == 0) {
+                            valueMap(primaryValueName)(left)
+                        } else left.result) +
+                            (if (right.result == 0) {
+                                valueMap(primaryValueName)(right)
+                            } else right.result)
+                    left
+                }
+        }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
 
         lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
         import sparkDriver.ss.implicits._
@@ -303,9 +287,9 @@ class som extends phCommand with phReportTableCol {
         val resultDF = timelineList.map { timeline =>
             val dataTmp = data.filter(col("TIMELINE") === timeline)
             val totalResult = dataTmp.filter(col("DISPLAY_NAME") === mktDisplayName)
-                    .select("RESULT")
-                    .collect().head.toString()
-                    .replaceAll("[\\[\\]]", "")
+                .select("RESULT")
+                .collect().head.toString()
+                .replaceAll("[\\[\\]]", "")
             dataTmp.withColumn("SOM in " + mktDisplayName, (col("RESULT") / totalResult) * 100)
         }.reduce((df1, df2) => df1.union(df2))
         resultDF.na.fill(Double.NaN)
@@ -322,16 +306,16 @@ class growth extends phCommand with phReportTableCol {
         val resultRDD = timelineList.map { timeline =>
             val allTimelineList = getAllTimeline(List(timeline))
             tmpRDD.filter(x => allTimelineList.contains(x.timeline))
-                    .keyBy(x => x.display_name)
-                    .reduceByKey { (left, right) =>
-                        if (left.timeline == timeline) {
-                            left.growth = (left.result - right.result) / right.result * 100
-                            left
-                        } else {
-                            right.growth = (right.result - left.result) / left.result * 100
-                            right
-                        }
+                .keyBy(x => x.display_name)
+                .reduceByKey { (left, right) =>
+                    if (left.timeline == timeline) {
+                        left.growth = (left.result - right.result) / right.result * 100
+                        left
+                    } else {
+                        right.growth = (right.result - left.result) / left.result * 100
+                        right
                     }
+                }
         }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
         lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
         import sparkDriver.ss.implicits._
@@ -367,9 +351,8 @@ class rank extends phCommand with phReportTableCol {
         val rddTemp = data.toJavaRDD.rdd.map(x => phLyMOVData(x(0).toString, x(1).toString, x(2).toString,
             BigDecimal(x(3).toString)))
         val filter_display_name = rddTemp.filter(x => x.date >= allTimelst.min)
-                .filter(x => x.date <= allTimelst.max)
-                .filter(x => x.tp == primaryValueName)
-        println("rddTemp================")
+            .filter(x => x.date <= allTimelst.max)
+            .filter(x => x.tp == primaryValueName)
         val mid_sum = allTimelineList.map { timeline =>
             val startYm: String = getStartYm(timeline)
             val ymMap = getTimeLineYm(timeline)
@@ -379,42 +362,30 @@ class rank extends phCommand with phReportTableCol {
             }
             val endYm: String = ymMap("year").toString + month
             filter_display_name.filter(x => x.date >= startYm)
-                    .filter(x => x.date <= endYm)
-                    .map(x => {
-                        x.result = x.value
-                        x
-                    })
-                    .keyBy(x => (x.id, timeline))
-                    .reduceByKey { (left, right) =>
-                        left.result =
-                                (if (left.result == 0) {
-                                    left.value
-                                } else left.result) +
-                                        (if (right.result == 0) {
-                                            right.value
-                                        } else right.result)
-                        left
-                    }
+                .filter(x => x.date <= endYm)
+                .map(x => {
+                    x.result = x.value
+                    x
+                })
+                .keyBy(x => (x.id, timeline))
+                .reduceByKey { (left, right) =>
+                    left.result =
+                        (if (left.result == 0) {
+                            left.value
+                        } else left.result) +
+                            (if (right.result == 0) {
+                                right.value
+                            } else right.result)
+                    left
+                }
         }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
-        println("00000000000000000000000000000000000000000000000000000000000000")
-        mid_sum.take(10).foreach(println)
         val mktDisplayNameSum = mid_sum.map(x => x._2.result).sum()
         val resultList = mid_sum.map(x => (x._1._2, x._2.id, (x._2.result / mktDisplayNameSum) * 100))
-                .filter(x => x._2 != "* Others *")
-                .sortBy(x => -x._3)
+            .filter(x => x._2 != "* Others *")
+            .sortBy(x => -x._3)
         lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
         import sparkDriver.ss.implicits._
         val resultDF = resultList.toDF("TIMELINE", "DISPLAY_NAME", "SOM")
         resultDF
-        //        println("mid_sum=================")
-        //        mid_sum.take(20).foreach(println)
-        //        val result = mid_sum.top(20)(Ordering.by[((String, String), phLyMOVData), BigDecimal](_._2.result)).toList
-        //        println("result==================")
-        //        result.take(20).foreach(println)
-        //        lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
-        //        import sparkDriver.ss.implicits._
-        //        val resultDF = result.map(x => (x._2.id, x._2.date, x._2.tp, x._2.value, x._2.result)).toDF("ID", "DATE", "TYPE",
-        //            "VALUE", "RESULT")
-        //        resultDF
     }
 }

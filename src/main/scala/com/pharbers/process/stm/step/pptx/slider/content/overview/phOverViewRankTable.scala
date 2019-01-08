@@ -4,6 +4,7 @@ import java.util.UUID
 
 import com.pharbers.process.common.phCommand
 import com.pharbers.process.stm.step.pptx.slider.content._
+import com.pharbers.process.stm.step.pptx.slider.content.overview.TableCol.{ev, movGetValue}
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.col
 
@@ -13,6 +14,7 @@ class phOverViewRankTable extends phReportContentTableBaseImpl {
         val tableArgs = getTableArgs(args)
         val timelineList = colArgs.timelineList
         colArgs.timelineList = timelineList.head :: Nil
+        colArgs.data = colArgs.data.asInstanceOf[Map[String, DataFrame]]("Manufa")
         val rankDf = getRankDF(colArgs)
         val colName = rankDf.columns
         val displayNameList = ((rankDf.limit(20) union rankDf.filter(col("DISPLAY_NAME").isin(colArgs.displayNameList: _*))).collect()
@@ -153,10 +155,10 @@ class phOverViewRankTable extends phReportContentTableBaseImpl {
             }
 
         }
-        addCell(jobid, tableName, "A1：D1", rowTitle._1, "String", List(rowTitle._2))
-        addCell(jobid, tableName, "A2：C2", "MAT", "String", List(rowTitle._2))
-        addCell(jobid, tableName, "C2：D2", "MON", "String", List(rowTitle._2))
-        addCell(jobid, tableName, "E1：E2", "", "String", List(rowTitle._2))
+        addCell(jobid, tableName, "A1:D1", rowTitle._1, "String", List(rowTitle._2))
+        addCell(jobid, tableName, "A2:C2", "MAT", "String", List(rowTitle._2))
+        addCell(jobid, tableName, "C2:D2", "MON", "String", List(rowTitle._2))
+        addCell(jobid, tableName, "E1:E2", "", "String", List(rowTitle._2))
         timelineList.zipWithIndex.foreach{ case (timelineAndCss, timeIndex) =>
             val timeline = timelineAndCss._1
             rowList.zipWithIndex.foreach { case (displayNameAndCss, displayNameIndex) =>
@@ -174,7 +176,7 @@ class phOverViewRankTable extends phReportContentTableBaseImpl {
         val common: String => String = x => x
         val dataMap = data.asInstanceOf[Map[String, Any]]
         val dataFrame = dataMap("data").asInstanceOf[DataFrame]
-        val rankList = dataFrame("rank").asInstanceOf[List[(String,String,String)]]
+        val rankList = dataMap("rank").asInstanceOf[List[(String,String,String)]]
         rankList.foreach(x => {
             cellMap.getOrElse((x._1,x._2,""),(cell("","","","","",Nil),common))._1.value = x._3
         })

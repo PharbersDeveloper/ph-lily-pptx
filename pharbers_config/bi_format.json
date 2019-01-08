@@ -24,7 +24,7 @@
             ],
             "tables": [
               {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.overview.phOverViewRankLineTable",
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.overview.phOverViewRankTable",
                 "mkt_display": "CHPA Total Mkt",
                 "mkt_col": "RMB",
                 "pos": [
@@ -39,7 +39,7 @@
                 "col": {
                   "title" : ":col_title_chart",
                   "count" : [
-                    "RMB(Bn):col_chart",
+                    "RMB:col_chart",
                     "GROWTH(%):col_chart",
                     "SOM(%):col_chart",
                     "EV:col_chart"
