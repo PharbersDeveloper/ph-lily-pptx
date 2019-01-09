@@ -4,6 +4,7 @@ import com.pharbers.process.common.{phCommand, phLyFactory, phLyMOVData}
 import com.pharbers.process.stm.step.pptx.slider.content.phReportTableCol
 import com.pharbers.spark.phSparkDriver
 import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.functions._
 
 class movGetValue extends phCommand with phReportTableCol {
     override def exec(args: Any): DataFrame = {
@@ -12,6 +13,7 @@ class movGetValue extends phCommand with phReportTableCol {
         val displayNamelList: List[String] = argsMap("allDisplayNames").asInstanceOf[List[String]]
         val timelineList = argsMap("timelineList").asInstanceOf[List[String]]
         val colList: List[String] = argsMap("colList").asInstanceOf[List[String]]
+        val mktDisplayName: String = argsMap("mktDisplayName").asInstanceOf[String]
         val primaryValueName: String = argsMap("primaryValueName").asInstanceOf[String]
         val allTimelineList: List[String] = if (colList.contains("Growth(%)")) {
             getAllTimeline(timelineList)
@@ -61,10 +63,10 @@ class movGetValue extends phCommand with phReportTableCol {
         }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
 
         val mktValue = mid_sum.keyBy(x => x._1._2)
-            .reduceByKey { (left, right) =>
-                left._2.result = left._2.result + right._2.result
-                left
-            }.map(x => ("CHPA Total Mkt", x._1, x._2._2.result))
+                .reduceByKey{ (left, right) =>
+                    left._2.result = left._2.result + right._2.result
+                    left
+                }.map(x => (mktDisplayName, x._1, x._2._2.result))
 
         val filter_display_name = mid_sum.filter(x => displayNamelList.contains(x._1._1))
             .map(x => (x._1._1, x._1._2, x._2.result))

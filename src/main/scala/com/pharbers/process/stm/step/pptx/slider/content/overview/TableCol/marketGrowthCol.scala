@@ -48,7 +48,7 @@ class marketGrowthCol extends phCommand with phReportTableCol {
         val funcFileter = Map("rmb" -> filter_func_rmb)
 
         data = funcFileter(primaryValueName)(data.filter(col("DATE") >= allTimelst.min && col("DATE") <= allTimelst.max))
-                .join(mapDf, data("ID") === mapDf("ID")).select("DISPLAY_NAME", "DATE", "TYPE", "VALUE")
+        data = mapping(data, mapDf)
 
         val rddTemp = data.toJavaRDD.rdd.map(x =>  phLyMOVData(x(0).toString, x(1).toString, x(2).toString, BigDecimal(x(3).toString)))
 
@@ -108,6 +108,10 @@ class marketGrowthCol extends phCommand with phReportTableCol {
             Map("som" -> func_som, "Growth(%)" -> func_growth)
         val result = funcMap(valueType)(mid_sum)
         result
+    }
+
+    def mapping(dataDF: DataFrame, mapDf: DataFrame): DataFrame = {
+        dataDF.join(mapDf, data("ID") === mapDf("ID")).select("DISPLAY_NAME", "DATE", "TYPE", "VALUE")
     }
 }
 
@@ -214,5 +218,14 @@ class marketSomCol extends phCommand with phReportTableCol {
         mid_sum.take(20).foreach(println)
         val result = funcMap(valueType)(mid_sum)
         result
+    }
+}
+
+class marketGrowthColWith2Source extends marketGrowthCol{
+    override def mapping(dataDF: DataFrame, mapDf: DataFrame): DataFrame = {
+        import sparkDriver.ss.implicits._
+        List(("ELI LILLY GROUP","Lilly")).toDF("ID", "DISPLAY_NAME")
+        dataDF.join(mapDf, data("ID") === mapDf("ID"))
+                .select("DISPLAY_NAME", "DATE", "TYPE", "VALUE")
     }
 }

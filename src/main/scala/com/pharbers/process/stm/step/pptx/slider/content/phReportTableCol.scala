@@ -331,14 +331,8 @@ class rank extends phCommand with phReportTableCol {
         val argsMap = args.asInstanceOf[Map[String, Any]]
         val data = argsMap("data").asInstanceOf[DataFrame]
         val timelineList = argsMap("timelineList").asInstanceOf[List[String]]
-        val colList: List[String] = argsMap("colList").asInstanceOf[List[String]]
         val primaryValueName: String = argsMap("primaryValueName").asInstanceOf[String]
-        val allTimelineList: List[String] = if (colList.contains("Growth(%)")) {
-            getAllTimeline(timelineList)
-        } else {
-            timelineList
-        }
-        val allTimelst: List[String] = allTimelineList.map { timeline =>
+        val allTimelst: List[String] = timelineList.map { timeline =>
             val startYm: String = getStartYm(timeline)
             val ymMap = getTimeLineYm(timeline)
             val month = ymMap("month").toString.length match {
@@ -353,7 +347,7 @@ class rank extends phCommand with phReportTableCol {
         val filter_display_name = rddTemp.filter(x => x.date >= allTimelst.min)
             .filter(x => x.date <= allTimelst.max)
             .filter(x => x.tp == primaryValueName)
-        val mid_sum = allTimelineList.map { timeline =>
+        val mid_sum = timelineList.map { timeline =>
             val startYm: String = getStartYm(timeline)
             val ymMap = getTimeLineYm(timeline)
             val month = ymMap("month").toString.length match {

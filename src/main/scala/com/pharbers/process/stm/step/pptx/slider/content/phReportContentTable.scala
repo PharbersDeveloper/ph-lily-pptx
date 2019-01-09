@@ -107,12 +107,14 @@ class phReportContentTableBaseImpl extends phReportContentTable {
             "SOM%" -> ("SOM in " + mktDisplayName),
             "Share" -> ("SOM in " + mktDisplayName),
             "Growth(%)" -> "GROWTH",
+            "GROWTH(%)" -> "GROWTH",
             "YoY GR(%)" -> "GROWTH",
             "YoY GR" -> "GROWTH",
             "YOY GR" -> "GROWTH",
             "GR(%)" -> "GROWTH",
             "RMB" -> "RESULT",
             "RMB(Mn)" -> "RESULT",
+            "RMB(Bn)" -> "RESULT",
             "DOT" -> "RESULT",
             "SOM in Branded MKT(%)" -> ("SOM in " + mktDisplayName),
             "SOM in Branded MKT%" -> ("SOM in " + mktDisplayName),
@@ -190,6 +192,7 @@ class phReportContentTableBaseImpl extends phReportContentTable {
         val col2DataColMap = tableArgs.col2DataColMap
         val common: String => String = x => x
         val mn: String => String = x => (x.toDouble / 1000000).toString
+        val bn: String => String = x => (x.toDouble / 1000000000).toString
         val data2ValueMap = Map("DOT(Mn)" -> mn,
             "MMU" -> common,
             "Tablet" -> common,
@@ -198,7 +201,8 @@ class phReportContentTableBaseImpl extends phReportContentTable {
             "DOT" -> common,
             "Mg(Mn)" -> mn,
             "MG(Mn)" -> mn,
-            "RMB(Mn)" -> mn)
+            "RMB(Mn)" -> mn,
+            "RMB(Bn)" -> bn)
         (rowTitle :: colTitle :: Nil).zipWithIndex.foreach {
             case (titleANdCss, index) =>
                 val title = titleANdCss._1
