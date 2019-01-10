@@ -1,16 +1,16 @@
 {
-  "title": "10",
+  "title": "overview",
   "slices": [
     {
       "filter": {
-        "name": ["Manufa"],
-        "description": "9",
+        "name": ["DF_gen_search_set", "LLYProd", "movMktFour"],
+        "description": "12",
         "factory": "com.pharbers.process.stm.step.pptx.filter.phMOVFilterImpl",
         "filt": []
       },
       "sliders": [
         {
-          "title": "Lilly and Top MNCs Cash SOM Trends in CHPA Monthly ",
+          "title": "Lilly All Products Performance in CHPA (MAT M09 18) – Cash",
           "content": {
             "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
             "texts": [
@@ -24,35 +24,38 @@
             ],
             "tables": [
               {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.overview.phOverViewRankTable",
-                "mkt_display": "CHPA Total Mkt",
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phOverViewProductPerformanceTable",
+                "mkt_display": "Lilly Group",
                 "mkt_col": "RMB",
                 "pos": [
-                  30, 60, 600, 400
+                  15, 60, 81, 81
                 ],
                 "timeline": [
-                  "MAT M09 18:timeline_1"
+                  "MAT M09 18:timeline_2","M09 18:timeline_2"
                 ],
-                "rank_timeline": ["MAT M09 18:timeline_1","MAT M09 17:timeline_1","M09 18:timeline_1","M09 17:timeline_1"],
-                "data": "Manufa",
-                "mapping": "",
                 "col": {
-                  "title" : ":col_title_chart",
+                  "title" : ":col_title_common",
                   "count" : [
-                    "RMB:col_chart",
-                    "GROWTH(%):col_chart",
-                    "SOM(%):col_chart",
-                    "EV:col_chart"
+                    "MMU:col_common5",
+                    "YoY GR(%):col_common5",
+                    "SOM(%):col_common5"
                   ]
                 },
                 "row": {
-                  "title" : ":row_title_chart",
+                  "title" : "M09 18:row_title_chart1",
                   "display_name" : [
-                    "ELI LILLY GROUP:row_chart"
+                    "Ceclor:row_5","Vancocin:row_5",
+                    "Gemzar:row_5","Alimta:row_5",
+                    "Prozac:row_5","Cymbalta:row_5",
+                    "Zyprexa:row_5","Strattera:row_5",
+                    "Total Humulin:row_5","Total  Humalog:row_5",
+                    "Lly Insulin:row_5","Cialis:row_5",
+                    "Evista:row_5","Forsteo:row_5"
                   ]
                 }
               }
             ]
+
           }
         }
       ]

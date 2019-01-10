@@ -72,6 +72,7 @@ class phReportContentTableBaseImpl extends phReportContentTable {
             "YoY GR" -> "Growth(%)",
             "YOY GR" -> "Growth(%)",
             "GR(%)" -> "Growth(%)",
+            "Growth Contribution%" -> "GrowthContribution%",
             "SOM in Branded MKT(%)" -> "som",
             "SOM in Branded MKT%" -> "som")
         val argsMap = args.asInstanceOf[Map[String, Any]]
@@ -112,6 +113,7 @@ class phReportContentTableBaseImpl extends phReportContentTable {
             "YoY GR" -> "GROWTH",
             "YOY GR" -> "GROWTH",
             "GR(%)" -> "GROWTH",
+            "Growth Contribution%" -> "GROWTH_CONTRIBUTION",
             "RMB" -> "RESULT",
             "RMB(Mn)" -> "RESULT",
             "RMB(Bn)" -> "RESULT",
@@ -149,6 +151,7 @@ class phReportContentTableBaseImpl extends phReportContentTable {
         val mktDisplayName = colArgs.mktDisplayName
         val somCommand: phCommand = new som
         val growthCommand: phCommand = new growth
+        val growthContribution: phCommand = new growthContribution
         val empty: phCommand = new phCommand {
             override def exec(args: Any): Any = args.asInstanceOf[Map[String, Any]]("data")
         }
@@ -162,7 +165,8 @@ class phReportContentTableBaseImpl extends phReportContentTable {
             "GR(%)" -> growthCommand,
             "SOM in Branded MKT(%)" -> somCommand,
             "Share" -> somCommand,
-            "som" -> somCommand
+            "som" -> somCommand,
+            "GrowthContribution%" -> growthContribution
             )
         colList.foreach(x => {
             val mktDisplay = x.split(" (in|of) ").tail.headOption.getOrElse(mktDisplayName)

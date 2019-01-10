@@ -29,12 +29,12 @@ class phMOVFilterImpl extends phFilter with phCommand {
     override def exec(args: Any): Any = {
         val js = args.asInstanceOf[JsValue]
         val name = (js \ "name").as[List[String]]
-        val movSourceList = List("LLYProd", "Manufa", "ManufaMNC", "market")
+        val movSourceList = List("LLYProd", "Manufa", "ManufaMNC", "market", "DF_gen_search_set")
 
 //        val mapping2Market:DataFrame => DataFrame => DataFrame = markt => mapping => {
 //            markt.join(mapping, markt("ID") === mapping("ID"))
 //        }
-//        val mappingSourceList = List("movMktOne", "movMktTow", "movMktThree")
+//        val mappingSourceList = List("movMktOne", "movMktTwo", "movMktThree")
         val getDF: String => DataFrame = str => {
             phLyFactory.getStorageWithDFName(str)
         }

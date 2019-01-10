@@ -296,6 +296,24 @@ class som extends phCommand with phReportTableCol {
     }
 }
 
+class growthContribution extends phCommand with phReportTableCol {
+    override def exec(args: Any): Any = {
+        val argsMap = args.asInstanceOf[Map[String, Any]]
+        val mktDisplayName = argsMap("mktDisplayName").asInstanceOf[String]
+        val data = argsMap("data").asInstanceOf[DataFrame]
+        val timelineList = argsMap("timelineList").asInstanceOf[List[String]]
+        val resultDF = timelineList.map { timeline =>
+            val dataTmp = data.filter(col("TIMELINE") === timeline)
+            val totalResult = dataTmp.filter(col("DISPLAY_NAME") === mktDisplayName)
+                    .select("RESULT", "GROWTH")
+                    .collect().head.toSeq
+                    .reduce((x,y) => (x.toString.toDouble * y.toString.toDouble) / (y.toString.toDouble / 100 + 1))
+            dataTmp.withColumn("GROWTH_CONTRIBUTION", (((col("RESULT") * col("GROWTH")) / (col("GROWTH") / 100 + 1)) / totalResult) * 100)
+        }.reduce((df1, df2) => df1.union(df2))
+        resultDF.na.fill(Double.NaN)
+    }
+}
+
 class growth extends phCommand with phReportTableCol {
     override def exec(args: Any): Any = {
         val argsMap = args.asInstanceOf[Map[String, Any]]

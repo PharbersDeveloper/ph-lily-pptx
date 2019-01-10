@@ -33,7 +33,7 @@ class phOverViewProductPerformanceTable extends phCommand {
         val timelineList = colArgs.timelineList
         val data = timelineList.map(x => {
             colArgs.timelineList = x :: Nil
-//            colValue(colArgs)
+            colValue(colArgs)
         })
         createTable(tableArgs, data)
     }
@@ -85,7 +85,7 @@ class phOverViewProductPerformanceTable extends phCommand {
         val pos = (element \ "pos").as[List[Int]]
         val colTitle = ((element \ "col" \ "title").as[String].split(":").head, (element \ "col" \ "title").as[String].split(":").tail.headOption.getOrElse(""))
         val rowTitle = ((element \ "row" \ "title").as[String].split(":").head, (element \ "row" \ "title").as[String].split(":").tail.headOption.getOrElse(""))
-        val mktDisplayName: String = ((element \ "mkt_display").as[String] :: rowList.head._1 :: Nil).filter(x => x != "").head
+        val mktDisplayName: String = (element \ "mkt_display").as[String]
         val col2DataColMap = Map("DOT(Mn)" -> "RESULT",
             "MMU" -> "RESULT",
             "Tablet" -> "RESULT",
@@ -110,28 +110,29 @@ class phOverViewProductPerformanceTable extends phCommand {
             "Mg(Mn)" -> "RESULT",
             "MG(Mn)" -> "RESULT",
             "RMB(Mn)" -> "RESULT")
-        tableArgs(rowList, colList, timelineList, mktDisplayName, jobid, pos, colTitle, rowTitle, slideIndex,col2DataColMap, rowColList)
+        tableArgs(rowList :+ (mktDisplayName, "row_1"), colList, timelineList, mktDisplayName, jobid, pos, colTitle, rowTitle, slideIndex,col2DataColMap, rowColList)
     }
 
-//    def colValue(colArgs: colArgs): DataFrame= {
-//        val colMap = Map(
-//            "DOT(Mn)" -> "dot",
-//            "MMU" -> "dot",
-//            "Tablet" -> "dot",
-//            "RMB" -> "LC-RMB",
-//            "RMB(Mn)" -> "LC-RMB",
-//            "DOT" -> "dot",
-//            "Mg(Mn)" -> "dot",
-//            "MG(Mn)" -> "dot",
-//            "RMB(Mn)" -> "LC-RMB",
-//            "RMB(Bn)" -> "LC-RMB",
-//            "" -> "empty"
-//        )
-//        val displayNamesMapping = getDisplayNamesMapping(colArgs.displayNameList)
-//        val result: DataFrame = new xx.exec(Map("data" -> colArgs.data, "displayNamesMapping" ->displayNamesMapping, "colList" -> colArgs.colList,
-//            "timelineList" -> colArgs.timelineList,"mktDisplayName" -> colArgs.mktDisplayName, "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName, colArgs.primaryValueName)))
-//        result
-//    }
+    def colValue(colArgs: colArgs): DataFrame= {
+        val colMap = Map(
+            "DOT(Mn)" -> "dot",
+            "MMU" -> "dot",
+            "Tablet" -> "dot",
+            "RMB" -> "LC-RMB",
+            "RMB(Mn)" -> "LC-RMB",
+            "DOT" -> "dot",
+            "Mg(Mn)" -> "dot",
+            "MG(Mn)" -> "dot",
+            "RMB(Mn)" -> "LC-RMB",
+            "RMB(Bn)" -> "LC-RMB",
+            "" -> "empty"
+        )
+        val displayNamesMapping = colArgs.colList.zip(colArgs.rowColList)
+        val dataMap = colArgs.data.asInstanceOf[Map[String, DataFrame]]
+        val result: DataFrame = new mixValue.exec(Map("data" -> dataMap("DF_gen_search_set"), "mapData" -> dataMap("movMktFour"), "displayNameList" -> displayNamesMapping, "colList" -> colArgs.colList,
+            "timelineList" -> colArgs.timelineList,"mktDisplayName" -> colArgs.mktDisplayName, "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName, colArgs.primaryValueName)))
+        result
+    }
 
 //    def colOtherValue(colArgs: colArgs, data: DataFrame): DataFrame= {
 //        val sortList = List("growth(%)","som","EV")
@@ -203,18 +204,19 @@ class phOverViewProductPerformanceTable extends phCommand {
                 val colCell = "A" + (index + 1)
                 addCell(jobid, tableName, colCell, title, "String", List(css, colTitle._2))
         }
+        addCell(jobid, tableName, "B1:B2", colList.head._1, "String", List(colList.head._2, colTitle._2))
 
         timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
             val timeline = timelineAndCss._1
             val timelineCss = timelineAndCss._2
-            val cellLeft = (1 + timelineIndex * colList.size + 65).toChar.toString + "1"
-            val cellRight = (timelineIndex * colList.size + colList.size + 65).toChar.toString + "1"
+            val cellLeft = (1 + timelineIndex * (colList.size - 1) + 66).toChar.toString + "1"
+            val cellRight = ((timelineIndex + 1) * (colList.size - 1) + 66).toChar.toString + "1"
             val timeLineCell = cellLeft + ":" + cellRight
             addCell(jobid, tableName, timeLineCell, timeline, "String", List(timelineCss))
-            colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+            colList.tail.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
                 val colName = colNameAndCss._1
                 val colCss = colNameAndCss._2
-                val colCell = (colList.size * timelineIndex + colNameIndex + 1 + 65).toChar.toString + "2"
+                val colCell = ((colList.size - 1) * timelineIndex + colNameIndex + 1 + 66).toChar.toString + "2"
                 addCell(jobid, tableName, colCell, colName, "String", List(colCss, colTitle._2))
             }
         }
@@ -224,16 +226,17 @@ class phOverViewProductPerformanceTable extends phCommand {
             val rowCss = displayNameAndCss._2
             val displayName = displayNameAndCss._1
             addCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String", List(rowTitle._2, rowCss))
-
+            cellMap = cellMap ++ Map((displayName, timelineList.head._1, colList.head._1) ->
+                    (cell(jobid, tableName, "B" + rowIndex.toString, "", "Number", List(colList.head._2, rowCss)), data2ValueMap.getOrElse(colList.head._1, common)))
             timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
                 val timeline = timelineAndCss._1
                 val timelineCss = timelineAndCss._2
-                colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+                colList.tail.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
                     val colName = col2DataColMap.getOrElse(colNameAndCss._1, colNameAndCss._1).replace("Share of", "SOM in")
                     val data2Value = data2ValueMap.getOrElse(colNameAndCss._1, common)
                     val colCss = colNameAndCss._2
                     val colIndex = colList.size * timelineIndex + colNameIndex + 1
-                    val cellIndex = (colIndex + 65).toChar.toString + rowIndex.toString
+                    val cellIndex = (colIndex + 66).toChar.toString + rowIndex.toString
                     cellMap = cellMap ++ Map((displayName, timeline, colName) -> (cell(jobid, tableName, cellIndex, "", "Number", List(colCss, rowCss)), data2Value))
                 }
             }
@@ -273,9 +276,9 @@ class phOverViewProductPerformanceTable extends phCommand {
         pushExcel(cellList.head.jobid, cellList.head.tableName, pos, slideIndex)
     }
 
-    def getDisplayNamesMapping(displayNameList: List[String]): List[(String, String, String)] = {
-        ???
-    }
+//    def getDisplayNamesMapping(displayNameList: List[String],displayNameCol: List[String], marketMapDF: DataFrame): List[(String, String, String)] = {
+//        ???
+//    }
 
     case class tableArgs(var rowList: List[(String, String)], colList: List[(String, String)],timelineList: List[(String, String)], mktDisplayName: String,
                          jobid: String, pos: List[Int], colTitle: (String, String), rowTitle: (String, String), slideIndex: Int, col2DataColMap: Map[String, String],

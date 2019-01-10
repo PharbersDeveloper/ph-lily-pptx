@@ -159,11 +159,7 @@ class marketSomCol extends phCommand with phReportTableCol {
 
         val rddTemp = data.toJavaRDD.rdd.map(x =>  phLyMOVData(x(0).toString, x(1).toString, x(2).toString, BigDecimal(x(3).toString)))
 
-
-        val filter_display_name = rddTemp.filter(x => displayNamelList.contains(x.id))
-
-
-        val mid_sum = filter_display_name.map { x =>
+        val mid_sum = rddTemp.map { x =>
             val idx = allTimelst.indexOf(x.date)
             val lst = if (idx > -1) {
                 List.fill(idx)(BigDecimal(0)) :::
@@ -180,7 +176,15 @@ class marketSomCol extends phCommand with phReportTableCol {
         //        println("***************************************************")
         //        mid_sum.take(20).foreach(println)
         val func_growth: RDD[(String, List[BigDecimal])] => RDD[(String, List[String])] = mid_sum => {
-            mid_sum.map { iter =>
+            val mktDisplayNameRDD = mid_sum.map(x => (mktDisplayName,x._2))
+                    .keyBy(x => x._1)
+                    .reduceByKey{(left, right) => {
+                        val lst = left._2.zip(right._2).map(x => x._1 + x._2)
+                        (mktDisplayName, lst)
+                        }
+                    }
+                    .map(x =>(x._1, x._2._2))
+            mid_sum.union(mktDisplayNameRDD).map { iter =>
                 val growth: List[String] = iter._2.zipWithIndex.map { case (value, idx) =>
                     if (idx >= timelineList.length) {
                         BigDecimal(20181231).toString()
@@ -196,7 +200,7 @@ class marketSomCol extends phCommand with phReportTableCol {
         val func_som: RDD[(String, List[BigDecimal])] => RDD[(String, List[String])] = mid_sum => {
             val mktDisplayNameList = mid_sum.reduce((left, right) => {
                 val lst = left._2.zip(right._2).map(x => x._1 + x._2)
-                ("all", lst)
+                (mktDisplayName, lst)
             })._2
             mid_sum.map { iter =>
                 val som = iter._2.zipWithIndex.map { case (value, idx) =>
@@ -214,8 +218,6 @@ class marketSomCol extends phCommand with phReportTableCol {
         val funcMap: Map[String, RDD[(String, List[BigDecimal])] => RDD[(String, List[String])]] =
             Map("som" -> func_som, "Growth(%)" -> func_growth)
 
-        println("****************************************************")
-        mid_sum.take(20).foreach(println)
         val result = funcMap(valueType)(mid_sum)
         result
     }
