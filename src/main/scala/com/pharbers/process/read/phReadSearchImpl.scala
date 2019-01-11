@@ -4,18 +4,23 @@ import com.pharbers.process.common.{phCommand, phLyFactory}
 import org.apache.spark.sql.DataFrame
 
 class phReadSearchImpl extends phCommand {
-    override def exec(args : Any): Any = {
+    override def exec(args: Any): Any = {
         loadDataFromPathInHDFS(args.asInstanceOf[String])
     }
-    def loadDataFromPathInHDFS(filepath : String): DataFrame = {
+
+    def loadDataFromPathInHDFS(filepath: String): DataFrame = {
         val tmp = phLyFactory.getCalcInstance()
         tmp.ss.read.format("com.databricks.spark.csv")
-                .option("delimiter", ",")
-                .option("header", "true")
-                .load(filepath.asInstanceOf[String])
-                .withColumnRenamed("PRODUCT DESC", "PRODUCT_DESC_MARKET")
-                .withColumnRenamed("PACK DESC", "PACK_DESC_MARKET")
-                .withColumnRenamed("COMPS DESC", "COMPS_DESC_MARKET")
-                .select("Display Name", "COMPS_DESC_MARKET", "PRODUCT_DESC_MARKET", "PACK_DESC_MARKET", "name")
+            .option("delimiter", ",")
+            .option("header", "false")
+            .load(filepath.asInstanceOf[String])
+            .withColumnRenamed("_c0", "Display Name")
+            .withColumnRenamed("_c1", "COMPS_DESC_MARKET")
+            .withColumnRenamed("_c2", "PRODUCT_DESC_MARKET")
+            .withColumnRenamed("_c3", "PACK_DESC_MARKET")
+            .withColumnRenamed("_c4", "name")
+            .filter(x => x(1) != "COMPS DESC")
+            .filter(x => x(4) != "NAME")
+            .select("Display Name", "COMPS_DESC_MARKET", "PRODUCT_DESC_MARKET", "PACK_DESC_MARKET", "name")
     }
 }
