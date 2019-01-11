@@ -1,14 +1,14 @@
 {
-  "title": "overview",
+  "title": "growth",
   "slices": [
     {
       "filter": {
         "name": [
           "DF_gen_search_set",
-          "LLYProd",
+          "ManufaMNC",
           "movMktFour"
         ],
-        "description": "12",
+        "description": "6",
         "factory": "com.pharbers.process.stm.step.pptx.filter.phMOVFilterImpl",
         "filt": []
       },
@@ -31,11 +31,11 @@
             ],
             "tables": [
               {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.overview.phOverViewProductPerformanceTable",
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.overview.productPerformanceGrowthTable",
                 "mkt_display": "Lilly Group",
-                "mkt_col": "LC-RMB",
+                "mkt_col": "RMB(Mn)",
                 "pos": [
-                  15,
+                  30,
                   60,
                   81,
                   81
@@ -46,70 +46,69 @@
                   "M09 18:timeline_2"
                 ],
                 "col": {
-                  "title": ":col_title_common",
+                  "title": "M09 18:col_title_common",
                   "count": [
-                    "Product Growth(%):col_common5",
-                    "Mkt Growth(%):col_common5"
+                    "SOM(%):col_common1"
                   ]
                 },
                 "row": {
-                  "title": "M09 18:row_title_chart1",
+                  "title": ":row_title_chart1",
                   "display_name": [
                     {
                       "name": "Ceclor:row_5",
-                      "col": "LC-RMB"
+                      "col": "RMB(Mn)"
                     },
                     {
                       "name": "Vancocin:row_5",
-                      "col": "LC-RMB"
+                      "col": "RMB(Mn)"
                     },
                     {
                       "name": "Gemzar:row_5",
-                      "col": "LC-RMB"
+                      "col": "RMB(Mn)"
                     },
                     {
                       "name": "Alimta:row_5",
-                      "col": "LC-RMB"
+                      "col": "RMB(Mn)"
                     },
                     {
                       "name": "Prozac:row_5",
-                      "col": "LC-RMB"
+                      "col": "RMB(Mn)"
                     },
                     {
                       "name": "Cymbalta:row_5",
-                      "col": "LC-RMB"
+                      "col": "RMB(Mn)"
                     },
                     {
                       "name": "Zyprexa:row_5",
-                      "col": "LC-RMB"
+                      "col": "RMB(Mn)"
                     },
                     {
                       "name": "Strattera:row_5",
-                      "col": "LC-RMB"
+                      "col": "RMB(Mn)"
                     },
                     {
                       "name": "Total Humulin:row_5",
-                      "col": "LC-RMB"
+                      "col": "RMB(Mn)"
                     },
                     {
-                      "name": "Total  Humalog:row_5",
-                      "col": "LC-RMB"
+                      "name": "Total Humalog:row_5",
+                      "col": "RMB(Mn)"
                     },
                     {
                       "name": "Lly Insulin:row_5",
-                      "col": "LC-RMB"
+                      "col": "RMB(Mn)"
                     },
                     {
                       "name": "Cialis:row_5",
-                      "col": "LC-RMB"
+                      "col": "RMB(Mn)"
                     },
                     {
                       "name": "Evista:row_5",
-                      "col": "LC-RMB"
+                      "col": "RMB(Mn)"
                     },
                     {
                       "name": "Forsteo:row_5",
-                      "col": "LC-RMB"
+                      "col": "RMB(Mn)"
                     }
                   ]
                 }
