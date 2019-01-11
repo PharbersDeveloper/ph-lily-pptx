@@ -241,7 +241,7 @@ class valueDF extends phCommand with phReportTableCol {
         val func_dot_value: phLycalData => BigDecimal = phLycalData => {
             phLycalData.dot
         }
-        val valueMap = Map("LC_RMB" -> func_rmb_value, "dot" -> func_dot_value)
+        val valueMap = Map("LC-RMB" -> func_rmb_value, "dot" -> func_dot_value)
         val mid_sum = allTimelineList.map { timeline =>
             val startYm: String = getStartYm(timeline)
             val ymMap = getTimeLineYm(timeline)

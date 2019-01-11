@@ -31,11 +31,8 @@ class phOverViewProductPerformanceTable extends phCommand {
     override def exec(args: Any): Any = {
         val colArgs = getColArgs(args)
         val tableArgs = getTableArgs(args)
-        val timelineList = colArgs.timelineList
-        val data = timelineList.map(x => {
-            colArgs.timelineList = x :: Nil
-            colValue(colArgs)
-        })
+//        val timelineList = colArgs.timelineList
+        val data = colValue(colArgs)
         createTable(tableArgs, data)
     }
 
@@ -87,12 +84,13 @@ class phOverViewProductPerformanceTable extends phCommand {
         val colTitle = ((element \ "col" \ "title").as[String].split(":").head, (element \ "col" \ "title").as[String].split(":").tail.headOption.getOrElse(""))
         val rowTitle = ((element \ "row" \ "title").as[String].split(":").head, (element \ "row" \ "title").as[String].split(":").tail.headOption.getOrElse(""))
         val mktDisplayName: String = (element \ "mkt_display").as[String]
-        val col2DataColMap = Map("DOT(Mn)" -> "RESULT",
-            "MMU" -> "RESULT",
-            "Tablet" -> "RESULT",
-            "SOM(%)" -> "SOM",
-            "SOM" -> "SOM",
-            "SOM%" -> "SOM",
+        val col2DataColMap = Map("DOT(Mn)" -> "RESULT1",
+            "MMU" -> "RESULT1",
+            "Tablet" -> "RESULT1",
+            "Tablet(K)" -> "RESULT1",
+            "SOM(%)" -> "SOM1",
+            "SOM" -> "SOM1",
+            "SOM%" -> "SOM1",
             "Share" -> "SOM",
             "Growth(%)" -> "GROWTH",
             "GROWTH(%)" -> "GROWTH",
@@ -100,23 +98,24 @@ class phOverViewProductPerformanceTable extends phCommand {
             "YoY GR" -> "GROWTH",
             "YOY GR" -> "GROWTH",
             "GR(%)" -> "GROWTH",
-            "RMB" -> "RESULT",
-            "RMB(Mn)" -> "RESULT",
-            "RMB(Bn)" -> "RESULT",
-            "DOT" -> "RESULT",
-            "Product Growth(%)" -> "PRODUCT_GROWTH",
-            "Mkt Growth(%)" -> "MKT_GROWTH",
+            "RMB" -> "RESULT1",
+            "RMB(Mn)" -> "RESULT1",
+            "RMB(Bn)" -> "RESULT1",
+            "DOT" -> "RESULT1",
+            "Product Growth(%)" -> "GROWTH1",
+            "Mkt Growth(%)" -> "GROWTH0",
             "SOM in Branded MKT(%)" -> "SOM",
             "SOM in Branded MKT%" -> "SOM",
-            "Mg(Mn)" -> "RESULT",
-            "MG(Mn)" -> "RESULT",
-            "RMB(Mn)" -> "RESULT")
-        tableArgs(rowList :+ (mktDisplayName, "row_1"), colList, timelineList, mktDisplayName, jobid, pos, colTitle, rowTitle, slideIndex,col2DataColMap, rowColList)
+            "Mg(Mn)" -> "RESULT1",
+            "MG(Mn)" -> "RESULT1",
+            "RMB(Mn)" -> "RESULT1")
+        tableArgs((mktDisplayName, "row_1") +: rowList, colList, timelineList, mktDisplayName, jobid, pos, colTitle, rowTitle, slideIndex,col2DataColMap, "RMB(Mn)" +: rowColList)
     }
 
     def colValue(colArgs: colArgs): DataFrame= {
         val colMap = Map(
             "DOT(Mn)" -> "dot",
+            "Tablet(K)" -> "dot",
             "MMU" -> "dot",
             "Tablet" -> "dot",
             "RMB" -> "LC-RMB",
@@ -128,10 +127,11 @@ class phOverViewProductPerformanceTable extends phCommand {
             "RMB(Bn)" -> "LC-RMB",
             "" -> "empty"
         )
-        val displayNamesMapping = colArgs.rowList.zip(colArgs.rowColList)
+        val displayNamesMapping = colArgs.rowList.zip(colArgs.rowColList.map(x => colMap(x)))
         val dataMap = colArgs.data.asInstanceOf[Map[String, DataFrame]]
         val result: DataFrame = new mixValue().exec(Map("data" -> dataMap("DF_gen_search_set"), "mapData" -> dataMap("movMktFour"), "displayNameList" -> displayNamesMapping, "colList" -> colArgs.colList,
-            "timelineList" -> colArgs.timelineList,"mktDisplayName" -> colArgs.mktDisplayName, "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName, colArgs.primaryValueName)))
+            "timelineList" -> colArgs.timelineList,"mktDisplayName" -> colArgs.mktDisplayName,
+            "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName, colArgs.primaryValueName), "mncData" -> dataMap("ManufaMNC")))
                 .asInstanceOf[DataFrame]
         result
     }
@@ -189,9 +189,11 @@ class phOverViewProductPerformanceTable extends phCommand {
         val common: String => String = x => x
         val mn: String => String = x => (x.toDouble / 1000000).toString
         val bn: String => String = x => (x.toDouble / 1000000000).toString
+        val k: String => String = x => (x.toDouble / 1000).toString
         val data2ValueMap = Map("DOT(Mn)" -> mn,
             "MMU" -> common,
             "Tablet" -> common,
+            "Tablet(K)" -> k,
             "RMB" -> common,
             "RMB(Mn)" -> mn,
             "DOT" -> common,
@@ -199,26 +201,31 @@ class phOverViewProductPerformanceTable extends phCommand {
             "MG(Mn)" -> mn,
             "RMB(Mn)" -> mn,
             "RMB(Bn)" -> bn)
-        (rowTitle :: colTitle :: Nil).zipWithIndex.foreach {
+        (colTitle :: Nil).zipWithIndex.foreach {
             case (titleANdCss, index) =>
                 val title = titleANdCss._1
                 val css = titleANdCss._2
-                val colCell = "A" + (index + 1)
+                val colCell = "A1:A2"
                 addCell(jobid, tableName, colCell, title, "String", List(css, colTitle._2))
         }
-        addCell(jobid, tableName, "B1:B2", colList.head._1, "String", List(colList.head._2, colTitle._2))
+        addCell(jobid, tableName, "B1:B2", "RMB", "String", List(colList.head._2, colTitle._2))
 
         timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+            val timeToHead: String => String = time => {
+                Map(
+                    "" -> "Month", "RQ" -> "Rolling QTR", "MAT" -> "MAT", "YTD" -> "YTD"
+                ).getOrElse(time.split(" ").head,"Month")
+            }
             val timeline = timelineAndCss._1
             val timelineCss = timelineAndCss._2
-            val cellLeft = (1 + timelineIndex * (colList.size - 1) + 66).toChar.toString + "1"
-            val cellRight = ((timelineIndex + 1) * (colList.size - 1) + 66).toChar.toString + "1"
+            val cellLeft = (1 + timelineIndex * colList.size + 66).toChar.toString + "1"
+            val cellRight = ((timelineIndex + 1) * colList.size + 66).toChar.toString + "1"
             val timeLineCell = cellLeft + ":" + cellRight
-            addCell(jobid, tableName, timeLineCell, timeline, "String", List(timelineCss))
-            colList.tail.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+            addCell(jobid, tableName, timeLineCell, timeToHead(timelineAndCss._1), "String", List(timelineCss))
+            colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
                 val colName = colNameAndCss._1
                 val colCss = colNameAndCss._2
-                val colCell = ((colList.size - 1) * timelineIndex + colNameIndex + 1 + 66).toChar.toString + "2"
+                val colCell = (colList.size * timelineIndex + colNameIndex + 1 + 66).toChar.toString + "2"
                 addCell(jobid, tableName, colCell, colName, "String", List(colCss, colTitle._2))
             }
         }
@@ -228,12 +235,12 @@ class phOverViewProductPerformanceTable extends phCommand {
             val rowCss = displayNameAndCss._2
             val displayName = displayNameAndCss._1
             addCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String", List(rowTitle._2, rowCss))
-            cellMap = cellMap ++ Map((displayName, timelineList.head._1, colList.head._1) ->
-                    (cell(jobid, tableName, "B" + rowIndex.toString, "", "Number", List(colList.head._2, rowCss)), data2ValueMap.getOrElse(colList.head._1, common)))
+            cellMap = cellMap ++ Map((displayName, timelineList.head._1, col2DataColMap.getOrElse(tableArgs.rowColList.head, tableArgs.rowColList.head)) ->
+                    (cell(jobid, tableName, "B" + rowIndex.toString, "", "Number", List(colList.head._2, rowCss)), data2ValueMap.getOrElse(tableArgs.rowColList.head, common)))
             timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
                 val timeline = timelineAndCss._1
                 val timelineCss = timelineAndCss._2
-                colList.tail.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+                colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
                     val colName = col2DataColMap.getOrElse(colNameAndCss._1, colNameAndCss._1).replace("Share of", "SOM in")
                     val data2Value = data2ValueMap.getOrElse(colNameAndCss._1, common)
                     val colCss = colNameAndCss._2
@@ -252,10 +259,11 @@ class phOverViewProductPerformanceTable extends phCommand {
         val dataColNames = dataFrame.columns
         dataFrame.collect().foreach(x => {
             val row = x.toSeq.zip(dataColNames).toList
-            val displayName = row.find(x => x._2.equals("DISPLAY_NAME")).get._1.toString
+            val displayName = row.find(x => x._2.equals("MOV_DISPLAY_NAME")).get._1.toString
             val timeline = row.find(x => x._2.equals("TIMELINE")).get._1.toString
+            val ty = row.find(x => x._2.equals("TYPE")).get._1.toString
             row.foreach(x => {
-                val oneCell = cellMap.getOrElse((displayName, timeline, x._2),(cell("","","","","",Nil),common))
+                val oneCell = cellMap.getOrElse((displayName, timeline, x._2 + ty),(cell("","","","","",Nil),common))
                 oneCell._1.value = oneCell._2(x._1.toString)
             })
         })
@@ -290,3 +298,304 @@ class phOverViewProductPerformanceTable extends phCommand {
                        var mktDisplayName: String, var primaryValueName: String, var data: Any, var mapping: Any = null,var rowColList: List[String])
 }
 
+class productPerformanceDotOrRmbTable extends phOverViewProductPerformanceTable{
+
+    override def createTableStyle(tableArgs: tableArgs): Map[(String, String, String), (cell, String => String)] = {
+        var cellMap: Map[(String, String, String), (cell, String => String)] = Map()
+        val tableName = UUID.randomUUID().toString
+        val rowTitle = tableArgs.rowTitle
+        val colTitle = tableArgs.colTitle
+        val rowList = tableArgs.rowList
+        val colList = tableArgs.colList
+        val timelineList = tableArgs.timelineList
+        val jobid = tableArgs.jobid
+        val col2DataColMap = tableArgs.col2DataColMap
+        val common: String => String = x => x
+        val mn: String => String = x => (x.toDouble / 1000000).toString
+        val bn: String => String = x => (x.toDouble / 1000000000).toString
+        val k: String => String = x => (x.toDouble / 1000).toString
+        val data2ValueMap = Map("DOT(Mn)" -> mn,
+            "MMU" -> common,
+            "Tablet" -> common,
+            "Tablet(K)" -> k,
+            "RMB" -> common,
+            "RMB(Mn)" -> mn,
+            "DOT" -> common,
+            "Mg(Mn)" -> mn,
+            "MG(Mn)" -> mn,
+            "RMB(Mn)" -> mn,
+            "RMB(Bn)" -> bn)
+        (colTitle :: Nil).zipWithIndex.foreach {
+            case (titleANdCss, index) =>
+                val title = titleANdCss._1
+                val css = titleANdCss._2
+                val colCell = "A1:A2"
+                addCell(jobid, tableName, colCell, title, "String", List(css, colTitle._2))
+                addCell(jobid, tableName, "B1:B2", "", "String", List(css, colTitle._2))
+        }
+
+        timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+            val timeToHead: String => String = time => {
+                Map(
+                    "" -> "Month", "RQ" -> "Rolling QTR", "MAT" -> "MAT", "YTD" -> "YTD"
+                ).getOrElse(time.split(" ").head,"Month")
+            }
+            val timeline = timelineAndCss._1
+            val timelineCss = timelineAndCss._2
+            val cellLeft = (1 + timelineIndex * colList.size + 67).toChar.toString + "1"
+            val cellRight = ((timelineIndex + 1) * colList.size + 67).toChar.toString + "1"
+            val timeLineCell = cellLeft + ":" + cellRight
+            addCell(jobid, tableName, timeLineCell, timeToHead(timeline), "String", List(timelineCss))
+            colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+                val colName = colNameAndCss._1
+                val colCss = colNameAndCss._2
+                val colCell = (colList.size * timelineIndex + colNameIndex + 1 + 67).toChar.toString + "2"
+                addCell(jobid, tableName, colCell, colName, "String", List(colCss, colTitle._2))
+            }
+        }
+
+        rowList.zip(tableArgs.rowColList).zipWithIndex.foreach { case (displayNameAndCol, displayNameIndex) =>
+            val rowIndex = displayNameIndex + 3
+            val rowCss = displayNameAndCol._1._2
+            val displayName = displayNameAndCol._1._1
+            addCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String", List(rowTitle._2, rowCss))
+            addCell(jobid, tableName, "B" + rowIndex.toString, displayNameAndCol._2, "String", List(rowTitle._2, rowCss))
+            cellMap = cellMap ++ Map((displayName, timelineList.head._1, col2DataColMap.getOrElse(displayNameAndCol._2, displayNameAndCol._2)) ->
+                    (cell(jobid, tableName, "C" + rowIndex.toString, "", "Number", List(colList.head._2, rowCss)), data2ValueMap.getOrElse(displayNameAndCol._2, common)))
+            timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+                val timeline = timelineAndCss._1
+                val timelineCss = timelineAndCss._2
+                colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+                    val colName = col2DataColMap.getOrElse(colNameAndCss._1, colNameAndCss._1).replace("Share of", "SOM in")
+                    val data2Value = data2ValueMap.getOrElse(colNameAndCss._1, common)
+                    val colCss = colNameAndCss._2
+                    val colIndex = colList.size * timelineIndex + colNameIndex + 1
+                    val cellIndex = (colIndex + 67).toChar.toString + rowIndex.toString
+                    cellMap = cellMap ++ Map((displayName, timeline, colName) -> (cell(jobid, tableName, cellIndex, "", "Number", List(colCss, rowCss)), data2Value))
+                }
+            }
+        }
+        cellMap
+    }
+}
+
+class productPerformanceGrowthTable extends phOverViewProductPerformanceTable{
+
+    override def createTableStyle(tableArgs: tableArgs): Map[(String, String, String), (cell, String => String)] = {
+        var cellMap: Map[(String, String, String), (cell, String => String)] = Map()
+        val tableName = UUID.randomUUID().toString
+        val rowTitle = tableArgs.rowTitle
+        val colTitle = tableArgs.colTitle
+        val rowList = tableArgs.rowList
+        val colList = tableArgs.colList
+        val timelineList = tableArgs.timelineList
+        val jobid = tableArgs.jobid
+        val col2DataColMap = tableArgs.col2DataColMap
+        val common: String => String = x => x
+        val mn: String => String = x => (x.toDouble / 1000000).toString
+        val bn: String => String = x => (x.toDouble / 1000000000).toString
+        val k: String => String = x => (x.toDouble / 1000).toString
+        val data2ValueMap = Map("DOT(Mn)" -> mn,
+            "MMU" -> common,
+            "Tablet" -> common,
+            "Tablet(K)" -> k,
+            "RMB" -> common,
+            "RMB(Mn)" -> mn,
+            "DOT" -> common,
+            "Mg(Mn)" -> mn,
+            "MG(Mn)" -> mn,
+            "RMB(Mn)" -> mn,
+            "RMB(Bn)" -> bn)
+        (rowTitle :: colTitle :: Nil).zipWithIndex.foreach {
+            case (titleANdCss, index) =>
+                val title = titleANdCss._1
+                val css = titleANdCss._2
+                val colCell = "A" + (index + 1)
+                addCell(jobid, tableName, colCell, title, "String", List(css, colTitle._2))
+        }
+
+        timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+            val timeToHead: String => String = time => {
+                Map(
+                    "" -> "Month", "RQ" -> "Rolling QTR", "MAT" -> "MAT", "YTD" -> "YTD"
+                ).getOrElse(time.split(" ").head,"Month")
+            }
+            val timeline = timelineAndCss._1
+            val timelineCss = timelineAndCss._2
+            val cellLeft = (1 + timelineIndex * colList.size + 65).toChar.toString + "1"
+            val cellRight = ((timelineIndex + 1) * colList.size + 65).toChar.toString + "1"
+            val timeLineCell = cellLeft + ":" + cellRight
+            addCell(jobid, tableName, timeLineCell, timeToHead(timeline), "String", List(timelineCss))
+            colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+                val colName = colNameAndCss._1
+                val colCss = colNameAndCss._2
+                val colCell = (colList.size * timelineIndex + colNameIndex + 1 + 65).toChar.toString + "2"
+                addCell(jobid, tableName, colCell, colName, "String", List(colCss, colTitle._2))
+            }
+        }
+
+        rowList.zipWithIndex.foreach { case (displayNameAndCss, displayNameIndex) =>
+            val rowIndex = displayNameIndex + 3
+            val rowCss = displayNameAndCss._2
+            val displayName = displayNameAndCss._1
+            addCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String", List(rowTitle._2, rowCss))
+            timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+                val timeline = timelineAndCss._1
+                val timelineCss = timelineAndCss._2
+                colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+                    val colName = col2DataColMap.getOrElse(colNameAndCss._1, colNameAndCss._1).replace("Share of", "SOM in")
+                    val data2Value = data2ValueMap.getOrElse(colNameAndCss._1, common)
+                    val colCss = colNameAndCss._2
+                    val colIndex = colList.size * timelineIndex + colNameIndex + 1
+                    val cellIndex = (colIndex + 65).toChar.toString + rowIndex.toString
+                    cellMap = cellMap ++ Map((displayName, timeline, colName) -> (cell(jobid, tableName, cellIndex, "", "Number", List(colCss, rowCss)), data2Value))
+                }
+            }
+        }
+        cellMap
+    }
+}
+
+class productPerformanceSomTable extends phOverViewProductPerformanceTable{
+
+    override def createTableStyle(tableArgs: tableArgs): Map[(String, String, String), (cell, String => String)] = {
+        var cellMap: Map[(String, String, String), (cell, String => String)] = Map()
+        val tableName = UUID.randomUUID().toString
+        val rowTitle = tableArgs.rowTitle
+        val colTitle = tableArgs.colTitle
+        val rowList = tableArgs.rowList
+        val colList = tableArgs.colList
+        val timelineList = tableArgs.timelineList
+        val jobid = tableArgs.jobid
+        val col2DataColMap = tableArgs.col2DataColMap
+        val common: String => String = x => x
+        val mn: String => String = x => (x.toDouble / 1000000).toString
+        val bn: String => String = x => (x.toDouble / 1000000000).toString
+        val k: String => String = x => (x.toDouble / 1000).toString
+        val data2ValueMap = Map("DOT(Mn)" -> mn,
+            "MMU" -> common,
+            "Tablet" -> common,
+            "Tablet(K)" -> k,
+            "RMB" -> common,
+            "RMB(Mn)" -> mn,
+            "DOT" -> common,
+            "Mg(Mn)" -> mn,
+            "MG(Mn)" -> mn,
+            "RMB(Mn)" -> mn,
+            "RMB(Bn)" -> bn)
+        (colTitle :: Nil).zipWithIndex.foreach {
+            case (titleANdCss, index) =>
+                val title = titleANdCss._1
+                val css = titleANdCss._2
+                val colCell = "A" + (index + 1)
+                addCell(jobid, tableName, colCell, title, "String", List(css, colTitle._2))
+        }
+
+        timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+            val timeToHead: String => String = time => {
+                Map(
+                    "" -> "Month", "RQ" -> "Rolling QTR", "MAT" -> "MAT", "YTD" -> "YTD"
+                ).getOrElse(time.split(" ").head,"Month")
+            }
+            val timeline = timelineAndCss._1
+            val timelineCss = timelineAndCss._2
+            val cellLeft = (1 + timelineIndex * colList.size + 65).toChar.toString + "1"
+            val cellRight = ((timelineIndex + 1) * colList.size + 65).toChar.toString + "1"
+            val timeLineCell = cellLeft + ":" + cellRight
+            addCell(jobid, tableName, timeLineCell, timeToHead(timeline), "String", List(timelineCss))
+        }
+
+        rowList.zipWithIndex.foreach { case (displayNameAndCss, displayNameIndex) =>
+            val rowIndex = displayNameIndex + 2
+            val rowCss = displayNameAndCss._2
+            val displayName = displayNameAndCss._1
+            addCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String", List(rowTitle._2, rowCss))
+            timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+                val timeline = timelineAndCss._1
+                val timelineCss = timelineAndCss._2
+                colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+                    val colName = col2DataColMap.getOrElse(colNameAndCss._1, colNameAndCss._1).replace("Share of", "SOM in")
+                    val data2Value = data2ValueMap.getOrElse(colNameAndCss._1, common)
+                    val colCss = colNameAndCss._2
+                    val colIndex = colList.size * timelineIndex + colNameIndex + 1
+                    val cellIndex = (colIndex + 65).toChar.toString + rowIndex.toString
+                    cellMap = cellMap ++ Map((displayName, timeline, colName) -> (cell(jobid, tableName, cellIndex, "", "Number", List(colCss, rowCss)), data2Value))
+                }
+            }
+        }
+        cellMap
+    }
+}
+
+class productPerformanceDotOrRmbSomTable extends phOverViewProductPerformanceTable{
+
+    override def createTableStyle(tableArgs: tableArgs): Map[(String, String, String), (cell, String => String)] = {
+        var cellMap: Map[(String, String, String), (cell, String => String)] = Map()
+        val tableName = UUID.randomUUID().toString
+        val rowTitle = tableArgs.rowTitle
+        val colTitle = tableArgs.colTitle
+        val rowList = tableArgs.rowList
+        val colList = tableArgs.colList
+        val timelineList = tableArgs.timelineList
+        val jobid = tableArgs.jobid
+        val col2DataColMap = tableArgs.col2DataColMap
+        val common: String => String = x => x
+        val mn: String => String = x => (x.toDouble / 1000000).toString
+        val bn: String => String = x => (x.toDouble / 1000000000).toString
+        val k: String => String = x => (x.toDouble / 1000).toString
+        val data2ValueMap = Map("DOT(Mn)" -> mn,
+            "MMU" -> common,
+            "Tablet" -> common,
+            "Tablet(K)" -> k,
+            "RMB" -> common,
+            "RMB(Mn)" -> mn,
+            "DOT" -> common,
+            "Mg(Mn)" -> mn,
+            "MG(Mn)" -> mn,
+            "RMB(Mn)" -> mn,
+            "RMB(Bn)" -> bn)
+
+        timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+            val timeToHead: String => String = time => {
+                Map(
+                    "" -> "Month", "RQ" -> "Rolling QTR", "MAT" -> "MAT", "YTD" -> "YTD"
+                ).getOrElse(time.split(" ").head,"Month")
+            }
+            val timeline = timelineAndCss._1
+            val timelineCss = timelineAndCss._2
+            val cellLeft = (timelineIndex * colList.size + 65).toChar.toString + "1"
+            val cellRight = ((timelineIndex + 1) * colList.size + 65).toChar.toString + "1"
+            val timeLineCell = cellLeft + ":" + cellRight
+            addCell(jobid, tableName, timeLineCell, timeToHead(timeline), "String", List(timelineCss))
+            addCell(jobid, tableName, "A2", "Product", "String", List(timelineCss))
+            addCell(jobid, tableName, "B2", "Measurement", "String", List(timelineCss))
+            colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+                val colName = colNameAndCss._1
+                val colCss = colNameAndCss._2
+                val colCell = (colList.size * timelineIndex + colNameIndex + 67).toChar.toString + "2"
+                addCell(jobid, tableName, colCell, colName, "String", List(colCss, colTitle._2))
+            }
+        }
+
+        rowList.zip(tableArgs.rowColList).zipWithIndex.foreach { case (displayNameAndCol, displayNameIndex) =>
+            val rowIndex = displayNameIndex + 3
+            val rowCss = displayNameAndCol._1._2
+            val displayName = displayNameAndCol._1._1
+            addCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String", List(rowTitle._2, rowCss))
+            addCell(jobid, tableName, "B" + rowIndex.toString, displayNameAndCol._2, "String", List(rowTitle._2, rowCss))
+            timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+                val timeline = timelineAndCss._1
+                val timelineCss = timelineAndCss._2
+                colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+                    val colName = col2DataColMap.getOrElse(colNameAndCss._1, colNameAndCss._1).replace("Share of", "SOM in")
+                    val data2Value = data2ValueMap.getOrElse(colNameAndCss._1, common)
+                    val colCss = colNameAndCss._2
+                    val colIndex = colList.size * timelineIndex + colNameIndex + 1
+                    val cellIndex = (colIndex + 66).toChar.toString + rowIndex.toString
+                    cellMap = cellMap ++ Map((displayName, timeline, colName) -> (cell(jobid, tableName, cellIndex, "", "Number", List(colCss, rowCss)), data2Value))
+                }
+            }
+        }
+        cellMap
+    }
+}

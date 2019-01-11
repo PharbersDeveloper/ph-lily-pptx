@@ -57,7 +57,7 @@ class mixValue extends phCommand with phReportTableCol {
             .filter(x => allDisplayName.contains(x._1.display_name) && x._2 == getMarket(x._1.display_name))
             .filter(x => valueMap(allDisAndType(x._1.display_name))(x._1, x._2))
             .map { x =>
-                x._1.result = if (x._1.value == -1) x._1.dot
+                x._1.result = if (allDisAndType(x._1.display_name) == "dot") x._1.dot
                 else x._1.value
                 x
             }
@@ -77,8 +77,7 @@ class mixValue extends phCommand with phReportTableCol {
                     left
                 }
         }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
-        println("MID_SUM===========")
-        mid_sum.take(20).foreach(println)
+
 
         lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
         import sparkDriver.ss.implicits._
@@ -98,8 +97,8 @@ class mixValue extends phCommand with phReportTableCol {
             val resultDF = getSom(mid_DF, mov_map_data, timelineList, productList)
             resultDF
         }
-        val funcMap = Map("Growth(%)" -> growthResult("growth"), "som" -> somResult("som"))
-        val resultDF = funcMap(colList.head)
+        val funcMap = Map("Growth(%)" -> growthResult, "som" -> somResult)
+        val resultDF = funcMap(colList.head)(colList.head)
         resultDF
     }
 

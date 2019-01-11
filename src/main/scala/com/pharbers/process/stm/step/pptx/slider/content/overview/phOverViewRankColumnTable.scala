@@ -17,23 +17,38 @@ class phOverViewRankColumnTable extends phReportContentTrendsChart{
         createTable(tableArgs, data)
     }
 
-//    override def getColArgs(args: Any): colArgs = {
-//        val col2DataColMap = Map(
-//            "SOM(%)" -> "som",
-//            "SOM" -> "som",
-//            "SOM%" -> "som",
-//            "Share" -> "som",
-//            "Growth(%)" -> "Growth(%)",
-//            "YoY GR(%)" -> "Growth(%)",
-//            "YoY GR" -> "Growth(%)",
-//            "YOY GR" -> "Growth(%)",
-//            "GR(%)" -> "Growth(%)",
-//            "SOM in Branded MKT(%)" -> "som",
-//            "SOM in Branded MKT%" -> "som")
-//        val argsMap = args.asInstanceOf[Map[String, Any]]
-//        val element = argsMap("element").asInstanceOf[JsValue]
-//        element.as[phTable]
-//    }
+    override def getColArgs(args: Any): colArgs = {
+        val col2DataColMap = Map(
+            "SOM(%)" -> "som",
+            "SOM" -> "som",
+            "SOM%" -> "som",
+            "Share" -> "som",
+            "Growth(%)" -> "Growth(%)",
+            "GROWTH(%)" -> "Growth(%)",
+            "YoY GR(%)" -> "Growth(%)",
+            "YoY GR" -> "Growth(%)",
+            "YOY GR" -> "Growth(%)",
+            "GR(%)" -> "Growth(%)",
+            "MAT Product Growth(%)" -> "Growth(%)",
+            "YTD Product Growth(%)" -> "Growth(%)",
+            "Rolling QTR Product Growth(%)" -> "Growth(%)",
+            "MTH Product Growth(%)" -> "Growth(%)",
+            "SOM in Branded MKT(%)" -> "som",
+            "SOM in Branded MKT%" -> "som")
+        val argsMap = args.asInstanceOf[Map[String, Any]]
+        val element = argsMap("element").asInstanceOf[JsValue]
+        val rowList = (element \ "row" \ "display_name").as[List[String]].map(x => x.split(":").head.replace("%", ""))
+        val colList = (element \ "col" \ "count").as[List[String]].map(x => col2DataColMap.getOrElse(x.split(":").head,x.split(":").head))
+        val timelineList = (element \ "timeline").as[List[String]].map(x => x.split(":").head)
+        val mktDisplayName = ((element \ "mkt_display").as[String] :: rowList.head :: Nil).find(x => x != "").getOrElse("")
+        val displayNameList = rowList.:::((element \ "col" \ "count").as[List[String]].map(x => x.split(":").head.split(" (in|of) ").tail.headOption.getOrElse(""))).::(mktDisplayName)
+                .distinct.filter(x => x != "")
+        val primaryValueName = ((element \ "mkt_col").as[String] :: colList.head :: Nil).filter(x => x != "").head
+        val dataMap = argsMap("data").asInstanceOf[Map[String, DataFrame]]
+        val data = dataMap((element \ "data").as[String])
+        val mapDF = dataMap.getOrElse((element \ "mapping").as[String], null)
+        colArgs(rowList, colList, timelineList, displayNameList, mktDisplayName, primaryValueName, data, mapDF)
+    }
 
     override def getTableArgs(args: Any): tableArgs = {
         val argsMap = args.asInstanceOf[Map[String, Any]]
