@@ -128,7 +128,6 @@ class phOverViewRankLineTable extends phOverViewRankColumnTable{
         var displayNameList: List[String] = Nil
         rows.foreach(x => {
             val withName = x.toSeq.zip(colName).toList
-            println(withName)
             displayNameList = displayNameList :+ withName.find(x => x._2.equals("DISPLAY_NAME")).get._1.toString
         })
         displayNameList

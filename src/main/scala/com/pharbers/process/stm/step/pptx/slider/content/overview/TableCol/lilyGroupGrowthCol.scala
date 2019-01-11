@@ -60,10 +60,6 @@ class lilyGroupGrowthCol extends phCommand with phReportTableCol {
         /**
           * 2. reduce by key 就是以display name 求和, 叫中间和
           */
-
-        println("****************************************************")
-        filter_display_name.take(20).foreach(println)
-
         val mid_sum = allTimelineList.map { timeline =>
             val startYm: String = getStartYm(timeline)
             val ymMap = getTimeLineYm(timeline)
@@ -84,10 +80,6 @@ class lilyGroupGrowthCol extends phCommand with phReportTableCol {
                         left
                     }
         }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
-
-        println("............................................................")
-        mid_sum.take(20).foreach(println)
-        mid_sum.take(20).foreach(x=>println(x._2.result))
 
         lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
         import sparkDriver.ss.implicits._

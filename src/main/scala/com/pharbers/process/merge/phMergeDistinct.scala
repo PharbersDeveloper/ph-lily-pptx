@@ -15,13 +15,10 @@ class phMergeDistinctImpl extends phMergeDistinct with phCommand {
           * 1. storage里面取所有读取的数据
           */
         val rdd_name_lst = args.asInstanceOf[Option[List[String]]].get
-        rdd_name_lst.foreach(println)
 
         val rdd_lst = rdd_name_lst.map { name =>
             phLyFactory.getStorageWithName(name)
         }
-
-        rdd_lst.foreach(println)
 
         /**
           * 2. 将数据文件union起来
@@ -54,7 +51,6 @@ class phMergeDistinctImpl extends phMergeDistinct with phCommand {
         phLyFactory.clearStorage
         phLyFactory.setStorageWithName("main frame", reval)
         phLyFactory.saveMidProcess("main frame", "hdfs:///test/mid/main-frame-without-dot/")
-        println(reval.count())
         Some(reval)
     }
 }
