@@ -38,7 +38,6 @@ trait phGenSearchSet extends PharbersInjectModule {
 
 class phGenSearchSetImpl extends phGenSearchSet with phCommand {
     override def exec(args : Any): Unit = {
-        //        println(data_sources)
         val dfLst = data_sources.map(x => {
             val function = x("factory")
             val command = phLyFactory.getInstance(function).asInstanceOf[phCommand]

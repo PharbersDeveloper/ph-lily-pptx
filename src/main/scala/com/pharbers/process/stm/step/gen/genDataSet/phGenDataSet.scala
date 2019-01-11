@@ -47,8 +47,6 @@ class phGenDataSetImpl extends phGenDataSet with phCommand {
             cmd.exec(nod.get("path").get)
         }
 
-        rdd_lst.foreach(println)
-
         def callAcc(lst : List[Map[String, String]], rdd : Option[Any]) : Option[Any] = {
             if (lst.isEmpty) rdd
             else {

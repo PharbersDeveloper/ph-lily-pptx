@@ -2,10 +2,11 @@ package com.pharbers.process.stm.step.pptx.slider.content.overview.TableCol
 
 import com.pharbers.process.common.{phCommand, phLyFactory, phLyMOVData, phLycalData}
 import com.pharbers.process.stm.step.pptx.slider.content.{growth, phReportTableCol}
-import org.apache.spark.sql.functions.{col, when}
+import org.apache.spark.sql.functions.{col, when, lit}
 import com.pharbers.spark.phSparkDriver
 import org.apache.spark.sql.DataFrame
 
+//只有一个月份的Product&Market的Growth或者SOM
 class mixValue extends phCommand with phReportTableCol {
     override def exec(args: Any): Any = {
         val argsMap = args.asInstanceOf[Map[String, Any]]
@@ -15,6 +16,7 @@ class mixValue extends phCommand with phReportTableCol {
         val displayNamelAndType: List[(String, String)] = argsMap("displayNameList").asInstanceOf[List[(String, String)]]
         val colList: List[String] = argsMap("colList").asInstanceOf[List[String]]
         val mktDisplayName: String = argsMap("mktDisplayName").asInstanceOf[String]
+        val mncData: DataFrame = argsMap("mncData").asInstanceOf[DataFrame]
         //单个Timeline
         val timelineList: List[String] = argsMap("timelineList").asInstanceOf[List[String]]
         val allTimelineList: List[String] = if (colList.contains("Growth(%)")) {
@@ -84,21 +86,20 @@ class mixValue extends phCommand with phReportTableCol {
         val mov_map_data = filtered_map_data.map(x => List((x._2, x._1), (x._2, x._4)))
             .reduce((lst1, lst2) => lst1 ::: lst2)
             .toDF("MOV_DISPLAY_NAME", "DISPLAY_NAME")
-        val mid_DF = mid_sum.map(x => (x._1._1, x._1._2, x._2._1.result)).toDF("DISPLAY_NAME", "TIMELINE",
+        val mid_DF = mid_sum.map(x => (x._1._1, x._1._2, x._2._1.result)).toDF("DISPLAY_NAME_MID", "TIMELINE",
             "RESULT")
-        //        val mid_DF = mid_sum.map(x => (x._1._1, x._1._2, x._2._1.result)).toDF("DISPLAY_NAME_MID", "TIMELINE",
-        //            "RESULT")
         val productList = filtered_map_data.map(x => x._1).toList
-        val growthResult: String => DataFrame = colString => {
+        val growthResult: String => DataFrame = str => {
             val resultDF = getGrowth(mid_DF, mov_map_data, timelineList, productList)
             resultDF
         }
-        val somResult: String => DataFrame = colString => {
+        val somResult: String => DataFrame = str => {
             val resultDF = getSom(mid_DF, mov_map_data, timelineList, productList)
             resultDF
         }
         val funcMap = Map("Growth(%)" -> growthResult, "som" -> somResult)
-        val resultDF = funcMap(colList.head)(colList.head)
+        val lyGroupresult = getLLYGroupValue(mncData, timelineList, mktDisplayName, colList.head)
+        val resultDF = funcMap(colList.head)(colList.head).union(lyGroupresult)
         resultDF
     }
 
@@ -107,6 +108,7 @@ class mixValue extends phCommand with phReportTableCol {
             .withColumnRenamed("DISPLAY_NAME", "DISPLAY_NAME_MID")
         val resultDF = mid_result.join(mov_map_data, col("DISPLAY_NAME_MID") === col("DISPLAY_NAME"))
             .withColumn("TYPE", when(col("DISPLAY_NAME").isin(productList: _*), 1).otherwise(0))
+            .select("DISPLAY_NAME", "TIMELINE", "RESULT", "GROWTH", "TYPE", "MOV_DISPLAY_NAME")
         resultDF
     }
 
@@ -121,6 +123,102 @@ class mixValue extends phCommand with phReportTableCol {
         val resultDF = mid_result.filter(col("TYPE") === 1)
             .join(mktResult, col("MKT_MOV_DISPLAY_NAME") === col("MOV_DISPLAY_NAME"))
             .withColumn("SOM", (col("RESULT") / col("MKT_RESULT")) * 100)
+            .select("DISPLAY_NAME", "TIMELINE", "RESULT", "SOM", "TYPE", "MOV_DISPLAY_NAME")
         resultDF
+    }
+
+    def getLLYGroupValue(mncData: DataFrame, timelineList: List[String], mktDisplayName: String, colstr: String): DataFrame = {
+        val allTimelineList: List[String] = if (colstr == "Growth(%)") {
+            getAllTimeline(timelineList)
+        } else {
+            timelineList
+        }
+        val allTimelst: List[String] = allTimelineList.map { timeline =>
+            val startYm: String = getStartYm(timeline)
+            val ymMap = getTimeLineYm(timeline)
+            val month = ymMap("month").toString.length match {
+                case 1 => "0" + ymMap("month")
+                case _ => ymMap("month")
+            }
+            val endYm: String = ymMap("year").toString + month
+            List(startYm, endYm)
+        }.reduce((lst1, lst2) => lst1 ::: lst2)
+        val tempRDD = mncData.toJavaRDD.rdd.map(x => phLyMOVData(x(0).toString, x(1).toString, x(2).toString,
+            BigDecimal(x(3).toString)))
+        val filterRDD = tempRDD.filter(x => x.tp == "LC-RMB")
+            .filter(x => x.date <= allTimelst.max)
+            .filter(x => x.date >= allTimelst.min)
+            .map { x =>
+                x.result = x.value
+                x
+            }
+        println("filterRDD=========")
+        filterRDD.take(20).foreach(println)
+
+        val mid_sum = allTimelineList.map { timeline =>
+            val startYm: String = getStartYm(timeline)
+            val ymMap = getTimeLineYm(timeline)
+            val month = ymMap("month").toString.length match {
+                case 1 => "0" + ymMap("month")
+                case _ => ymMap("month")
+            }
+            val endYm: String = ymMap("year").toString + month
+            filterRDD.filter(x => x.date >= startYm)
+                .filter(x => x.date <= endYm)
+                .keyBy(x => (x.id, timeline))
+                .reduceByKey { (left, right) =>
+                    left.result = left.result + right.result
+                    left
+                }
+        }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
+
+        println("mid_sum=========")
+        mid_sum.take(20).foreach(println)
+
+        val format_rdd = mid_sum.map(x => (x._2.id, x._1._2, x._2.result))
+
+        println("format_rdd=========")
+        format_rdd.take(20).foreach(println)
+
+        lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
+        import sparkDriver.ss.implicits._
+
+        val lyGroup = format_rdd.filter(x => x._1 == "ELI LILLY GROUP")
+            .map(x => (x._1, x._2, x._3))
+
+        println("lyGroup=========")
+        lyGroup.take(20).foreach(println)
+
+        val lyGroup_market = format_rdd.keyBy(x => x._2)
+            .reduceByKey { (left, rigth) =>
+                val result = left._3 + rigth._3
+                (left._1, left._2, result)
+            }.map(x => ("ELI LILLY GROUP MKT", x._1, x._2._3))
+
+        println("lyGroup_market=========")
+        lyGroup_market.take(20).foreach(println)
+
+
+        val func_som: String => DataFrame = str => {
+            val mid_result = lyGroup.toDF("DISPLAY_NAME", "TIMELINE", "RESULT")
+            val mktResult = lyGroup_market.map(x => (x._2, x._3)).toDF("TIMELINE_MKT", "MKT_RESULT")
+            val resultDF = mid_result.join(mktResult, col("TIMELINE") === col("TIMELINE_MKT"))
+                .withColumn("SOM", (col("RESULT") / col("MKT_RESULT")) * 100)
+                .withColumn("TYPE", lit(1))
+                .withColumn("MOV_DISPLAY_NAME", lit(mktDisplayName))
+                .select("DISPLAY_NAME", "TIMELINE", "RESULT", "SOM", "TYPE", "MOV_DISPLAY_NAME")
+            resultDF
+        }
+        val func_growth: String => DataFrame = str => {
+            val data = lyGroup.union(lyGroup_market).toDF("DISPLAYNAME", "TIMELINE", "RESULT")
+            val mid_result = new growth().exec(Map("data" -> data, "timelineList" -> timelineList)).asInstanceOf[DataFrame]
+            val resultDF = mid_result.withColumn("TYPE", when(col("DISPLAY_NAME") === "ELI LILLY GROUP", 1).otherwise(0))
+                .withColumn("MOV_DISPLAY_NAME", lit(mktDisplayName))
+                .select("DISPLAY_NAME", "TIMELINE", "RESULT", "GROWTH", "TYPE", "MOV_DISPLAY_NAME")
+            resultDF
+        }
+        val func_map = Map("Growth(%)" -> func_growth, "som" -> func_som)
+        val lyGroupValue = func_map(colstr)(colstr)
+        lyGroupValue
     }
 }

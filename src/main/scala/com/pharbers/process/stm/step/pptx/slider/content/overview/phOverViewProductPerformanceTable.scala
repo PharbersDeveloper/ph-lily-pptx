@@ -12,18 +12,19 @@ import play.api.libs.json.JsValue
 class phOverViewProductPerformanceTable extends phCommand {
     val socketDriver = phSocketDriver()
     var cells: List[String] = Nil
-    def addCell(jobid: String, tableName: String, cell: String, value: String, cate: String, cssName: List[String]): Unit ={
+
+    def addCell(jobid: String, tableName: String, cell: String, value: String, cate: String, cssName: List[String]): Unit = {
         val css = cssName.mkString("*")
         cells = cells :+ s"#c#$cell#s#$css#t#$cate#v#$value"
     }
 
-    def pushCell(jobid: String, tableName: String): Unit ={
+    def pushCell(jobid: String, tableName: String): Unit = {
         cells.sliding(30, 30).foreach(x => {
             socketDriver.setExcel(jobid, tableName, x)
         })
     }
 
-    def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit ={
+    def pushExcel(jobid: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
         Thread.sleep(3000)
         socketDriver.excel2PPT(jobid, tableName, pos, sliderIndex)
     }
@@ -56,20 +57,20 @@ class phOverViewProductPerformanceTable extends phCommand {
         val element = argsMap("element").asInstanceOf[JsValue]
         val rowList = (element \ "row" \ "display_name").as[List[JsValue]].map(x => (x \ "name").as[String].split(":").head.replace("%", ""))
         val rowColList = (element \ "row" \ "display_name").as[List[JsValue]].map(x => (x \ "col").as[String])
-        val colList = (element \ "col" \ "count").as[List[String]].map(x => col2DataColMap.getOrElse(x.split(":").head,x.split(":").head))
+        val colList = (element \ "col" \ "count").as[List[String]].map(x => col2DataColMap.getOrElse(x.split(":").head, x.split(":").head))
         val timelineList = (element \ "timeline").as[List[String]].map(x => x.split(":").head)
         val mktDisplayName = ((element \ "mkt_display").as[String] :: rowList.head :: Nil).filter(x => x != "").head
         val displayNameList = rowList.:::((element \ "col" \ "count").as[List[String]].map(x => x.split(":").head.split(" (in|of) ").tail.headOption.getOrElse(""))).::(mktDisplayName)
-                .distinct.filter(x => x != "")
+            .distinct.filter(x => x != "")
         val primaryValueName = ((element \ "mkt_col").as[String] :: colList.head :: Nil).filter(x => x != "").head
         val dataMap = argsMap("data").asInstanceOf[Map[String, DataFrame]]
         val data = dataMap
         val mapping = dataMap
-        colArgs(rowList, colList, timelineList, displayNameList,  mktDisplayName,
+        colArgs(rowList, colList, timelineList, displayNameList, mktDisplayName,
             primaryValueName, data, mapping, rowColList)
     }
 
-    def getTableArgs(args: Any):tableArgs = {
+    def getTableArgs(args: Any): tableArgs = {
         val argsMap = args.asInstanceOf[Map[String, Any]]
         val jobid = argsMap("jobid").asInstanceOf[String]
         val slideIndex = argsMap("slideIndex").asInstanceOf[Int]
@@ -112,7 +113,7 @@ class phOverViewProductPerformanceTable extends phCommand {
         tableArgs((mktDisplayName, "row_1") +: rowList, colList, timelineList, mktDisplayName, jobid, pos, colTitle, rowTitle, slideIndex,col2DataColMap, "RMB(Mn)" +: rowColList)
     }
 
-    def colValue(colArgs: colArgs): DataFrame= {
+    def colValue(colArgs: colArgs): DataFrame = {
         val colMap = Map(
             "DOT(Mn)" -> "dot",
             "Tablet(K)" -> "dot",
@@ -130,47 +131,47 @@ class phOverViewProductPerformanceTable extends phCommand {
         val displayNamesMapping = colArgs.rowList.zip(colArgs.rowColList.map(x => colMap(x)))
         val dataMap = colArgs.data.asInstanceOf[Map[String, DataFrame]]
         val result: DataFrame = new mixValue().exec(Map("data" -> dataMap("DF_gen_search_set"), "mapData" -> dataMap("movMktFour"), "displayNameList" -> displayNamesMapping, "colList" -> colArgs.colList,
-            "timelineList" -> colArgs.timelineList,"mktDisplayName" -> colArgs.mktDisplayName,
-            "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName, colArgs.primaryValueName), "mncData" -> dataMap("ManufaMNC")))
-                .asInstanceOf[DataFrame]
+            "timelineList" -> colArgs.timelineList, "mktDisplayName" -> colArgs.mktDisplayName,
+            "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName, colArgs.primaryValueName),
+            "mncData" -> dataMap("ManufaMNC"))).asInstanceOf[DataFrame]
         result
     }
 
-//    def colOtherValue(colArgs: colArgs, data: DataFrame): DataFrame= {
-//        val sortList = List("growth(%)","som","EV")
-//        val rowList = colArgs.rowList
-//        val colList = colArgs.colList.sortBy(x => (sortList.indexOf(x), x))
-//        val timelineList = colArgs.timelineList
-//        val mktDisplayName = colArgs.mktDisplayName
-//        val somCommand: phCommand = new som
-//        val growthCommand: phCommand = new growth
-//        val mktGrowthCommand: phCommand = new mktGr
-//        val empty: phCommand = new phCommand {
-//            override def exec(args: Any): Any = args.asInstanceOf[Map[String, Any]]("data")
-//        }
-//        var dataFrame = data
-//        val colMap = Map(
-//            "SOM(%)" -> somCommand,
-//            "SOM" -> somCommand,
-//            "SOM%" -> somCommand,
-//            "Growth(%)" -> growthCommand,
-//            "YoY GR(%)" -> growthCommand,
-//            "GR(%)" -> growthCommand,
-//            "SOM in Branded MKT(%)" -> somCommand,
-//            "Share" -> somCommand,
-//            "som" -> somCommand,
-//            "Mkt Growth(%)" -> mktGrowthCommand
-//        )
-//        colList.foreach(x => {
-//            val mktDisplay = x.split(" (in|of) ").tail.headOption.getOrElse(mktDisplayName)
-//            dataFrame = colMap.getOrElse(x.split(" (in|of) ").head, empty).exec(Map(
-//                "data" -> dataFrame, "mktDisplayName" -> mktDisplay, "timelineList" -> timelineList
-//            )).asInstanceOf[DataFrame]
-//        })
-//        dataFrame
-//    }
+    //    def colOtherValue(colArgs: colArgs, data: DataFrame): DataFrame= {
+    //        val sortList = List("growth(%)","som","EV")
+    //        val rowList = colArgs.rowList
+    //        val colList = colArgs.colList.sortBy(x => (sortList.indexOf(x), x))
+    //        val timelineList = colArgs.timelineList
+    //        val mktDisplayName = colArgs.mktDisplayName
+    //        val somCommand: phCommand = new som
+    //        val growthCommand: phCommand = new growth
+    //        val mktGrowthCommand: phCommand = new mktGr
+    //        val empty: phCommand = new phCommand {
+    //            override def exec(args: Any): Any = args.asInstanceOf[Map[String, Any]]("data")
+    //        }
+    //        var dataFrame = data
+    //        val colMap = Map(
+    //            "SOM(%)" -> somCommand,
+    //            "SOM" -> somCommand,
+    //            "SOM%" -> somCommand,
+    //            "Growth(%)" -> growthCommand,
+    //            "YoY GR(%)" -> growthCommand,
+    //            "GR(%)" -> growthCommand,
+    //            "SOM in Branded MKT(%)" -> somCommand,
+    //            "Share" -> somCommand,
+    //            "som" -> somCommand,
+    //            "Mkt Growth(%)" -> mktGrowthCommand
+    //        )
+    //        colList.foreach(x => {
+    //            val mktDisplay = x.split(" (in|of) ").tail.headOption.getOrElse(mktDisplayName)
+    //            dataFrame = colMap.getOrElse(x.split(" (in|of) ").head, empty).exec(Map(
+    //                "data" -> dataFrame, "mktDisplayName" -> mktDisplay, "timelineList" -> timelineList
+    //            )).asInstanceOf[DataFrame]
+    //        })
+    //        dataFrame
+    //    }
 
-    def createTable(tableArgs: tableArgs, data: Any): Unit= {
+    def createTable(tableArgs: tableArgs, data: Any): Unit = {
         val cellMap = createTableStyle(tableArgs)
         val cellList = putTableValue(data.asInstanceOf[DataFrame], cellMap)
         pushTable(cellList, tableArgs.pos, tableArgs.slideIndex)
@@ -286,16 +287,17 @@ class phOverViewProductPerformanceTable extends phCommand {
         pushExcel(cellList.head.jobid, cellList.head.tableName, pos, slideIndex)
     }
 
-//    def getDisplayNamesMapping(displayNameList: List[String],displayNameCol: List[String], marketMapDF: DataFrame): List[(String, String, String)] = {
-//        ???
-//    }
+    //    def getDisplayNamesMapping(displayNameList: List[String],displayNameCol: List[String], marketMapDF: DataFrame): List[(String, String, String)] = {
+    //        ???
+    //    }
 
-    case class tableArgs(var rowList: List[(String, String)], colList: List[(String, String)],timelineList: List[(String, String)], mktDisplayName: String,
+    case class tableArgs(var rowList: List[(String, String)], colList: List[(String, String)], timelineList: List[(String, String)], mktDisplayName: String,
                          jobid: String, pos: List[Int], colTitle: (String, String), rowTitle: (String, String), slideIndex: Int, col2DataColMap: Map[String, String],
                          var rowColList: List[String])
 
     case class colArgs(var rowList: List[String], var colList: List[String], var timelineList: List[String], var displayNameList: List[String],
-                       var mktDisplayName: String, var primaryValueName: String, var data: Any, var mapping: Any = null,var rowColList: List[String])
+                       var mktDisplayName: String, var primaryValueName: String, var data: Any, var mapping: Any = null, var rowColList: List[String])
+
 }
 
 class productPerformanceDotOrRmbTable extends phOverViewProductPerformanceTable{
