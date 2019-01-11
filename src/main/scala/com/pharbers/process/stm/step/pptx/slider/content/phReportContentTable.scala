@@ -1,6 +1,7 @@
 package com.pharbers.process.stm.step.pptx.slider.content
 
-import java.util.UUID
+import java.text.SimpleDateFormat
+import java.util.{Calendar, Date, UUID}
 
 import com.pharbers.phsocket.phSocketDriver
 import com.pharbers.process.common.{phCommand, phLycalArray, phLycalData}
@@ -15,10 +16,17 @@ import org.apache.spark.sql.functions.col
 import scala.collection.mutable
 
 object phReportContentTable {
-//    val month = 11
-//    val getTimeLine: String => String = time => {
-//
-//    }
+    var timelineStar: Date = _
+    def initTimeline(time: String): Unit ={
+        timelineStar = new SimpleDateFormat("MM yy").parse(time)
+    }
+
+    def time2timeLine(time: String): String = {
+        val cal = Calendar.getInstance()
+        cal.setTime(timelineStar)
+        cal.add(Calendar.MONTH, "\\d+".r.findFirstIn("#time\\d+#".r.findFirstIn(time).get).getOrElse("1").toInt - 1)
+        time.replaceAll("#time\\d+#", "M" + new SimpleDateFormat("MM yy").format(cal.getTime))
+    }
 }
 
 trait phReportContentTable extends phCommand {
@@ -82,7 +90,7 @@ class phReportContentTableBaseImpl extends phReportContentTable {
         val element = argsMap("element").asInstanceOf[JsValue]
         val rowList = (element \ "row" \ "display_name").as[List[String]].map(x => x.split(":").head.replace("%", ""))
         val colList = (element \ "col" \ "count").as[List[String]].map(x => col2DataColMap.getOrElse(x.split(":").head,x.split(":").head))
-        val timelineList = (element \ "timeline").as[List[String]].map(x => x.split(":").head)
+        val timelineList = (element \ "timeline").as[List[String]].map(x => x.split(":").head).map(x => phReportContentTable.time2timeLine(x))
         val mktDisplayName = ((element \ "mkt_display").as[String] :: rowList.head :: Nil).filter(x => x != "").head
         val displayNameList = rowList.:::((element \ "col" \ "count").as[List[String]].map(x => x.split(":").head.split(" (in|of) ").tail.headOption.getOrElse(""))).::(mktDisplayName)
             .distinct.filter(x => x != "")
@@ -98,7 +106,7 @@ class phReportContentTableBaseImpl extends phReportContentTable {
         val element = argsMap("element").asInstanceOf[JsValue]
         val rowList = (element \ "row" \ "display_name").as[List[String]].map(x => (x.split(":").head, x.split(":").tail.headOption.getOrElse("")))
         val colList = (element \ "col" \ "count").as[List[String]].map(x => (x.split(":").head, x.split(":").tail.headOption.getOrElse("")))
-        val timelineList = (element \ "timeline").as[List[String]].map(x => (x.split(":").head, x.split(":").tail.headOption.getOrElse("")))
+        val timelineList = (element \ "timeline").as[List[String]].map(x => (phReportContentTable.time2timeLine(x.split(":").head), x.split(":").tail.headOption.getOrElse("")))
         val pos = (element \ "pos").as[List[Int]]
         val colTitle = ((element \ "col" \ "title").as[String].split(":").head, (element \ "col" \ "title").as[String].split(":").tail.headOption.getOrElse(""))
         val rowTitle = ((element \ "row" \ "title").as[String].split(":").head, (element \ "row" \ "title").as[String].split(":").tail.headOption.getOrElse(""))

@@ -158,7 +158,7 @@ class phOverViewMarketTrendLineNoTable extends phOverViewMarketTrendTable {
         val element = argsMap("element").asInstanceOf[JsValue]
         val rowList = (element \ "row" \ "display_name").as[List[String]].map(x => x.split(":").head.replace("%", ""))
         val colList = (element \ "col" \ "count").as[List[String]].map(x => col2DataColMap.getOrElse(x.split(":").head,x.split(":").head))
-        val timelineList = (element \ "timeline").as[List[String]].map(x => x.split(":").head)
+        val timelineList = (element \ "timeline").as[List[String]].map(x => x.split(":").head).map(x => phReportContentTable.time2timeLine(x))
         val mktDisplayName = ((element \ "mkt_display").as[String] :: rowList.head :: Nil).filter(x => x != "").head
         val displayNameList = rowList.:::((element \ "col" \ "count").as[List[String]].map(x => x.split(":").head.split(" (in|of) ").tail.headOption.getOrElse(""))).::(mktDisplayName)
                 .distinct.filter(x => x != "")

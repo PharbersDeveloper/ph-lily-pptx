@@ -4,7 +4,7 @@ import java.util.UUID
 
 import com.pharbers.phsocket.phSocketDriver
 import com.pharbers.process.common.phCommand
-import com.pharbers.process.stm.step.pptx.slider.content.cell
+import com.pharbers.process.stm.step.pptx.slider.content.{cell, phReportContentTable}
 import com.pharbers.process.stm.step.pptx.slider.content.overview.TableCol.mixValue
 import org.apache.spark.sql.DataFrame
 import play.api.libs.json.JsValue
@@ -58,7 +58,7 @@ class phOverViewProductPerformanceTable extends phCommand {
         val rowList = (element \ "row" \ "display_name").as[List[JsValue]].map(x => (x \ "name").as[String].split(":").head.replace("%", ""))
         val rowColList = (element \ "row" \ "display_name").as[List[JsValue]].map(x => (x \ "col").as[String])
         val colList = (element \ "col" \ "count").as[List[String]].map(x => col2DataColMap.getOrElse(x.split(":").head, x.split(":").head))
-        val timelineList = (element \ "timeline").as[List[String]].map(x => x.split(":").head)
+        val timelineList = (element \ "timeline").as[List[String]].map(x => x.split(":").head).map(x => phReportContentTable.time2timeLine(x))
         val mktDisplayName = ((element \ "mkt_display").as[String] :: rowList.head :: Nil).filter(x => x != "").head
         val displayNameList = rowList.:::((element \ "col" \ "count").as[List[String]].map(x => x.split(":").head.split(" (in|of) ").tail.headOption.getOrElse(""))).::(mktDisplayName)
             .distinct.filter(x => x != "")
@@ -80,7 +80,7 @@ class phOverViewProductPerformanceTable extends phCommand {
         })
         val rowColList = (element \ "row" \ "display_name").as[List[JsValue]].map(x => (x \ "col").as[String])
         val colList = (element \ "col" \ "count").as[List[String]].map(x => (x.split(":").head, x.split(":").tail.headOption.getOrElse("")))
-        val timelineList = (element \ "timeline").as[List[String]].map(x => (x.split(":").head, x.split(":").tail.headOption.getOrElse("")))
+        val timelineList = (element \ "timeline").as[List[String]].map(x => (phReportContentTable.time2timeLine(x.split(":").head), x.split(":").tail.headOption.getOrElse("")))
         val pos = (element \ "pos").as[List[Int]]
         val colTitle = ((element \ "col" \ "title").as[String].split(":").head, (element \ "col" \ "title").as[String].split(":").tail.headOption.getOrElse(""))
         val rowTitle = ((element \ "row" \ "title").as[String].split(":").head, (element \ "row" \ "title").as[String].split(":").tail.headOption.getOrElse(""))
@@ -110,7 +110,7 @@ class phOverViewProductPerformanceTable extends phCommand {
             "Mg(Mn)" -> "RESULT1",
             "MG(Mn)" -> "RESULT1",
             "RMB(Mn)" -> "RESULT1")
-        tableArgs((mktDisplayName, "row_1") +: rowList, colList, timelineList, mktDisplayName, jobid, pos, colTitle, rowTitle, slideIndex,col2DataColMap, "RMB(Mn)" +: rowColList)
+        tableArgs((mktDisplayName, "row_1") +: rowList, colList, timelineList, mktDisplayName, jobid, pos, colTitle, rowTitle, slideIndex,col2DataColMap, (element \ "mkt_col").as[String] +: rowColList)
     }
 
     def colValue(colArgs: colArgs): DataFrame = {
@@ -558,17 +558,12 @@ class productPerformanceDotOrRmbSomTable extends phOverViewProductPerformanceTab
             "RMB(Bn)" -> bn)
 
         timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
-            val timeToHead: String => String = time => {
-                Map(
-                    "" -> "Month", "RQ" -> "Rolling QTR", "MAT" -> "MAT", "YTD" -> "YTD"
-                ).getOrElse(time.split(" ").head,"Month")
-            }
             val timeline = timelineAndCss._1
             val timelineCss = timelineAndCss._2
             val cellLeft = (timelineIndex * colList.size + 65).toChar.toString + "1"
-            val cellRight = ((timelineIndex + 1) * colList.size + 65).toChar.toString + "1"
+            val cellRight = ((timelineIndex + 1) * colList.size + 66).toChar.toString + "1"
             val timeLineCell = cellLeft + ":" + cellRight
-            addCell(jobid, tableName, timeLineCell, timeToHead(timeline), "String", List(timelineCss))
+            addCell(jobid, tableName, timeLineCell, timeline, "String", List(timelineCss))
             addCell(jobid, tableName, "A2", "Product", "String", List(timelineCss))
             addCell(jobid, tableName, "B2", "Measurement", "String", List(timelineCss))
             colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>

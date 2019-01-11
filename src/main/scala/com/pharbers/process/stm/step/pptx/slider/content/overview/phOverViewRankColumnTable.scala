@@ -39,7 +39,7 @@ class phOverViewRankColumnTable extends phReportContentTrendsChart{
         val element = argsMap("element").asInstanceOf[JsValue]
         val rowList = (element \ "row" \ "display_name").as[List[String]].map(x => x.split(":").head.replace("%", ""))
         val colList = (element \ "col" \ "count").as[List[String]].map(x => col2DataColMap.getOrElse(x.split(":").head,x.split(":").head))
-        val timelineList = (element \ "timeline").as[List[String]].map(x => x.split(":").head)
+        val timelineList = (element \ "timeline").as[List[String]].map(x => x.split(":").head).map(x => phReportContentTable.time2timeLine(x))
         val mktDisplayName = ((element \ "mkt_display").as[String] :: rowList.head :: Nil).find(x => x != "").getOrElse("")
         val displayNameList = rowList.:::((element \ "col" \ "count").as[List[String]].map(x => x.split(":").head.split(" (in|of) ").tail.headOption.getOrElse(""))).::(mktDisplayName)
                 .distinct.filter(x => x != "")
@@ -57,7 +57,7 @@ class phOverViewRankColumnTable extends phReportContentTrendsChart{
         val element = argsMap("element").asInstanceOf[JsValue]
         val rowList = (element \ "row" \ "display_name").as[List[String]].map(x => (x.split(":").head, x.split(":").tail.headOption.getOrElse("")))
         val colList = (element \ "col" \ "count").as[List[String]].map(x => (x.split(":").head, x.split(":").tail.headOption.getOrElse("")))
-        val timelineList = (element \ "timeline").as[List[String]].map(x => (x.split(":").head, x.split(":").tail.headOption.getOrElse("")))
+        val timelineList = (element \ "timeline").as[List[String]].map(x => (phReportContentTable.time2timeLine(x.split(":").head), x.split(":").tail.headOption.getOrElse("")))
         val pos = (element \ "pos").as[List[Int]]
         val colTitle = ((element \ "col" \ "title").as[String].split(":").head, (element \ "col" \ "title").as[String].split(":").tail.headOption.getOrElse(""))
         val rowTitle = ((element \ "row" \ "title").as[String].split(":").head, (element \ "row" \ "title").as[String].split(":").tail.headOption.getOrElse(""))

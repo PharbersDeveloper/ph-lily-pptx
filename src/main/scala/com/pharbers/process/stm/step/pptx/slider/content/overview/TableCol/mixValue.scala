@@ -115,7 +115,7 @@ class mixValue extends phCommand with phReportTableCol {
     def getSom(data: DataFrame, mov_map_data: DataFrame, timelineList: List[String], productList: List[String]): DataFrame = {
         val result = timelineList.map{timeline =>
             val filter_data = data.filter(col("TIMELINE") === timeline)
-            val mid_result = data.join(mov_map_data, col("DISPLAY_NAME_MID") === col("DISPLAY_NAME"))
+            val mid_result = filter_data.join(mov_map_data, col("DISPLAY_NAME_MID") === col("DISPLAY_NAME"))
                 .withColumn("TYPE", when(col("DISPLAY_NAME").isin(productList: _*), 1).otherwise(0))
             val mktResult = mid_result.filter(col("TYPE") === 0)
                 .select("MOV_DISPLAY_NAME", "DISPLAY_NAME", "RESULT")
