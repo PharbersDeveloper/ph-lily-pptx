@@ -102,6 +102,11 @@
                        descritption="what is this for"
                        path="/data/lily/source_file_20181118/marketoverview/mapTable/CHPA_Market_3_MAPPING.csv"
                        factory="com.pharbers.process.read.mktoverview.phReadMktThree"/>
+            <data_node index="3"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/source_file_20181118/marketoverview/mapTable/CHPA_Market_4_MAPPING.csv"
+                       factory="com.pharbers.process.read.mktoverview.phReadMktFour"/>
         </data_nodes>
     </gen_movMap_set>
     <gen_search_set>

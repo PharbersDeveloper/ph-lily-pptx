@@ -325,7 +325,7 @@ class growth extends phCommand with phReportTableCol {
             val allTimelineList = getAllTimeline(List(timeline))
             tmpRDD.filter(x => allTimelineList.contains(x.timeline))
                 .keyBy(x => x.display_name)
-                .reduceByKey { (left, right) =>
+                .reduceByKey { (left , right) =>
                     if (left.timeline == timeline) {
                         left.growth = (left.result - right.result) / right.result * 100
                         left

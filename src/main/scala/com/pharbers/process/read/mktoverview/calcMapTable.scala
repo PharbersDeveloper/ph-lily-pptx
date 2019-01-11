@@ -39,3 +39,14 @@ class phReadMktThree extends calcMapTable with phCommand{
         phLyFactory.setStorageWithDFName("movMktThree", resultDF)
     }
 }
+
+class phReadMktFour extends calcMapTable with phCommand{
+    override def exec(args: Any): Any = {
+        val path: String = args.asInstanceOf[String]
+        val df: DataFrame = sparkDriver.ss.read.format("com.databricks.spark.csv")
+            .option("header", "true")
+            .option("delimiter", ",")
+            .load(path)
+        phLyFactory.setStorageWithDFName("movMktFour", df)
+    }
+}

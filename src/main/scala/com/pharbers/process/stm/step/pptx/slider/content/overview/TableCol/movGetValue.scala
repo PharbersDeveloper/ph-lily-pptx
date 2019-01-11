@@ -3,6 +3,7 @@ package com.pharbers.process.stm.step.pptx.slider.content.overview.TableCol
 import com.pharbers.process.common.{phCommand, phLyFactory, phLyMOVData}
 import com.pharbers.process.stm.step.pptx.slider.content.phReportTableCol
 import com.pharbers.spark.phSparkDriver
+import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions._
 

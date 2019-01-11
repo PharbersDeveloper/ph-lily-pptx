@@ -69,9 +69,6 @@ class marketGrowthCol extends phCommand with phReportTableCol {
                     val lst = left._2.reVal.zip(right._2.reVal).map(x => x._1 + x._2)
                     (left._1, phLycalArray(lst))
                 }.map(x => (x._1, x._2._2.reVal.reverse))
-
-        //        println("***************************************************")
-        //        mid_sum.take(20).foreach(println)
         val func_growth: RDD[(String, List[BigDecimal])] => RDD[(String, List[String])] = mid_sum => {
             mid_sum.map { iter =>
                 val growth: List[String] = iter._2.zipWithIndex.map { case (value, idx) =>

@@ -3,7 +3,11 @@
   "slices": [
     {
       "filter": {
-        "name": ["DF_gen_search_set", "LLYProd", "movMktFour"],
+        "name": [
+          "DF_gen_search_set",
+          "LLYProd",
+          "movMktFour"
+        ],
         "description": "12",
         "factory": "com.pharbers.process.stm.step.pptx.filter.phMOVFilterImpl",
         "filt": []
@@ -16,7 +20,10 @@
             "texts": [
               {
                 "pos": [
-                  0, 0, 100, 100
+                  0,
+                  0,
+                  100,
+                  100
                 ],
                 "font": "",
                 "text": ""
@@ -24,38 +31,90 @@
             ],
             "tables": [
               {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phOverViewProductPerformanceTable",
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.overview.phOverViewProductPerformanceTable",
                 "mkt_display": "Lilly Group",
-                "mkt_col": "RMB",
+                "mkt_col": "LC-RMB",
                 "pos": [
-                  15, 60, 81, 81
+                  15,
+                  60,
+                  81,
+                  81
                 ],
+                "data":"",
                 "timeline": [
-                  "MAT M09 18:timeline_2","M09 18:timeline_2"
+                  "MAT M09 18:timeline_2",
+                  "M09 18:timeline_2"
                 ],
                 "col": {
-                  "title" : ":col_title_common",
-                  "count" : [
-                    "MMU:col_common5",
-                    "YoY GR(%):col_common5",
-                    "SOM(%):col_common5"
+                  "title": ":col_title_common",
+                  "count": [
+                    "Product Growth(%):col_common5",
+                    "Mkt Growth(%):col_common5"
                   ]
                 },
                 "row": {
-                  "title" : "M09 18:row_title_chart1",
-                  "display_name" : [
-                    "Ceclor:row_5","Vancocin:row_5",
-                    "Gemzar:row_5","Alimta:row_5",
-                    "Prozac:row_5","Cymbalta:row_5",
-                    "Zyprexa:row_5","Strattera:row_5",
-                    "Total Humulin:row_5","Total  Humalog:row_5",
-                    "Lly Insulin:row_5","Cialis:row_5",
-                    "Evista:row_5","Forsteo:row_5"
+                  "title": "M09 18:row_title_chart1",
+                  "display_name": [
+                    {
+                      "name": "Ceclor:row_5",
+                      "col": "LC-RMB"
+                    },
+                    {
+                      "name": "Vancocin:row_5",
+                      "col": "LC-RMB"
+                    },
+                    {
+                      "name": "Gemzar:row_5",
+                      "col": "LC-RMB"
+                    },
+                    {
+                      "name": "Alimta:row_5",
+                      "col": "LC-RMB"
+                    },
+                    {
+                      "name": "Prozac:row_5",
+                      "col": "LC-RMB"
+                    },
+                    {
+                      "name": "Cymbalta:row_5",
+                      "col": "LC-RMB"
+                    },
+                    {
+                      "name": "Zyprexa:row_5",
+                      "col": "LC-RMB"
+                    },
+                    {
+                      "name": "Strattera:row_5",
+                      "col": "LC-RMB"
+                    },
+                    {
+                      "name": "Total Humulin:row_5",
+                      "col": "LC-RMB"
+                    },
+                    {
+                      "name": "Total  Humalog:row_5",
+                      "col": "LC-RMB"
+                    },
+                    {
+                      "name": "Lly Insulin:row_5",
+                      "col": "LC-RMB"
+                    },
+                    {
+                      "name": "Cialis:row_5",
+                      "col": "LC-RMB"
+                    },
+                    {
+                      "name": "Evista:row_5",
+                      "col": "LC-RMB"
+                    },
+                    {
+                      "name": "Forsteo:row_5",
+                      "col": "LC-RMB"
+                    }
                   ]
                 }
               }
             ]
-
           }
         }
       ]

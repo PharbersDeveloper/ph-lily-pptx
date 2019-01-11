@@ -5,6 +5,7 @@ import java.util.UUID
 import com.pharbers.phsocket.phSocketDriver
 import com.pharbers.process.common.phCommand
 import com.pharbers.process.stm.step.pptx.slider.content.cell
+import com.pharbers.process.stm.step.pptx.slider.content.overview.TableCol.mixValue
 import org.apache.spark.sql.DataFrame
 import play.api.libs.json.JsValue
 
@@ -65,8 +66,8 @@ class phOverViewProductPerformanceTable extends phCommand {
                 .distinct.filter(x => x != "")
         val primaryValueName = ((element \ "mkt_col").as[String] :: colList.head :: Nil).filter(x => x != "").head
         val dataMap = argsMap("data").asInstanceOf[Map[String, DataFrame]]
-        val data = dataMap((element \ "data").as[String])
-        val mapping = dataMap.getOrElse((element \ "mapping").as[String], null)
+        val data = dataMap
+        val mapping = dataMap
         colArgs(rowList, colList, timelineList, displayNameList,  mktDisplayName,
             primaryValueName, data, mapping, rowColList)
     }
@@ -127,10 +128,11 @@ class phOverViewProductPerformanceTable extends phCommand {
             "RMB(Bn)" -> "LC-RMB",
             "" -> "empty"
         )
-        val displayNamesMapping = colArgs.colList.zip(colArgs.rowColList)
+        val displayNamesMapping = colArgs.rowList.zip(colArgs.rowColList)
         val dataMap = colArgs.data.asInstanceOf[Map[String, DataFrame]]
-        val result: DataFrame = new mixValue.exec(Map("data" -> dataMap("DF_gen_search_set"), "mapData" -> dataMap("movMktFour"), "displayNameList" -> displayNamesMapping, "colList" -> colArgs.colList,
+        val result: DataFrame = new mixValue().exec(Map("data" -> dataMap("DF_gen_search_set"), "mapData" -> dataMap("movMktFour"), "displayNameList" -> displayNamesMapping, "colList" -> colArgs.colList,
             "timelineList" -> colArgs.timelineList,"mktDisplayName" -> colArgs.mktDisplayName, "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName, colArgs.primaryValueName)))
+                .asInstanceOf[DataFrame]
         result
     }
 
