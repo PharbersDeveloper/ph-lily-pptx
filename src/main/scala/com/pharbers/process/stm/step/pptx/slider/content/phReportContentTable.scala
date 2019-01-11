@@ -25,7 +25,7 @@ object phReportContentTable {
         val cal = Calendar.getInstance()
         cal.setTime(timelineStar)
         cal.add(Calendar.MONTH, "\\d+".r.findFirstIn("#time\\d+#".r.findFirstIn(time).get).getOrElse("1").toInt - 1)
-        time.replaceAll("#time\\d+#", "M" + new SimpleDateFormat("MM yy").format(cal.getTime))
+        time.replaceAll("#time\\d+#", new SimpleDateFormat("MM yy").format(cal.getTime))
     }
 }
 
