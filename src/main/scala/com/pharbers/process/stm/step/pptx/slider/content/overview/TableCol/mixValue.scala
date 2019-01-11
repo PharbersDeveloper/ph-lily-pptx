@@ -112,18 +112,22 @@ class mixValue extends phCommand with phReportTableCol {
     }
 
     def getSom(data: DataFrame, mov_map_data: DataFrame, timelineList: List[String], productList: List[String]): DataFrame = {
-        val mid_result = data.join(mov_map_data, col("DISPLAY_NAME_MID") === col("DISPLAY_NAME"))
-            .withColumn("TYPE", when(col("DISPLAY_NAME").isin(productList: _*), 1).otherwise(0))
-        val mktResult = mid_result.filter(col("TYPE") === 0)
-            .select("MOV_DISPLAY_NAME", "DISPLAY_NAME", "RESULT")
-            .withColumnRenamed("MOV_DISPLAY_NAME", "MKT_MOV_DISPLAY_NAME")
-            .withColumnRenamed("DISPLAY_NAME", "MKT_DISPLAY_NAME")
-            .withColumnRenamed("RESULT", "MKT_RESULT")
-        val resultDF = mid_result.filter(col("TYPE") === 1)
-            .join(mktResult, col("MKT_MOV_DISPLAY_NAME") === col("MOV_DISPLAY_NAME"))
-            .withColumn("SOM", (col("RESULT") / col("MKT_RESULT")) * 100)
-            .select("DISPLAY_NAME", "TIMELINE", "RESULT", "SOM", "TYPE", "MOV_DISPLAY_NAME")
-        resultDF
+        val result = timelineList.map{timeline =>
+            val filter_data = data.filter(col("TIMELINE") === timeline)
+            val mid_result = data.join(mov_map_data, col("DISPLAY_NAME_MID") === col("DISPLAY_NAME"))
+                .withColumn("TYPE", when(col("DISPLAY_NAME").isin(productList: _*), 1).otherwise(0))
+            val mktResult = mid_result.filter(col("TYPE") === 0)
+                .select("MOV_DISPLAY_NAME", "DISPLAY_NAME", "RESULT")
+                .withColumnRenamed("MOV_DISPLAY_NAME", "MKT_MOV_DISPLAY_NAME")
+                .withColumnRenamed("DISPLAY_NAME", "MKT_DISPLAY_NAME")
+                .withColumnRenamed("RESULT", "MKT_RESULT")
+            val resultDF = mid_result.filter(col("TYPE") === 1)
+                .join(mktResult, col("MKT_MOV_DISPLAY_NAME") === col("MOV_DISPLAY_NAME"))
+                .withColumn("SOM", (col("RESULT") / col("MKT_RESULT")) * 100)
+                .select("DISPLAY_NAME", "TIMELINE", "RESULT", "SOM", "TYPE", "MOV_DISPLAY_NAME")
+            resultDF
+        }.reduce((df1, df2) => df1.union(df2))
+        result
     }
 
     def getLLYGroupValue(mncData: DataFrame, timelineList: List[String], mktDisplayName: String, colstr: String): DataFrame = {
@@ -151,8 +155,6 @@ class mixValue extends phCommand with phReportTableCol {
                 x.result = x.value
                 x
             }
-        println("filterRDD=========")
-        filterRDD.take(20).foreach(println)
 
         val mid_sum = allTimelineList.map { timeline =>
             val startYm: String = getStartYm(timeline)
@@ -171,13 +173,7 @@ class mixValue extends phCommand with phReportTableCol {
                 }
         }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
 
-        println("mid_sum=========")
-        mid_sum.take(20).foreach(println)
-
         val format_rdd = mid_sum.map(x => (x._2.id, x._1._2, x._2.result))
-
-        println("format_rdd=========")
-        format_rdd.take(20).foreach(println)
 
         lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
         import sparkDriver.ss.implicits._
@@ -185,28 +181,25 @@ class mixValue extends phCommand with phReportTableCol {
         val lyGroup = format_rdd.filter(x => x._1 == "ELI LILLY GROUP")
             .map(x => (x._1, x._2, x._3))
 
-        println("lyGroup=========")
-        lyGroup.take(20).foreach(println)
-
         val lyGroup_market = format_rdd.keyBy(x => x._2)
             .reduceByKey { (left, rigth) =>
                 val result = left._3 + rigth._3
                 (left._1, left._2, result)
             }.map(x => ("ELI LILLY GROUP MKT", x._1, x._2._3))
 
-        println("lyGroup_market=========")
-        lyGroup_market.take(20).foreach(println)
-
-
         val func_som: String => DataFrame = str => {
-            val mid_result = lyGroup.toDF("DISPLAY_NAME", "TIMELINE", "RESULT")
-            val mktResult = lyGroup_market.map(x => (x._2, x._3)).toDF("TIMELINE_MKT", "MKT_RESULT")
-            val resultDF = mid_result.join(mktResult, col("TIMELINE") === col("TIMELINE_MKT"))
-                .withColumn("SOM", (col("RESULT") / col("MKT_RESULT")) * 100)
-                .withColumn("TYPE", lit(1))
-                .withColumn("MOV_DISPLAY_NAME", lit(mktDisplayName))
-                .select("DISPLAY_NAME", "TIMELINE", "RESULT", "SOM", "TYPE", "MOV_DISPLAY_NAME")
-            resultDF
+            val result = timelineList.map{timeline =>
+                val mid_result = lyGroup.toDF("DISPLAY_NAME", "TIMELINE", "RESULT")
+                    .filter(col("TIMELINE") === timeline)
+                val mktResult = lyGroup_market.map(x => (x._2, x._3)).toDF("TIMELINE_MKT", "MKT_RESULT")
+                val resultDF = mid_result.join(mktResult, col("TIMELINE") === col("TIMELINE_MKT"))
+                    .withColumn("SOM", (col("RESULT") / col("MKT_RESULT")) * 100)
+                    .withColumn("TYPE", lit(1))
+                    .withColumn("MOV_DISPLAY_NAME", lit(mktDisplayName))
+                    .select("DISPLAY_NAME", "TIMELINE", "RESULT", "SOM", "TYPE", "MOV_DISPLAY_NAME")
+                resultDF
+            }.reduce((df1, df2) => df1.union(df2))
+            result
         }
         val func_growth: String => DataFrame = str => {
             val data = lyGroup.union(lyGroup_market).toDF("DISPLAYNAME", "TIMELINE", "RESULT")
