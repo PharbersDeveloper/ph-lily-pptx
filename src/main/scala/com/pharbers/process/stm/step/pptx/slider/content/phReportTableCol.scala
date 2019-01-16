@@ -8,7 +8,7 @@ import org.apache.spark.sql.functions.col
 
 import scala.collection.mutable
 
-trait phReportTableCol {
+trait phReportTableCol extends Serializable{
     lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
     var data: DataFrame = _
 
@@ -99,24 +99,31 @@ trait phReportTableCol {
         val timelineList: List[String] = argsMap("timelineList").asInstanceOf[List[String]]
         val mktDisplayName = argsMap("mktDisplayName").asInstanceOf[String]
         val primaryValueName: String = argsMap("primaryValueName").asInstanceOf[String]
+        val headstr = timelineList.head.dropRight(5)
         val valueType = colList.head
-        val forward: Int = timelineYmCount(timelineList.head)
         //需要计算出真正的所有timeline
         val allTimelineList: List[String] = if (colList.contains("Growth(%)")) {
             getAllTimeline(timelineList)
         } else {
             timelineList
         }
+        val funcYTD: String => Int = timeline => {
+            13 - timelineYmCount(timeline)
+        }
+        val funcOther: String => Int = timeline => {
+            timelineYmCount(timeline)
+        }
+        val countMap: Map[String, String => Int] = Map("YTD" -> funcYTD, "OTHER" -> funcOther)
         //为了筛选数据
         val allTimelst: List[String] = allTimelineList.map { timeline =>
-            val startYm: String = getStartYm(timeline)
             val ymMap = getTimeLineYm(timeline)
             val month = ymMap("month").toString.length match {
                 case 1 => "0" + ymMap("month")
                 case _ => ymMap("month")
             }
             val endYm: String = ymMap("year").toString + month
-            List(startYm, endYm)
+            val forward = timelineYmCount(timeline)
+            getAllym(ymMap("year"), ymMap("month"), forward, List(endYm))
         }.reduce((lst1, lst2) => (lst1 ::: lst2).distinct).sorted
         val rddTemp = data.toJavaRDD.rdd.map(x => phLycalData(x(0).toString, x(1).toString, x(2).toString, x(3).toString, x(4).toString,
             BigDecimal(x(5).toString), BigDecimal(x(6).toString), BigDecimal(x(7).toString), x(8).toString))
@@ -144,6 +151,10 @@ trait phReportTableCol {
         val mid_sum = filter_display_name.map { x =>
             val idx = allTimelst.indexOf(x.date)
             val lst = if (idx > -1) {
+                val ym = x.date.takeRight(4)
+                val timeline = headstr + ym.takeRight(2) + " " + ym.take(2)
+                val key = if (timeline.substring(0, 3) == "YTD") "YTD" else "OTHER"
+                val forward = countMap(key)(timeline)
                 List.fill(idx)(BigDecimal(0)) :::
                     List.fill(forward)(valueFuncMap(primaryValueName)(x)) :::
                     List.fill(allTimelst.length - idx - forward)(BigDecimal(0))
@@ -253,14 +264,12 @@ class valueDF extends phCommand with phReportTableCol {
             filter_display_name.filter(x => x.date >= startYm)
                 .filter(x => x.date <= endYm)
                 .keyBy(x => (x.display_name, timeline))
+                .map { x =>
+                    x._2.result = valueMap(primaryValueName)(x._2)
+                    x
+                }
                 .reduceByKey { (left, right) =>
-                    left.result =
-                        (if (left.result == 0) {
-                            valueMap(primaryValueName)(left)
-                        } else left.result) +
-                            (if (right.result == 0) {
-                                valueMap(primaryValueName)(right)
-                            } else right.result)
+                    left.result = left.result + right.result
                     left
                 }
         }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
@@ -305,9 +314,9 @@ class growthContribution extends phCommand with phReportTableCol {
         val resultDF = timelineList.map { timeline =>
             val dataTmp = data.filter(col("TIMELINE") === timeline)
             val totalResult = dataTmp.filter(col("DISPLAY_NAME") === mktDisplayName)
-                    .select("RESULT", "GROWTH")
-                    .collect().head.toSeq
-                    .reduce((x,y) => (x.toString.toDouble * y.toString.toDouble) / (y.toString.toDouble / 100 + 1))
+                .select("RESULT", "GROWTH")
+                .collect().head.toSeq
+                .reduce((x, y) => (x.toString.toDouble * y.toString.toDouble) / (y.toString.toDouble / 100 + 1))
             dataTmp.withColumn("GROWTH_CONTRIBUTION", (((col("RESULT") * col("GROWTH")) / (col("GROWTH") / 100 + 1)) / totalResult) * 100)
         }.reduce((df1, df2) => df1.union(df2))
         resultDF.na.fill(Double.NaN)
@@ -325,7 +334,7 @@ class growth extends phCommand with phReportTableCol {
             val allTimelineList = getAllTimeline(List(timeline))
             tmpRDD.filter(x => allTimelineList.contains(x.timeline))
                 .keyBy(x => x.display_name)
-                .reduceByKey { (left , right) =>
+                .reduceByKey { (left, right) =>
                     if (left.timeline == timeline) {
                         left.growth = (left.result - right.result) / right.result * 100
                         left
