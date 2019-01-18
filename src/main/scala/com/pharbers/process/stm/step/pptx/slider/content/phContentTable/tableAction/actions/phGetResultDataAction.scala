@@ -24,7 +24,7 @@ case class phColOtherValueAction() extends tableActionBase {
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
         val sortList = List("som")
-        val colList = colArgs.colList.sortBy(x => (-sortList.indexOf(x), x))
+        val colList = colArgs.colList.sortBy(x => (sortList.indexOf(x), x))
         val timelineList = colArgs.timelineList
         val mktDisplayName = colArgs.mktDisplayName
         val empty: phCommand = new phCommand {

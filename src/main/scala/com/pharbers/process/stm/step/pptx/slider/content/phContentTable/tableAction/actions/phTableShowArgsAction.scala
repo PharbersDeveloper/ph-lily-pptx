@@ -32,6 +32,6 @@ case class phTableShowArgsAction() extends tableStageAction {
 }
 
 class phCityTableShowArgsAction() extends phTableShowArgsAction{
-    override val actionList: List[tableActionBase] = phGetShowRowListAction() :: phGetMktDisplayNameAction() :: phGetShowColListAction() ::
+    override val actionList: List[tableActionBase] = phGetShowRowListAction() :: phGetShowMktDisplayNameAction() :: phGetShowColListAction() ::
             phGetShowTimelineListFromQuarterAction() :: phGetShowRowTitleAction() :: phGetShowColTitleAction() :: phGetShowCol2DataColMapAction() :: Nil
 }
