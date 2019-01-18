@@ -6,8 +6,6 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.functions.col
 
-import scala.collection.mutable
-
 trait phReportTableCol extends Serializable{
     lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
     var data: DataFrame = _
@@ -46,6 +44,7 @@ trait phReportTableCol extends Serializable{
             case 2 => timeline.charAt(0) match {
                 case 'M' => 1
                 case 'R' => 3
+                case 'Q' => 1
             }
         }
     }

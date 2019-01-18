@@ -45,3 +45,15 @@ class phMOVFilterImpl extends phFilter with phCommand {
         result
     }
 }
+
+class phCityFilterImpl extends phFilter with phCommand {
+    override def exec(args: Any): DataFrame = {
+        val js = args.asInstanceOf[JsValue]
+        val name = (js \ "name").as[String]
+        val cityFilt = (js \ "filt").as[String]
+        val source = phLyFactory.getStorageWithDFName("DF_gen_search_set").filter(col("name") === name)
+            .filter(col("CITY") === cityFilt)
+            .withColumn("DATE", formatYm(col("DATE")))
+        source
+    }
+}

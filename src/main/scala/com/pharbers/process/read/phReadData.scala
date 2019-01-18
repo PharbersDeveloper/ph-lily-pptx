@@ -9,40 +9,50 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
 
 trait phReadData extends java.io.Serializable {
-    val start : Int
-    val step : Int
-    val cat : Int
-    val primary : List[Int]
+    val start: Int
+    val step: Int
+    val cat: Int
+    val primary: List[Int]
     val seed = "#alfred#"
     val headline = 2
 
-    def md5Hash(text : String):String = java.security.MessageDigest.
-        getInstance("MD5").digest(text.getBytes()).map(0xFF & _).map{"%02x".format(_)}.foldLeft(""){_+_}
+    def md5Hash(text: String): String = java.security.MessageDigest.
+        getInstance("MD5").digest(text.getBytes()).map(0xFF & _).map {
+        "%02x".format(_)
+    }.foldLeft("") {
+        _ + _
+    }
 
-    def genPrimaryId(text: String) : String = md5Hash(text)
+    def genPrimaryId(text: String): String = md5Hash(text)
 
-    def mergeDF(path: String): String ={
+    def mergeDF(path: String): String = {
         val conf = new Configuration
         val hdfs = FileSystem.get(conf)
         val hdfsPath = new Path(path)
         val filePathlst = hdfs.listStatus(hdfsPath)
-        val rdd = filePathlst.map{filePath=>
+        val rdd = filePathlst.map { filePath =>
             formatDF(filePath.getPath.toString)
-        }.reduce{(totalRDD, onerdd) => totalRDD.union(onerdd)}
+        }.reduce { (totalRDD, onerdd) => totalRDD.union(onerdd) }
         val result = md5Hash("cui#merge" + new Date().getTime)
         phLyFactory.setStorageWithName(result, rdd)
         result
     }
 
-    def formatDF(path: String) : RDD[(String, phLyDataSet)] = {
+    def formatDF(path: String): RDD[(String, phLyDataSet)] = {
         val tmp = phLyFactory.getCalcInstance()
         val df: DataFrame = tmp.ss.read.format("com.databricks.spark.csv")
             .option("header", "false")
             .option("delimiter", ",")
             .load(path)
         val timeline = df.head().apply(start).toString.split("~").last.trim
+        val monthType = df.head().apply(start).toString.split("~").head.trim
         val dt_f = new java.text.SimpleDateFormat("MM/yyyy")
         val dt = dt_f.parse(timeline.toString)
+
+        val funcAll : Int => Int = offset => offset + 3
+        val funcCity : Int => Int = offset => offset * 3
+
+        val offsetMap = Map("QTR" -> funcCity, "MTH" -> funcAll)
 
         val cat01 = df.head(headline).last.apply(start)
         val cat02 = df.head(headline).last.apply(start + step)
@@ -65,13 +75,13 @@ trait phReadData extends java.io.Serializable {
                     val offset = (idx - start) % step
                     val cal = Calendar.getInstance()
                     cal.setTime(dt)
-                    cal.add(2 /*Month*/, offset)
+//                    cal.add(2 /*Month*/ , offset)
+                    cal.add(2 /*Month*/ , offsetMap(monthType)(offset))
                     val cal_str = dt_f.format(cal.getTime)
-
                     val tt = if (idx < start + (cat - 1) * step) cat01
                     else cat02
 
-                    if (row._1  == "PRODUCT ID") row._1 -> phLyDataSet(row._2(this.primary.head).toString, row._2(this.primary.tail.head).toString, "DATE", "TYPE", 0)
+                    if (row._1 == "PRODUCT ID") row._1 -> phLyDataSet(row._2(this.primary.head).toString, row._2(this.primary.tail.head).toString, "DATE", "TYPE", 0)
                     else row._1 -> phLyDataSet(row._2(this.primary.head).toString, row._2(this.primary.tail.head).toString, cal_str, tt.toString, BigDecimal(row._2(idx).toString))
                 }
             inner.toList

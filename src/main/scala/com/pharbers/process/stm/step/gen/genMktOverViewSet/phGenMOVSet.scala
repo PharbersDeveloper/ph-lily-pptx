@@ -6,7 +6,7 @@ import com.pharbers.process.common.{phCommand, phLyFactory}
 
 import scala.xml.{Node, NodeSeq}
 
-class phGenMOVSet extends PharbersInjectModule {
+trait phGenMOVSet extends PharbersInjectModule {
     override val id: String = "gen_mov_set"
     override val configPath: String = "pharbers_config/bi_config.xml"
     override val md: List[String] = "merges" :: "data_nodes" :: Nil
