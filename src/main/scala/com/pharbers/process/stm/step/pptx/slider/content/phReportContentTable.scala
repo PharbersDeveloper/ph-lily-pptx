@@ -4,13 +4,14 @@ import java.text.SimpleDateFormat
 import java.util.{Calendar, Date, UUID}
 
 import com.pharbers.phsocket.phSocketDriver
+import com.pharbers.process.common.jsonData.{col, phTable, phTable2Data, row}
 import com.pharbers.process.common.{phCommand, phLycalArray, phLycalData}
 import com.pharbers.process.stm.step.pptx.slider.content.overview.TableCol.{PieTableCol, PieTableCol2}
 import com.pharbers.spark.phSparkDriver
 import org.apache.poi.xslf.usermodel.XSLFSlide
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
-import play.api.libs.json.JsValue
+import play.api.libs.json._
 import org.apache.spark.sql.functions.col
 
 import scala.collection.mutable
@@ -24,8 +25,15 @@ object phReportContentTable {
     def time2timeLine(time: String): String = {
         val cal = Calendar.getInstance()
         cal.setTime(timelineStar)
-        cal.add(Calendar.MONTH, "\\d+".r.findFirstIn("#time\\d+#".r.findFirstIn(time).get).getOrElse("1").toInt - 1)
-        time.replaceAll("#time\\d+#", new SimpleDateFormat("MM yy").format(cal.getTime))
+        cal.add(Calendar.MONTH, "-?\\d+".r.findFirstIn("#time-?\\d+#".r.findFirstIn(time).get).getOrElse("24").toInt - 24)
+        time.replaceAll("#time-?\\d+#", new SimpleDateFormat("MM yy").format(cal.getTime))
+    }
+
+    def qtime2timeLine(time: String): String = {
+        val cal = Calendar.getInstance()
+        cal.setTime(timelineStar)
+        cal.add(Calendar.MONTH, "-?\\d+".r.findFirstIn("#qtime-?\\d+#".r.findFirstIn(time).get).getOrElse("8").toInt * 3 - 24)
+        time.replaceAll("#qtime-?\\d+#", new SimpleDateFormat("MM yy").format(cal.getTime))
     }
 }
 
@@ -618,6 +626,36 @@ class rankTable extends phReportContentTableBaseImpl {
             "timelineList" -> colArgs.timelineList, "primaryValueName" -> colMap.getOrElse(colArgs.primaryValueName, colArgs.primaryValueName)))
         result
     }
+}
+
+class cityBaseTable extends phReportContentTableBaseImpl{
+
+
+    override def getColArgs(args: Any): colArgs = {
+        val argsMap = args.asInstanceOf[Map[String, Any]]
+        val data = argsMap("data")
+        val element = argsMap("element").asInstanceOf[JsValue]
+        implicit val row = Json.format[row]
+        implicit val col = Json.format[col]
+        implicit val phTable = Json.format[phTable]
+        val table = element.as[phTable]
+        getColArgsFromPhTable(table, data)
+    }
+
+    def getColArgsFromPhTable(table: phTable, data: Any): colArgs ={
+        val rowlist = table.initOne(table.row.display_name,Map())(phTable2Data.removeCssAndSomething("%")).asInstanceOf[List[String]]
+        val colList = table.initOne(table.col.count,phTable2Data.jsonCol2DataColMap)(phTable2Data.removeCssAndSomething("")).asInstanceOf[List[String]]
+        val quarterList = table.initOne(table.timeline,Map())(phTable2Data.removeCssAndSomething("")).asInstanceOf[List[String]]
+        val timelineList = table.initOne(quarterList,Map())(phTable2Data.quarter2timeLine(phReportContentTable.timelineStar)).asInstanceOf[List[String]]
+        val mktDisplayName = (table.mkt_display :: rowlist.head :: Nil).find(x => x != "").getOrElse("")
+        val displayNameList = mktDisplayName +: rowlist
+        val primaryValueName = (table.mkt_col :: colList.head :: Nil).find(x => x != "").getOrElse("DOT")
+        colArgs(rowlist, colList, timelineList, displayNameList, mktDisplayName, primaryValueName, data)
+    }
+}
+
+class cityTrendsTable extends phReportContentTrendsTable{
+
 }
 
 case class tableArgs(var rowList: List[(String, String)], colList: List[(String, String)], timelineList: List[(String, String)], mktDisplayName: String,
