@@ -54,6 +54,6 @@ class phCityFilterImpl extends phFilter with phCommand {
         val source = phLyFactory.getStorageWithDFName("DF_gen_search_set").filter(col("name") === name)
             .filter(col("CITY") === cityFilt)
             .withColumn("DATE", formatYm(col("DATE")))
-        source
+        source.select("CITY", "PRODUCT NAME", "PACK DES", "DATE", "TYPE", "ADD RATE", "DOT", "VALUE", "Display Name")
     }
 }

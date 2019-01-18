@@ -62,5 +62,5 @@ object phLyFactory {
     }.toDF("ID", "PRODUCT NAME", "PACK DES", "DATE", "TYPE", "ADD RATE", "DOT", "VALUE")
     def phCityRow2DFDetail(name: String) = stssoo(name).asInstanceOf[RDD[phLyCityDataSet]].map{ iter =>
         (iter.city, iter.product_name, iter.pack_des, iter.date, iter.tp, iter.value, iter.add_rate, iter.dot)
-    }.toDF("CITY", "PRODUCT NAME", "PACK DES", "DATE", "TYPE", "ADD RATE", "DOT", "VALUE")
+    }.toDF("CITY", "PRODUCT NAME", "PACK DES", "DATE", "TYPE", "VALUE", "ADD RATE", "DOT")
 }
