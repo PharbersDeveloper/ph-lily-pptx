@@ -11,8 +11,8 @@ case class phColPrimaryValueAction() extends tableActionBase{
 
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
-        val colMap = args(argsMapKeys.COL_COMMAND_MAP).asInstanceOf[Map[String, phCommand]]
-        val result = colMap(colArgs.primaryValueName).exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+//        val colMap = args(argsMapKeys.COL_COMMAND_MAP).asInstanceOf[Map[String, phCommand]]
+        val result = new valueDF().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
             "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName))
         args ++ Map(name -> result)
     }
@@ -51,8 +51,6 @@ case class phGetColCommandMapAction() extends tableActionBase {
         val growthContribution: phCommand = new growthContribution
         val primaryCommand: phCommand = new valueDF
         val colMap = Map(
-            "dot" -> primaryCommand,
-            "LC-RMB" -> primaryCommand,
             "SOM(%)" -> somCommand,
             "SOM" -> somCommand,
             "SOM%" -> somCommand,

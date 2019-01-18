@@ -3,7 +3,7 @@ package com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAc
 import com.pharbers.process.common.DTO.tableColArgs
 import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.{argsMapKeys, tableActionBase, tableStageAction}
 
-class phTableColArgsAction extends tableStageAction{
+case class phTableColArgsAction() extends tableStageAction{
     override val name: String = argsMapKeys.TABLE_COL_ARGS
     override val actionList: List[tableActionBase] = phGetRowLstAction() :: phGetColListAction() :: phGetTimelineListAction() ::
             phGetMktDisplayNameAction() :: phGetDisplayNameListAction() :: phGetPrimaryValueNameAction() :: Nil
@@ -21,7 +21,7 @@ class phTableColArgsAction extends tableStageAction{
     }
 }
 
-class phCityTableColArgsAction extends phTableColArgsAction{
+class phCityTableColArgsAction() extends phTableColArgsAction{
     override val actionList: List[tableActionBase] = phGetRowLstAction() :: phGetColListAction() :: phGetTimelineListFromQuarterAction() ::
             phGetMktDisplayNameAction() :: phGetDisplayNameListAction() :: phGetPrimaryValueNameAction() :: Nil
 }

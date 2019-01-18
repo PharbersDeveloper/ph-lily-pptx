@@ -28,7 +28,11 @@ trait tableActionBase {
     val name = ""
     def perform(args: Map[String, Any], actionListOp: Option[List[tableActionBase]]): Any ={
         val actionList = actionListOp.getOrElse(List(endAction()))
-        actionList.head.perform(show(args), Some(actionList.tail))
+        if(actionList.nonEmpty){
+            actionList.headOption.getOrElse(endAction()).perform(show(args), Some(actionList.tail))
+        } else {
+            show(args)
+        }
     }
 
     def show(args: Map[String, Any]):  Map[String, Any]

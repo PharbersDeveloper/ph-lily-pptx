@@ -7,7 +7,7 @@ import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAct
 case class phTableShowArgsAction() extends tableStageAction {
     override val name: String = argsMapKeys.TABLE_SHOW_ARGS
 
-    override val actionList: List[tableActionBase] = phGetShowRowListAction() :: phGetMktDisplayNameAction() :: phGetShowColListAction() ::
+    override val actionList: List[tableActionBase] = phGetShowRowListAction() :: phGetShowMktDisplayNameAction() :: phGetShowColListAction() ::
             phGetShowTimelineListAction() :: phGetShowRowTitleAction() :: phGetShowColTitleAction() :: phGetShowCol2DataColMapAction() :: Nil
 
     override def stageReady(args: Map[String, Any]): Map[String, Any] = {
@@ -31,7 +31,7 @@ case class phTableShowArgsAction() extends tableStageAction {
     }
 }
 
-case class phCityTableShowArgsAction() extends phTableShowArgsAction{
+class phCityTableShowArgsAction() extends phTableShowArgsAction{
     override val actionList: List[tableActionBase] = phGetShowRowListAction() :: phGetMktDisplayNameAction() :: phGetShowColListAction() ::
             phGetShowTimelineListFromQuarterAction() :: phGetShowRowTitleAction() :: phGetShowColTitleAction() :: phGetShowCol2DataColMapAction() :: Nil
 }

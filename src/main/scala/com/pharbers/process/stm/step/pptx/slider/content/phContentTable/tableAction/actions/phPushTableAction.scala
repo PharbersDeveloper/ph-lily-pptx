@@ -6,7 +6,7 @@ import com.pharbers.phsocket.phSocketDriver
 import com.pharbers.process.common.DTO.tableShowArgs
 import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.{argsMapKeys, tableActionBase}
 
-class phPushTableAction extends tableActionBase{
+case class phPushTableAction() extends tableActionBase{
 
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val cells = args(argsMapKeys.SHOW_TABLE).asInstanceOf[List[String]]

@@ -29,8 +29,10 @@ case class phGetShowTimelineListAction() extends tableActionBase{
 
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val tableModel = args(argsMapKeys.TABLE_MODEL).asInstanceOf[phTable]
-        val MonthList = tableModel.initOne(tableModel.timeline,Map())(phTable2Data.removeCssAndSomething("")).asInstanceOf[List[String]]
-        val timelineList = tableModel.initOne(MonthList,Map())(phTable2Data.Month2timeLine(phReportContentTable.timelineStar))
+//        val MonthList = tableModel.initOne(tableModel.timeline,Map())(phTable2Data.removeCssAndSomething("")).asInstanceOf[List[String]]
+        val timelineListAndCss = tableModel.initOne(tableModel.timeline,Map())(phTable2Data.Month2timeLine(phReportContentTable.timelineStar)).asInstanceOf[List[String]]
+        val timelineList = tableModel.initOne(timelineListAndCss,Map())(phTable2Data.severCss)
+
         args ++ Map(name -> timelineList)
     }
 }
@@ -73,5 +75,16 @@ case class phGetShowTimelineListFromQuarterAction() extends tableActionBase{
                 .asInstanceOf[List[String]]
         val timelineList = tableModel.initOne(timelineAndCssList, Map())(phTable2Data.severCss)
         args ++ Map(name -> timelineList)
+    }
+}
+
+case class phGetShowMktDisplayNameAction() extends tableActionBase{
+    override val name: String = argsMapKeys.MKT_DISPLAY_NAME
+
+    override def show(args: Map[String, Any]): Map[String, Any] = {
+        val tableModel = args(argsMapKeys.TABLE_MODEL).asInstanceOf[phTable]
+        val rowList = args(argsMapKeys.ROW_LIST).asInstanceOf[List[(String, String)]]
+        val mktDisplayName = (tableModel.mkt_display :: rowList.head._1 :: Nil).find(x => x != "").getOrElse("")
+        args ++ Map(name  -> mktDisplayName)
     }
 }

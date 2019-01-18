@@ -130,4 +130,32 @@ case class phGetShowTableBodyValueAction() extends tableActionBase {
     }
 }
 
+case class phGetCityShowTableHeadStyleAction() extends tableActionBase{
+    override val name: String = "get show table head style"
 
+    override def show(args: Map[String, Any]): Map[String, Any] = {
+        val tableShowArgs = args(argsMapKeys.TABLE_SHOW_ARGS).asInstanceOf[tableShowArgs]
+        val tableCells = args(argsMapKeys.TABLE_CELLS).asInstanceOf[tableCells]
+
+        tableShowArgs.timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+            val timeline = timelineAndCss._1
+            val month = "//d//d".r.findFirstIn("Q//d//d".r.findFirstIn(timeline).get).get.toInt
+            val qtimeline = timeline.replace(month.toString,(month / 3).toString)
+            val timelineCss = timelineAndCss._2
+            val cellLeft = (1 + timelineIndex * tableShowArgs.colList.size + 65).toChar.toString + "1"
+            val cellRight = (timelineIndex * tableShowArgs.colList.size + tableShowArgs.colList.size + 65).toChar.toString + "1"
+            val timeLineCell = cellLeft + ":" + cellRight
+            //            addCell(jobid, tableName, timeLineCell, timeline, "String", List(timelineCss))
+            tableCells.readyCells = tableCells.readyCells :+  s"#c#$timeLineCell#v#$qtimeline#t#String#s#$timelineCss"
+            tableShowArgs.colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+                val colName = colNameAndCss._1
+                val colCss = colNameAndCss._2
+                val colTitleCss = tableShowArgs.colTitle._2
+                val colCell = (tableShowArgs.colList.size * timelineIndex + colNameIndex + 1 + 65).toChar.toString + "2"
+                //                addCell(jobid, tableName, colCell, colName, "String", List(colCss, colTitleCss))
+                tableCells.readyCells = tableCells.readyCells :+  s"#c#$colCell#v#$colName#t#String#s#$colCss*$colTitleCss"
+            }
+        }
+        args
+    }
+}

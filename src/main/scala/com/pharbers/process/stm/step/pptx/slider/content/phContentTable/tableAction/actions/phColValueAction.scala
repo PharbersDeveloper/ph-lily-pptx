@@ -2,7 +2,7 @@ package com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAc
 
 import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.{argsMapKeys, tableActionBase, tableStageAction}
 
-class phColValueAction extends tableStageAction {
+case class phColValueAction() extends tableStageAction {
     override val name: String = argsMapKeys.DATA
     override val actionList: List[tableActionBase] = phGetColCommandMapAction() :: phColPrimaryValueAction() :: phColOtherValueAction() :: Nil
 

@@ -4,7 +4,7 @@ import com.pharbers.process.common.jsonData.{col, phTable, row}
 import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.{argsMapKeys, tableActionBase}
 import play.api.libs.json.{JsValue, Json}
 
-class phJson2ModelAction extends tableActionBase{
+case class phJson2ModelAction() extends tableActionBase{
     override val name: String = argsMapKeys.TABLE_MODEL
 
     override def show(args: Map[String, Any]): Map[String, Any] = {

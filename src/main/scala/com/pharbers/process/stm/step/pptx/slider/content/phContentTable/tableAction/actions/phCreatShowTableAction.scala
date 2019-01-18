@@ -5,7 +5,7 @@ import java.util.UUID
 import com.pharbers.process.common.DTO.tableCells
 import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.{argsMapKeys, tableActionBase, tableStageAction}
 
-class phCreatShowTableAction extends tableStageAction {
+case class phCreatShowTableAction() extends tableStageAction {
     override val name: String = argsMapKeys.SHOW_TABLE
     override val actionList: List[tableActionBase] = phGetData2CellValueMapAction() :: phGetShowTableTitleStyleAction() :: phGetShowTableHeadStyleAction() ::
             phGetShowTableBodyStyleAction() :: phGetShowTableBodyValueAction() :: Nil
