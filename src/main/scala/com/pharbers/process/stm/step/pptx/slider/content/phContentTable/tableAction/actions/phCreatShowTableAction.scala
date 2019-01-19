@@ -29,3 +29,8 @@ class phCreatCityShowTrendsTableAction() extends phCreatShowTableAction{
     override val actionList: List[tableActionBase] = phGetData2CellValueMapAction() :: phGetCityShowTrendsTableHeadStyleAction() ::
             phGetShowTrendsTableBodyStyleAction() :: phGetShowTrendsTableBodyValueAction() :: Nil
 }
+
+class phCreatCityShowStackedTableAction() extends phCreatShowTableAction{
+    override val actionList: List[tableActionBase] = phGetData2CellValueMapAction() :: phGetCityShowStackedTableHeadStyleAction() ::
+            phGetShowStackedTableBodyStyleAction() :: phGetShowCityStackedTableBodyValueAction() :: Nil
+}

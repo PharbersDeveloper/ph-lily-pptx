@@ -26,3 +26,9 @@ class phCityLineChartCommonTable extends phContentTableCommand{
             new phCityTableShowArgsAction() :: new phColTrendsValueAction :: new phCreatCityShowTrendsTableAction() :: new phPushLinChartAction() :: Nil
 
 }
+
+class phCityStackedChartCommonTable extends phContentTableCommand{
+    val actionList: List[tableActionBase] = phCityStackedJson2ModelAction() :: new phCityTableColArgsAction() ::
+            new phCityTableShowArgsAction() :: new phColStackedValueAction() :: new phCreatCityShowStackedTableAction() :: new phPushColumnStackedChartAction() :: Nil
+
+}

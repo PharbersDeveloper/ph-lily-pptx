@@ -22,6 +22,7 @@ object argsMapKeys{
     val DATA_2_Cell_VALUE_MAP = "data2CellValueMap"
     val TABLE_NAME = "tableName"
     val TABLE_CELLS = "tableCells"
+    val CITY = "city"
 }
 
 trait tableActionBase {

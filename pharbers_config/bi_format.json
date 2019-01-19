@@ -1,29 +1,39 @@
 {
-  "title": "growth",
+  "title": "Oncology_City_Quarterly",
   "slices": [
     {
       "filter": {
-        "name": [
-          "DF_gen_search_set",
-          "ManufaMNC",
-          "movMktFour"
-        ],
-        "description": "6",
-        "factory": "com.pharbers.process.stm.step.pptx.filter.phMOVFilterImpl",
-        "filt": []
+        "name": "ONCOLOGY_CHPA_ BRAND_1_MAPPING",
+        "description": "65",
+        "factory": "com.pharbers.process.stm.step.pptx.filter.phCityFilterImpl",
+        "filt": ["Beijing",
+          "Shanghai",
+          "Guangzhou",
+          "Chengdu",
+          "Shenyang",
+          "Nanjing",
+          "Hangzhou",
+          "Wuhan",
+          "Chongqing",
+          "Fuxiaquan",
+          "Pearl River Delta",
+          "Suzhou",
+          "Tianjin",
+          "Jinan",
+          "Xian",
+          "Zhengzhou",
+          "Ningbo"
+        ]
       },
       "sliders": [
         {
-          "title": "Lilly All Products Performance in CHPA (MAT M09 18) – Cash",
+          "title": "  Gemzar and Alimta Key Competitors MG Performance in Beijing (QTR)",
           "content": {
             "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
             "texts": [
               {
                 "pos": [
-                  0,
-                  0,
-                  100,
-                  100
+                  0, 0, 100, 100
                 ],
                 "font": "",
                 "text": ""
@@ -31,86 +41,54 @@
             ],
             "tables": [
               {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.overview.productPerformanceGrowthTable",
-                "mkt_display": "Lilly Group",
-                "mkt_col": "RMB(Mn)",
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phContentTable.phCityStackedChartCommonTable",
+                "mkt_display": "Oncology Mkt",
+                "mkt_col": "RMB",
                 "pos": [
-                  30,
-                  60,
-                  81,
-                  81
+                  30, 60, 600, 400
                 ],
-                "data":"",
                 "timeline": [
-                  "MAT M09 18:timeline_2",
-                  "M09 18:timeline_2"
+                  "Q#qtime8#:timeline_2"
                 ],
                 "col": {
-                  "title": "M09 18:col_title_common",
-                  "count": [
-                    "SOM(%):col_common1"
+                  "title" : ":col_title_common",
+                  "count" : [
+                    "RMB:col_common3"
                   ]
                 },
                 "row": {
-                  "title": ":row_title_chart1",
-                  "display_name": [
-                    {
-                      "name": "Ceclor:row_5",
-                      "col": "RMB(Mn)"
-                    },
-                    {
-                      "name": "Vancocin:row_5",
-                      "col": "RMB(Mn)"
-                    },
-                    {
-                      "name": "Gemzar:row_5",
-                      "col": "RMB(Mn)"
-                    },
-                    {
-                      "name": "Alimta:row_5",
-                      "col": "RMB(Mn)"
-                    },
-                    {
-                      "name": "Prozac:row_5",
-                      "col": "RMB(Mn)"
-                    },
-                    {
-                      "name": "Cymbalta:row_5",
-                      "col": "RMB(Mn)"
-                    },
-                    {
-                      "name": "Zyprexa:row_5",
-                      "col": "RMB(Mn)"
-                    },
-                    {
-                      "name": "Strattera:row_5",
-                      "col": "RMB(Mn)"
-                    },
-                    {
-                      "name": "Total Humulin:row_5",
-                      "col": "RMB(Mn)"
-                    },
-                    {
-                      "name": "Total Humalog:row_5",
-                      "col": "RMB(Mn)"
-                    },
-                    {
-                      "name": "Lly Insulin:row_5",
-                      "col": "RMB(Mn)"
-                    },
-                    {
-                      "name": "Cialis:row_5",
-                      "col": "RMB(Mn)"
-                    },
-                    {
-                      "name": "Evista:row_5",
-                      "col": "RMB(Mn)"
-                    },
-                    {
-                      "name": "Forsteo:row_5",
-                      "col": "RMB(Mn)"
-                    }
-                  ]
+                  "title" : ":row_title_common",
+                  "display_name" : [
+                    "Total Generic Vinorelbine(Generic Navelbine):row_5",
+                    "XALKORI    PFZ:row_5",
+                    "AVASTIN    GTC:row_5",
+                    "CONMANA    Z1B:row_5",
+                    "ARCEVA    ROC:row_5",
+                    "IRESSA    AZN:row_5",
+                    "XELODA    ROC:row_5",
+                    "NAVELBINE    P.F:row_5",
+                    "TAXOL    BMS:row_5",
+                    "TAXOTERE    AVS:row_5",
+                    "Alimta:row_5",
+                    "Gemzar:row_5"
+                  ],
+                  "city" : ["Beijing",
+                    "Shanghai",
+                    "Guangzhou",
+                    "Chengdu",
+                    "Shenyang",
+                    "Nanjing",
+                    "Hangzhou",
+                    "Wuhan",
+                    "Chongqing",
+                    "Fuxiaquan",
+                    "Pearl River Delta",
+                    "Suzhou",
+                    "Tianjin",
+                    "Jinan",
+                    "Xian",
+                    "Zhengzhou",
+                    "Ningbo"]
                 }
               }
             ]
