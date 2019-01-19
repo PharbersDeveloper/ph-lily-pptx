@@ -4,6 +4,7 @@ import com.pharbers.process.common.DTO.tableColArgs
 import com.pharbers.process.common.phCommand
 import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.{argsMapKeys, tableActionBase}
 import com.pharbers.process.stm.step.pptx.slider.content._
+import com.pharbers.process.stm.step.pptx.slider.content.city.phQuarterTableCol
 import org.apache.spark.sql.DataFrame
 
 case class phColPrimaryValueAction() extends tableActionBase{
@@ -68,10 +69,12 @@ case class phGetColCommandMapAction() extends tableActionBase {
 }
 
 case class phGetColValueAction() extends tableActionBase {
+    override val name: String = argsMapKeys.DATA
+
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
-        val result = new growthTable().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
-            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName))
+        val result = new phQuarterTableCol().getValue(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "mktDisplayName" -> colArgs.mktDisplayName))
         args ++ Map(name -> result)
     }
 }
