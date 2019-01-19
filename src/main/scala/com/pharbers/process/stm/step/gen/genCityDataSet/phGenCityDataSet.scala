@@ -1,14 +1,14 @@
-package com.pharbers.process.stm.step.gen.genDataSet
+package com.pharbers.process.stm.step.gen.genCityDataSet
 
 import com.pharbers.baseModules.PharbersInjectModule
 import com.pharbers.moduleConfig.{ConfigDefines, ConfigImpl}
-import com.pharbers.process.common.{phCommand, phLyDataSet, phLyFactory}
+import com.pharbers.process.common.{phCommand, phLyCityDataSet, phLyFactory}
 import org.apache.spark.rdd.RDD
 
 import scala.xml.{Node, NodeSeq}
 
-trait phGenDataSet extends PharbersInjectModule {
-    override val id: String = "gen_data_set"
+trait phGenCityDataSet extends PharbersInjectModule {
+    override val id: String = "gen_city_set"
     override val configPath: String = "pharbers_config/bi_config.xml"
     override val md: List[String] = "merges" :: "data_nodes" :: Nil
 
@@ -39,7 +39,7 @@ trait phGenDataSet extends PharbersInjectModule {
     }.getOrElse(throw new Exception("配置文件错误，phGenDataSet => merge func"))
 }
 
-class phGenDataSetImpl extends phGenDataSet with phCommand {
+class phGenCityDataSetImpl extends phGenCityDataSet with phCommand{
     override def exec(args: Any): Any = {
         val rdd_lst = data_sources.map { nod =>
             val fct = nod.get("factory").get
@@ -54,14 +54,14 @@ class phGenDataSetImpl extends phGenDataSet with phCommand {
                 val path = cur.get("path").get
                 val cmd = phLyFactory.getInstance(cur.get("factory").get).asInstanceOf[phCommand]
                 cmd.preExec(path)
-                callAcc(lst.tail, cmd.exec(rdd).asInstanceOf[Option[RDD[(String, phLyDataSet)]]])
+                callAcc(lst.tail, cmd.exec(rdd).asInstanceOf[Option[RDD[(String, phLyCityDataSet)]]])
             }
         }
-        val result = callAcc(merge_func, Some(rdd_lst)).get.asInstanceOf[RDD[(String, phLyDataSet)]]
+        val result = callAcc(merge_func, Some(rdd_lst)).get.asInstanceOf[RDD[(String, phLyCityDataSet)]]
 
         phLyFactory.clearStorage
-        phLyFactory.setStorageWithName("main-frame", result)
-        val df = phLyFactory.phRow2DFDetail("main-frame").distinct()
+        phLyFactory.stssoo = phLyFactory.stssoo + ("city-main-frame" -> result)
+        val df = phLyFactory.phCityRow2DFDetail("city-main-frame").distinct()
         println("gen data set")
         df.sort(-df("DOT")).show(false)
         println(df.count())
