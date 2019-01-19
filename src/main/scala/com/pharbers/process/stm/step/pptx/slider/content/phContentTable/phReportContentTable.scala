@@ -23,6 +23,6 @@ class phCityBaseTableCommonTable extends phContentTableCommand{
 
 class phCityLineChartCommonTable extends phContentTableCommand{
     val actionList: List[tableActionBase] = phJson2ModelAction() :: new phCityTableColArgsAction() ::
-            new phCityTableShowArgsAction() :: new phColTrendsValueAction :: Nil
+            new phCityTableShowArgsAction() :: new phColTrendsValueAction :: new phCreatCityShowTrendsTableAction() :: new phPushLinChartAction() :: Nil
 
 }
