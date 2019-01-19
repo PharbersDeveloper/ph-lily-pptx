@@ -3,7 +3,7 @@ package com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAc
 import com.pharbers.process.common.DTO.tableColArgs
 import com.pharbers.process.common.phCommand
 import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.{argsMapKeys, tableActionBase}
-import com.pharbers.process.stm.step.pptx.slider.content.{growth, growthContribution, som, valueDF}
+import com.pharbers.process.stm.step.pptx.slider.content._
 import org.apache.spark.sql.DataFrame
 
 case class phColPrimaryValueAction() extends tableActionBase{
@@ -67,3 +67,11 @@ case class phGetColCommandMapAction() extends tableActionBase {
     }
 }
 
+case class phGetColValueAction() extends tableActionBase {
+    override def show(args: Map[String, Any]): Map[String, Any] = {
+        val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
+        val result = new growthTable().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName))
+        args ++ Map(name -> result)
+    }
+}
