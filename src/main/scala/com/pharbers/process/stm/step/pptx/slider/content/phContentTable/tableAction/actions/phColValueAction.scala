@@ -20,5 +20,10 @@ class phColTrendsValueAction extends phColValueAction {
 }
 
 class phColStackedValueAction extends phColValueAction {
-    override val actionList: List[tableActionBase] = phGetColCommandMapAction() :: phColCityStackedPrimaryValueAction() :: phColOtherValueAction() :: Nil
+    override def stageReady(args: Map[String, Any]): Map[String, Any] = {
+        Map(argsMapKeys.DATA -> args(argsMapKeys.DATA),
+            argsMapKeys.TABLE_COL_ARGS -> args(argsMapKeys.TABLE_COL_ARGS),
+            argsMapKeys.CITY -> args(argsMapKeys.CITY))
+    }
+    override val actionList: List[tableActionBase] = phGetColCityStackedCommandMapAction() :: phColCityStackedPrimaryValueAction() :: phColCityStackedOtherValueAction() :: Nil
 }

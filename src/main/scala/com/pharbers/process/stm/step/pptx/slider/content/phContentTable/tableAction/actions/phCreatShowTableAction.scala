@@ -31,6 +31,12 @@ class phCreatCityShowTrendsTableAction() extends phCreatShowTableAction{
 }
 
 class phCreatCityShowStackedTableAction() extends phCreatShowTableAction{
+    override def stageReady(args: Map[String, Any]): Map[String, Any] = {
+        Map(argsMapKeys.DATA -> args(argsMapKeys.DATA), argsMapKeys.TABLE_SHOW_ARGS -> args(argsMapKeys.TABLE_SHOW_ARGS),
+            argsMapKeys.TABLE_CELLS -> tableCells(List(), Map()),
+            argsMapKeys.CITY -> args(argsMapKeys.CITY))
+    }
+
     override val actionList: List[tableActionBase] = phGetData2CellValueMapAction() :: phGetCityShowStackedTableHeadStyleAction() ::
             phGetShowStackedTableBodyStyleAction() :: phGetShowCityStackedTableBodyValueAction() :: Nil
 }
