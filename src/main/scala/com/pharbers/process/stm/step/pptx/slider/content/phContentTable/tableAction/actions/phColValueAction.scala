@@ -18,3 +18,7 @@ case class phColValueAction() extends tableStageAction {
 class phColTrendsValueAction extends phColValueAction {
     override val actionList: List[tableActionBase] = phGetColValueAction() :: Nil
 }
+
+class phColStackedValueAction extends phColValueAction {
+    override val actionList: List[tableActionBase] = phGetColCommandMapAction() :: phColCityStackedPrimaryValueAction() :: phColOtherValueAction() :: Nil
+}

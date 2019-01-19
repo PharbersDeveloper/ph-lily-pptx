@@ -16,3 +16,17 @@ case class phJson2ModelAction() extends tableActionBase{
         args ++ Map(name -> table)
     }
 }
+
+case class phCityStackedJson2ModelAction() extends tableActionBase{
+    override val name: String = argsMapKeys.TABLE_MODEL
+
+    override def show(args: Map[String, Any]): Map[String, Any] = {
+        val element = args("element").asInstanceOf[JsValue]
+        implicit val row = Json.format[row]
+        implicit val col = Json.format[col]
+        implicit val phTable = Json.format[phTable]
+        val table = element.as[phTable]
+        val city = (element \ "city").as[List[String]]
+        args ++ Map(name -> table, city -> argsMapKeys.CITY)
+    }
+}

@@ -6,6 +6,7 @@ import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAct
 import com.pharbers.process.stm.step.pptx.slider.content._
 import com.pharbers.process.stm.step.pptx.slider.content.city.phQuarterTableCol
 import org.apache.spark.sql.DataFrame
+import com.pharbers.process.stm.step.pptx.slider.content.city.phCityColStacked
 
 case class phColPrimaryValueAction() extends tableActionBase{
     override val name: String = argsMapKeys.DATA
@@ -75,6 +76,19 @@ case class phGetColValueAction() extends tableActionBase {
         val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
         val result = new phQuarterTableCol().getValue(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
             "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "mktDisplayName" -> colArgs.mktDisplayName))
+        args ++ Map(name -> result)
+    }
+}
+
+case class phColCityStackedPrimaryValueAction() extends tableActionBase{
+    override val name: String = argsMapKeys.DATA
+
+    override def show(args: Map[String, Any]): Map[String, Any] = {
+        val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
+        val cityList = args(argsMapKeys.CITY)
+        //        val colMap = args(argsMapKeys.COL_COMMAND_MAP).asInstanceOf[Map[String, phCommand]]
+        val result = new phCityColStacked().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "cityList" -> cityList))
         args ++ Map(name -> result)
     }
 }

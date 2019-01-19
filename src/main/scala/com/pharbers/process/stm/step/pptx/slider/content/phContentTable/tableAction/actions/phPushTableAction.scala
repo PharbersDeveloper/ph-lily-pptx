@@ -37,3 +37,9 @@ class phPushLinChartAction() extends phPushTableAction{
         socketDriver.excel2Chart(jobId, tableName, pos, sliderIndex, "Line")
     }
 }
+
+class phPushColumnStackedChartAction() extends phPushTableAction{
+    override def pushExcel(socketDriver: phSocketDriver, jobId: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
+        socketDriver.excel2Chart(jobId, tableName, pos, sliderIndex, "ColumnStacked")
+    }
+}
