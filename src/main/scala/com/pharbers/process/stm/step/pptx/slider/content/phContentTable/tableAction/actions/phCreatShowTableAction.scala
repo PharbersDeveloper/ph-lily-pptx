@@ -19,3 +19,13 @@ case class phCreatShowTableAction() extends tableStageAction {
         args ++ Map(name -> argsNew(argsMapKeys.TABLE_CELLS).asInstanceOf[tableCells].readyCells)
     }
 }
+
+class phCreatCityShowTableAction() extends phCreatShowTableAction{
+    override val actionList: List[tableActionBase] = phGetData2CellValueMapAction() :: phGetShowTableTitleStyleAction() :: phGetCityShowTableHeadStyleAction() ::
+            phGetShowTableBodyStyleAction() :: phGetShowTableBodyValueAction() :: Nil
+}
+
+class phCreatCityShowTrendsTableAction() extends phCreatShowTableAction{
+    override val actionList: List[tableActionBase] = phGetData2CellValueMapAction() :: phGetCityShowTrendsTableHeadStyleAction() ::
+            phGetShowTrendsTableBodyStyleAction() :: phGetShowTrendsTableBodyValueAction() :: Nil
+}

@@ -19,7 +19,21 @@ case class phPushTableAction() extends tableActionBase{
             socketDriver.setExcel(jobId, tableName, x)
         })
         Thread.sleep(3000)
-        socketDriver.excel2PPT(jobId, tableName, pos, sliderIndex)
+        pushExcel(socketDriver, jobId, tableName, pos, sliderIndex)
         args
+    }
+
+//    def pushCells():{
+//
+//    }
+
+    def pushExcel(socketDriver: phSocketDriver, jobId: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit ={
+        socketDriver.excel2PPT(jobId, tableName, pos, sliderIndex)
+    }
+}
+
+class phPushLinChartAction() extends phPushTableAction{
+    override def pushExcel(socketDriver: phSocketDriver, jobId: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
+        socketDriver.excel2Chart(jobId, tableName, pos, sliderIndex, "Line")
     }
 }

@@ -14,3 +14,7 @@ case class phColValueAction() extends tableStageAction {
         args ++ Map(argsMapKeys.DATA -> argsNew(argsMapKeys.DATA))
     }
 }
+
+class phColTrendsValueAction extends phColValueAction {
+    override val actionList: List[tableActionBase] = phGetColValueAction() :: Nil
+}
