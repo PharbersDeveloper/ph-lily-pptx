@@ -258,7 +258,7 @@ case class phGetShowStackedTableBodyStyleAction() extends tableActionBase{
                 //                val timeline = timelineAndCss._1
                 //                val timelineCss = timelineAndCss._2
                 tableShowArgs.colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
-                    val colName = tableShowArgs.col2DataColMap.getOrElse(colNameAndCss._1, colNameAndCss._1).replace("Share of", "SOM in")
+                    val colName = tableShowArgs.col2DataColMap.getOrElse(colNameAndCss._1, colNameAndCss._1).replaceAll(" in[\\s\\S]*", "")
                     val data2ValueMap = args(argsMapKeys.DATA_2_Cell_VALUE_MAP).asInstanceOf[Map[String, String => String]]
                     val data2Value = data2ValueMap.getOrElse(colNameAndCss._1, data2ValueMap("DOT"))
                     val colCss = colNameAndCss._2

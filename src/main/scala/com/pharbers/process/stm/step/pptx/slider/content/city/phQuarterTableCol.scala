@@ -39,6 +39,7 @@ class phQuarterTableCol extends Serializable {
                 case "MAT" => 12
                 case "YTD" => month
                 case "RQ" => 3
+                case "QTR" => 3
             }
             case 2 => timeline.charAt(0) match {
                 case 'M' => 1

@@ -27,6 +27,6 @@ case class phCityStackedJson2ModelAction() extends tableActionBase{
         implicit val phTable = Json.format[phTable]
         val table = element.as[phTable]
         val city = (element \ "city").as[List[String]]
-        args ++ Map(name -> table, city -> argsMapKeys.CITY)
+        args ++ Map(name -> table, argsMapKeys.CITY -> city)
     }
 }

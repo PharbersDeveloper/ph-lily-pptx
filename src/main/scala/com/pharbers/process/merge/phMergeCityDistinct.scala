@@ -35,12 +35,19 @@ class phMergeCityDistinctImpl extends phMergeCityDistinct with phCommand {
           * 3. 去重复
           */
         val rdd_rmb = result.filter(x => x.tp == "LC-RMB")
+            .filter(x => x.value != 0)
         val rdd_rmb_new = rdd_rmb.keyBy(row => row.product_name + row.pack_des + row.date + row.city).reduceByKey{ (left, right) =>
-            assert(left.value == right.value)
+            if (left.value == right.value)
+                left
+            else left.value = BigDecimal(20190119)
+//                assert(left.value == right.value)
             left
         }.map (x => x._2)
         val rdd_not_rmb = result.filter(x => x.tp != "LC-RMB").keyBy(row => row.product_name + row.pack_des + row.date + row.city).reduceByKey { (left, right) =>
-            assert(left.value == right.value)
+            if (left.value == right.value)
+                left
+            else left.value = BigDecimal(20190119)
+            //                assert(left.value == right.value)
             left
         }.map (x => x._2)
         //        assert(rdd_rmb.count() + rdd_not_rmb.count() == result.count())
