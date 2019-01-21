@@ -63,8 +63,8 @@ case class phGetPrimaryValueNameAction() extends tableActionBase{
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val tableModel = args(argsMapKeys.TABLE_MODEL).asInstanceOf[phTable]
         val colList = args(argsMapKeys.COL_LIST).asInstanceOf[List[String]]
-        val primaryValueName = (phTable2Data.jsonCol2DataColMap.getOrElse(tableModel.mkt_col, tableModel.mkt_col) ::
-                colList.head :: Nil).find(x => x != "").getOrElse("DOT")
+        val primaryValueName = phTable2Data.jsonCol2DataColMap.getOrElse((tableModel.mkt_col ::
+                colList.head :: Nil).find(x => x != "").getOrElse("dot"), "dot")
         args ++ Map(name -> primaryValueName)
     }
 }

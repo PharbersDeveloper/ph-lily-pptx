@@ -141,7 +141,7 @@ case class phGetCityShowTableHeadStyleAction() extends tableActionBase{
 
         tableShowArgs.timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
             val timeline = timelineAndCss._1
-            val month = "//d//d".r.findFirstIn("Q//d//d".r.findFirstIn(timeline).get).get.toInt
+            val month = "\\d\\d".r.findFirstIn("Q\\d\\d".r.findFirstIn(timeline).get).get.toInt
             val qtimeline = timeline.replace(month.toString,(month / 3).toString)
             val timelineCss = timelineAndCss._2
             val cellLeft = (1 + timelineIndex * tableShowArgs.colList.size + 65).toChar.toString + "1"
