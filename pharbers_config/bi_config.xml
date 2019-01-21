@@ -21,6 +21,11 @@
                     path=""
                     factory="com.pharbers.process.merge.phMergeCityDistinctImpl"
                     description="merge data nodes data" />
+            <merge
+                    index="2"
+                    path="/test/ADD_RATE/ADD_RATE.csv"
+                    factory="com.pharbers.process.merge.phMergeCityWithDotImpl"
+                    description="merge date with dot rate" />
         </merges>
         <data_nodes>
             <data_node index="1"
