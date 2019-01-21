@@ -53,6 +53,9 @@ class phMergeCityDistinctImpl extends phMergeCityDistinct with phCommand {
         //        assert(rdd_rmb.count() + rdd_not_rmb.count() == result.count())
 
         val reval = rdd_rmb_new.union(rdd_not_rmb)
+        rdd_name_lst.foreach(rddName =>
+            phLyFactory.stssoo = phLyFactory.stssoo.-(rddName)
+        )
         phLyFactory.clearStorage
         phLyFactory.stssoo = phLyFactory.stssoo + ("city main frame" -> reval)
         phLyFactory.saveMidProcess("city main frame", "hdfs:///test/mid/main-frame-without-dot/")

@@ -54,10 +54,10 @@ class phGenCityDataSetImpl extends phGenCityDataSet with phCommand{
                 val path = cur.get("path").get
                 val cmd = phLyFactory.getInstance(cur.get("factory").get).asInstanceOf[phCommand]
                 cmd.preExec(path)
-                callAcc(lst.tail, cmd.exec(rdd).asInstanceOf[Option[RDD[(String, phLyCityDataSet)]]])
+                callAcc(lst.tail, cmd.exec(rdd).asInstanceOf[Option[RDD[phLyCityDataSet]]])
             }
         }
-        val result = callAcc(merge_func, Some(rdd_lst)).get.asInstanceOf[RDD[(String, phLyCityDataSet)]]
+        val result = callAcc(merge_func, Some(rdd_lst)).get.asInstanceOf[RDD[phLyCityDataSet]]
 
         phLyFactory.clearStorage
         phLyFactory.stssoo = phLyFactory.stssoo + ("city-main-frame" -> result)
