@@ -3,114 +3,125 @@
         <storage name="storage" factory="storage factory" />
         <calculate name="calculate drive" factory="calculate factory" />
         <flow_nodes>
-            <flow_node index="1" factory="com.pharbers.process.stm.step.gen.genDataSet.phGenDataSetImpl"
+            <flow_node index="1" factory="com.pharbers.process.stm.step.gen.genCityDataSet.phGenCityDataSetImpl"
                        name="gen data set"
                        description="the abstraction gather all the source file to generate data set" />
             <flow_node index="2" factory="com.pharbers.process.stm.step.gen.genSearchSet.phGenSearchSetImpl"
                        name="gen search set"
                        description="the abstraction gather all the search file to generate search set" />
-            <flow_node index="3" factory="com.pharbers.process.stm.step.gen.genMktOverViewSet.phGenMOVSetImpl"
-                       name = "gen mov set"
-                       description="the abstraction gather all the market over view file to generate data set" />
-            <flow_node index="4" factory="com.pharbers.process.stm.step.gen.phGenMOVMapTableSet.phGenMovMapTableSetImpl"
-                       name = "gen mov set"
-                       description="the abstraction gather all the market over view file to generate data set" />
-            <flow_node index="5" factory="com.pharbers.process.stm.step.pptx.phGenPPTImpl"
+            <flow_node index="3" factory="com.pharbers.process.stm.step.pptx.phGenPPTImpl"
                        name="gen page"
                        description="calculate and generate ppt" />
         </flow_nodes>
     </flow_define>
-    <gen_data_set>
+    <gen_city_set>
         <merges>
             <merge
                     index="1"
                     path=""
-                    factory="com.pharbers.process.merge.phMergeDistinctImpl"
+                    factory="com.pharbers.process.merge.phMergeCityDistinctImpl"
                     description="merge data nodes data" />
-            <merge
-                    index="2"
-                    path="/data/lily/autoPPT/201811/mapTable/addRate/ADD Rate.csv"
-                    factory="com.pharbers.process.merge.phMergeWithDotImpl"
-                    description="merge date with dot rate" />
         </merges>
         <data_nodes>
             <data_node index="1"
                        name="data node"
                        descritption="what is this for"
-                       path="/data/lily/autoPPT/201811/sourceFile/subMarket/fullTitle"
-                       factory="com.pharbers.process.read.phReadDataFullTitleImpl"/>
+                       path="/data/lily/autoPPT/201809/sourceFile/city/beijing"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
             <data_node index="2"
                        name="data node"
                        descritption="what is this for"
-                       path="/data/lily/autoPPT/201811/sourceFile/subMarket/twelveTitle"
-                       factory="com.pharbers.process.read.phReadDataTwelveTitleImpl"/>
+                       path="/data/lily/autoPPT/201809/sourceFile/city/chengdu"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
             <data_node index="3"
                        name="data node"
                        descritption="what is this for"
-                       path="/data/lily/autoPPT/201811/sourceFile/subMarket/eightTitle"
-                       factory="com.pharbers.process.read.phReadDataEightTitleImpl"/>
+                       path="/data/lily/autoPPT/201809/sourceFile/city/chongqing"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
             <data_node index="4"
                        name="data node"
                        descritption="what is this for"
-                       path="/data/lily/autoPPT/201811/sourceFile/subMarket/sixTitle"
-                       factory="com.pharbers.process.read.phReadDataSixTitleImpl"/>
+                       path="/data/lily/autoPPT/201809/sourceFile/city/fuxiaquan"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
             <data_node index="5"
                        name="data node"
                        descritption="what is this for"
-                       path="/data/lily/autoPPT/201811/sourceFile/subMarket/fourTitle"
-                       factory="com.pharbers.process.read.phReadDataFourTitleImpl"/>
+                       path="/data/lily/autoPPT/201809/sourceFile/city/guangzhou"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
+            <data_node index="6"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/autoPPT/201809/sourceFile/city/haerbin"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
+            <data_node index="7"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/autoPPT/201809/sourceFile/city/hangzhou"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
+            <data_node index="8"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/autoPPT/201809/sourceFile/city/jinan"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
+            <data_node index="9"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/autoPPT/201809/sourceFile/city/nanjing"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
+            <data_node index="10"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/autoPPT/201809/sourceFile/city/ningbo"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
+            <data_node index="11"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/autoPPT/201809/sourceFile/city/pearl river"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
+            <data_node index="12"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/autoPPT/201809/sourceFile/city/shanghai"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
+            <data_node index="13"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/autoPPT/201809/sourceFile/city/shenyang"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
+            <data_node index="14"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/autoPPT/201809/sourceFile/city/suzhou"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
+            <data_node index="15"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/autoPPT/201809/sourceFile/city/tianjin"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
+            <data_node index="16"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/autoPPT/201809/sourceFile/city/wenzhou"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
+            <data_node index="17"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/autoPPT/201809/sourceFile/city/wuhan"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
+            <data_node index="18"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/autoPPT/201809/sourceFile/city/xian"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
+            <data_node index="19"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/autoPPT/201809/sourceFile/city/zhengzhou"
+                       factory="com.pharbers.process.read.city.phReadCityData"/>
         </data_nodes>
-    </gen_data_set>
-    <gen_mov_set>
-        <data_nodes>
-            <data_node index="1"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/autoPPT/201811/sourceFile/marketOverView/LLY PRODUCTS.CSV"
-                       factory="com.pharbers.process.read.mktoverview.phReadLLYProdImpl"/>
-            <data_node index="2"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/autoPPT/201811/sourceFile/marketOverView/MANUFACTURER.CSV"
-                       factory="com.pharbers.process.read.mktoverview.phReadManufaImpl"/>
-            <data_node index="3"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/autoPPT/201811/sourceFile/marketOverView/MANUFACTURER_MNC.CSV"
-                       factory="com.pharbers.process.read.mktoverview.phReadManufaMNCImpl"/>
-            <data_node index="4"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/autoPPT/201811/sourceFile/marketOverView/MARKET.CSV"
-                       factory="com.pharbers.process.read.mktoverview.phReadMarketImpl"/>
-        </data_nodes>
-    </gen_mov_set>
-    <gen_movMap_set>
-        <data_nodes>
-            <data_node index="1"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/autoPPT/201811/mapTable/marketOverView/CHPA_Market_1_MAPPING.csv"
-                       factory="com.pharbers.process.read.mktoverview.phReadMktOne"/>
-            <data_node index="2"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/autoPPT/201811/mapTable/marketOverView/CHPA_Market_2_MAPPING.csv"
-                       factory="com.pharbers.process.read.mktoverview.phReadMktTwo"/>
-            <data_node index="3"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/autoPPT/201811/mapTable/marketOverView/CHPA_Market_3_MAPPING.csv"
-                       factory="com.pharbers.process.read.mktoverview.phReadMktThree"/>
-            <data_node index="3"
-                       name="data node"
-                       descritption="what is this for"
-                       path="/data/lily/autoPPT/201811/mapTable/marketOverView/CHPA_Market_4_MAPPING.csv"
-                       factory="com.pharbers.process.read.mktoverview.phReadMktFour"/>
-        </data_nodes>
-    </gen_movMap_set>
+    </gen_city_set>
     <gen_search_set>
-        <merge factory="com.pharbers.process.merge.phMergeSearch" description="" />
+        <merge factory="com.pharbers.process.merge.phMergeCitySearch" description="" />
         <data_nodes>
             <data_node index="1"
                        name="search data node"
