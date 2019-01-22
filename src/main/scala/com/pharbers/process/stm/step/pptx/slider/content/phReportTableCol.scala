@@ -297,7 +297,7 @@ class som extends phCommand with phReportTableCol {
             val dataTmp = data.filter(col("TIMELINE") === timeline)
             val totalResult = dataTmp.filter(col("DISPLAY_NAME") === mktDisplayName)
                 .select("RESULT")
-                .collect().head.toString()
+                .collect().headOption.getOrElse("0").toString()
                 .replaceAll("[\\[\\]]", "")
             dataTmp.withColumn("SOM in " + mktDisplayName, (col("RESULT") / totalResult) * 100)
         }.reduce((df1, df2) => df1.union(df2))

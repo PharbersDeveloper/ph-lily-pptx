@@ -21,6 +21,12 @@ class phCityBaseTableCommonTable extends phContentTableCommand{
             new phCreatCityShowTableAction() :: phPushTableAction() :: Nil
 }
 
+class phCityTrendsTableCommonTable extends phContentTableCommand{
+    val actionList: List[tableActionBase] = phJson2ModelAction() :: new phCityTableColArgsAction() ::
+            new phCityTableShowArgsAction() :: new phColTrendsValueAction :: new phCreatCityShowTrendsTableAction() :: phPushTableAction() :: Nil
+
+}
+
 class phCityLineChartCommonTable extends phContentTableCommand{
     val actionList: List[tableActionBase] = phJson2ModelAction() :: new phCityTableColArgsAction() ::
             new phCityTableShowArgsAction() :: new phColTrendsValueAction :: new phCreatCityShowTrendsTableAction() :: new phPushLinChartAction() :: Nil
@@ -30,5 +36,11 @@ class phCityLineChartCommonTable extends phContentTableCommand{
 class phCityStackedChartCommonTable extends phContentTableCommand{
     val actionList: List[tableActionBase] = phCityStackedJson2ModelAction() :: new phCityTableColArgsAction() ::
             new phCityTableShowArgsAction() :: new phColStackedValueAction() :: new phCreatCityShowStackedTableAction() :: new phPushColumnStackedChartAction() :: Nil
+
+}
+
+class phCityMuchTimelineTableCommonTable extends phContentTableCommand{
+    val actionList: List[tableActionBase] = phJson2ModelAction() :: new phCityTableColArgsAction() ::
+            new phCityTableShowArgsAction() :: new phColAllValueAction :: new phCreatCityShowMuchTimelineTableAction() :: phPushTableAction() :: Nil
 
 }

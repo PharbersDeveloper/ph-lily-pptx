@@ -44,7 +44,7 @@ class phQuarterTableCol extends Serializable {
             case 2 => timeline.charAt(0) match {
                 case 'M' => 1
                 case 'R' => 3
-                case 'Q' => 1
+                case 'Q' => 3
             }
         }
     }
@@ -54,16 +54,6 @@ class phQuarterTableCol extends Serializable {
         val month = ym.head.toInt
         val year = 2000 + ym.last.toInt
         Map("month" -> month, "year" -> year)
-    }
-
-    //计算这张表总共前推多少个月份
-    def dfMonthCount(timelinelst: List[String], collst: List[String]): Int = {
-        val timelineCount = timelinelst.size
-        val colMap: Map[String, Int] = Map("RMB" -> 1, "SOM(%)" -> 1, "Grouth(%)" -> 2)
-        val timelineMax: Int = timelinelst.map(timeline => timelineYmCount(timeline)).max
-        val colMax: Int = collst.map(col => colMap(col)).max
-        val monthCount = timelineMax * colMax * timelineCount
-        monthCount
     }
 
     def getAllTimeline(timelineList: List[String]): List[String] = {
@@ -177,7 +167,7 @@ class phQuarterTableCol extends Serializable {
             mid_sum.map { iter =>
                 val growth: List[String] = iter._2.zipWithIndex.map { case (value, idx) =>
                     if (indexList.contains(idx)) {
-                        val m = iter._2.apply(idx + 12)
+                        val m = iter._2.apply(idx - 12)
                         if (m == 0) "Nan"
                         else (((value - m) / m) * 100).toString()
                     } else {
@@ -189,7 +179,7 @@ class phQuarterTableCol extends Serializable {
             }
         }
         val func_som: RDD[(String, List[BigDecimal])] => RDD[(String, List[String])] = mid_sum => {
-            val mktDisplayNameList = mid_sum.filter(x => x._1 == mktDisplayName).collect().head._2
+            val mktDisplayNameList = mid_sum.filter(x => x._1 == mktDisplayName).collect().headOption.getOrElse(("",List(BigDecimal(0))))._2
             mid_sum.map { iter =>
                 val som = iter._2.zipWithIndex.map { case (value, idx) =>
                     if (indexList.contains(idx)) {
