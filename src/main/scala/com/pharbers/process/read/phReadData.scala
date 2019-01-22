@@ -30,9 +30,13 @@ trait phReadData extends java.io.Serializable {
         val hdfs = FileSystem.get(conf)
         val hdfsPath = new Path(path)
         val filePathlst = hdfs.listStatus(hdfsPath)
-        val rdd = filePathlst.map { filePath =>
+        filePathlst.foreach{filePath =>
+        println("++++++++++++++++++++++++++++++++")
+        println(filePath.getPath.toString)}
+        val rdd1 = filePathlst.map { filePath =>
             formatDF(filePath.getPath.toString)
-        }.reduce { (totalRDD, onerdd) => totalRDD.union(onerdd) }
+        }
+        val rdd = rdd1.reduce { (totalRDD, onerdd) => totalRDD.union(onerdd) }
         val result = md5Hash("cui#merge" + new Date().getTime)
         phLyFactory.setStorageWithName(result, rdd)
         result

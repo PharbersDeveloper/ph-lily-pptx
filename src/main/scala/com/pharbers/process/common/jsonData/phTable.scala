@@ -17,11 +17,13 @@ case class row(var title: String, var display_name: List[String])
 
 object phTable2Data{
     val jsonCol2DataColMap: Map[Any, Any] = Map(
+
         "DOT(Mn)" -> "dot",
         "MMU" -> "dot",
         "Tablet" -> "dot",
         "RMB" -> "LC-RMB",
         "RMB(Mn)" -> "LC-RMB",
+        "LC-RMB" -> "LC-RMB",
         "DOT" -> "dot",
         "Mg(Mn)" -> "dot",
         "MG(Mn)" -> "dot",

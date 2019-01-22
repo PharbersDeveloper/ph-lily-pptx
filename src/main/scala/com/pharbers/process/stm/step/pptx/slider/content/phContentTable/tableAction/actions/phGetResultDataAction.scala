@@ -127,6 +127,17 @@ case class phGetColValueAction() extends tableActionBase {
     }
 }
 
+case class phGetAllColValueAction() extends tableActionBase {
+    override val name: String = argsMapKeys.DATA
+
+    override def show(args: Map[String, Any]): Map[String, Any] = {
+        val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
+        val result = new phQuarterTableCol().getValue(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "mktDisplayName" -> colArgs.mktDisplayName))
+        args ++ Map(name -> result)
+    }
+}
+
 case class phColCityStackedPrimaryValueAction() extends tableActionBase{
     override val name: String = argsMapKeys.DATA
 
