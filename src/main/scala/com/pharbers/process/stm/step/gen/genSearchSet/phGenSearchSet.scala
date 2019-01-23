@@ -47,3 +47,16 @@ class phGenSearchSetImpl extends phGenSearchSet with phCommand {
         phLyFactory.stssoo += ("DF_gen_search_set" -> command.exec(dfLst))
     }
 }
+
+class phGenCitySearchSetImpl extends phGenSearchSet with phCommand {
+    override val id: String = "gen_city_search_set"
+    override def exec(args : Any): Unit = {
+        val dfLst = data_sources.map(x => {
+            val function = x("factory")
+            val command = phLyFactory.getInstance(function).asInstanceOf[phCommand]
+            command.exec(x("path")).asInstanceOf[DataFrame]
+        })
+        val command = phLyFactory.getInstance(merge_func("factory")).asInstanceOf[phCommand]
+        phLyFactory.stssoo += ("DF_gen_city_search_set" -> command.exec(dfLst))
+    }
+}

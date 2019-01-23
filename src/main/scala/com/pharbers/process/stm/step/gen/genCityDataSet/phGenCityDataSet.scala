@@ -59,7 +59,6 @@ class phGenCityDataSetImpl extends phGenCityDataSet with phCommand{
         }
         val result = callAcc(merge_func, Some(rdd_lst)).get.asInstanceOf[RDD[phLyCityDataSet]]
 
-        phLyFactory.clearStorage
         phLyFactory.stssoo = phLyFactory.stssoo + ("city-main-frame" -> result)
         val df = phLyFactory.phCityRow2DFDetail("city-main-frame").distinct()
         println("gen data set")

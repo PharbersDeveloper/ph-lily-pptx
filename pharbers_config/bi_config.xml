@@ -3,17 +3,74 @@
         <storage name="storage" factory="storage factory" />
         <calculate name="calculate drive" factory="calculate factory" />
         <flow_nodes>
-            <flow_node index="1" factory="com.pharbers.process.stm.step.gen.genCityDataSet.phGenCityDataSetImpl"
+            <flow_node index="1" factory="com.pharbers.process.stm.step.gen.genDataSet.phGenDataSetImpl"
                        name="gen data set"
                        description="the abstraction gather all the source file to generate data set" />
             <flow_node index="2" factory="com.pharbers.process.stm.step.gen.genSearchSet.phGenSearchSetImpl"
                        name="gen search set"
                        description="the abstraction gather all the search file to generate search set" />
-            <flow_node index="3" factory="com.pharbers.process.stm.step.pptx.phGenPPTImpl"
+            <flow_node index="3" factory="com.pharbers.process.stm.step.gen.genCityDataSet.phGenCityDataSetImpl"
+                       name="gen city data set"
+                       description="the abstraction gather all the source file to generate data set" />
+            <flow_node index="4" factory="com.pharbers.process.stm.step.gen.genSearchSet.phGenCitySearchSetImpl"
+                       name="gen city search set"
+                       description="the abstraction gather all the search file to generate search set" />
+            <flow_node index="5" factory="com.pharbers.process.stm.step.pptx.phGenPPTImpl"
                        name="gen page"
                        description="calculate and generate ppt" />
         </flow_nodes>
     </flow_define>
+    <gen_data_set>
+        <merges>
+            <merge
+                    index="1"
+                    path=""
+                    factory="com.pharbers.process.merge.phMergeDistinctImpl"
+                    description="merge data nodes data" />
+            <merge
+                    index="2"
+                    path="/test/ADD_RATE/ADD_RATE.csv"
+                    factory="com.pharbers.process.merge.phMergeWithDotImpl"
+                    description="merge date with dot rate" />
+        </merges>
+        <data_nodes>
+            <data_node index="1"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/source_file_20181118/fullTitle"
+                       factory="com.pharbers.process.read.phReadDataFullTitleImpl"/>
+            <data_node index="2"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/source_file_20181118/twelveTitle"
+                       factory="com.pharbers.process.read.phReadDataTwelveTitleImpl"/>
+            <data_node index="3"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/source_file_20181118/eightTitle"
+                       factory="com.pharbers.process.read.phReadDataEightTitleImpl"/>
+            <data_node index="4"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/source_file_20181118/sixTitle"
+                       factory="com.pharbers.process.read.phReadDataSixTitleImpl"/>
+            <data_node index="5"
+                       name="data node"
+                       descritption="what is this for"
+                       path="/data/lily/source_file_20181118/fourTitle"
+                       factory="com.pharbers.process.read.phReadDataFourTitleImpl"/>
+        </data_nodes>
+    </gen_data_set>
+    <gen_search_set>
+        <merge factory="com.pharbers.process.merge.phMergeSearch" description="" />
+        <data_nodes>
+            <data_node index="1"
+                       name="search data node"
+                       descritption="what is this for"
+                       path="/test/mapTable"
+                       factory="com.pharbers.process.read.phReadSearchImpl"/>
+        </data_nodes>
+    </gen_search_set>
     <gen_city_set>
         <merges>
             <merge
@@ -125,7 +182,7 @@
                        factory="com.pharbers.process.read.city.phReadCityData"/>
         </data_nodes>
     </gen_city_set>
-    <gen_search_set>
+    <gen_city_search_set>
         <merge factory="com.pharbers.process.merge.phMergeCitySearch" description="" />
         <data_nodes>
             <data_node index="1"
@@ -134,7 +191,7 @@
                        path="/test/mapTable"
                        factory="com.pharbers.process.read.phReadSearchImpl"/>
         </data_nodes>
-    </gen_search_set>
+    </gen_city_search_set>
     <gen_pages>
         <format path="pharbers_config/bi_format.json" factory="com.pharbers.process.stm.step.pptx.phJsonGenPPT" />
         <out_file path="./ppt/" />

@@ -53,7 +53,7 @@ trait phReadData extends java.io.Serializable {
         val dt_f = new java.text.SimpleDateFormat("MM/yyyy")
         val dt = dt_f.parse(timeline.toString)
 
-        val funcAll : Int => Int = offset => offset + 3
+        val funcAll : Int => Int = offset => offset
         val funcCity : Int => Int = offset => offset * 3
 
         val offsetMap = Map("QTR" -> funcCity, "MTH" -> funcAll)
