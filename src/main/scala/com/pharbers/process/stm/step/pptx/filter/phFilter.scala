@@ -51,7 +51,7 @@ class phCityFilterImpl extends phFilter with phCommand {
         val js = args.asInstanceOf[JsValue]
         val name = (js \ "name").as[String]
         val cityFilt = (js \ "filt").as[List[String]]
-        val source = phLyFactory.getStorageWithDFName("DF_gen_search_set").filter(col("name") === name)
+        val source = phLyFactory.getStorageWithDFName("DF_gen_city_search_set").filter(col("name") === name)
             .filter(col("CITY").isin(cityFilt: _*))
             .withColumn("DATE", formatYm(col("DATE")))
         source.select("CITY", "PRODUCT NAME", "PACK DES", "DATE", "TYPE", "ADD RATE", "DOT", "VALUE", "Display Name")

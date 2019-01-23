@@ -4,7 +4,7 @@ import com.pharbers.process.common.DTO.tableColArgs
 import com.pharbers.process.common.phCommand
 import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.{argsMapKeys, tableActionBase}
 import com.pharbers.process.stm.step.pptx.slider.content._
-import com.pharbers.process.stm.step.pptx.slider.content.city.{citySom, phCityColStacked, phQuarterTableCol}
+import com.pharbers.process.stm.step.pptx.slider.content.city.{citySom, phCityColAntiPart, phCityColStacked, phQuarterTableCol}
 import org.apache.spark.sql.DataFrame
 
 case class phColPrimaryValueAction() extends tableActionBase{
@@ -132,7 +132,7 @@ case class phGetAllColValueAction() extends tableActionBase {
 
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
-        val result = new phQuarterTableCol().getValue(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+        val result = new phCityColAntiPart().getValue(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
             "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "mktDisplayName" -> colArgs.mktDisplayName))
         args ++ Map(name -> result)
     }

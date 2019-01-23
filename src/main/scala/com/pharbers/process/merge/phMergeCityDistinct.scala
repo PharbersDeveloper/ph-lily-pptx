@@ -56,7 +56,6 @@ class phMergeCityDistinctImpl extends phMergeCityDistinct with phCommand {
         rdd_name_lst.foreach(rddName =>
             phLyFactory.stssoo = phLyFactory.stssoo.-(rddName)
         )
-        phLyFactory.clearStorage
         phLyFactory.stssoo = phLyFactory.stssoo + ("city main frame" -> reval)
         phLyFactory.saveMidProcess("city main frame", "hdfs:///test/mid/main-frame-without-dot/")
         Some(reval)

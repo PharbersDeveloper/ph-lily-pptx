@@ -260,7 +260,7 @@ case class phGetShowMuchTimelineTableBodyStyleAction() extends tableActionBase {
 
         tableShowArgs.colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
             tableShowArgs.rowList.zipWithIndex.foreach { case (displayNameAndCss, displayNameIndex) =>
-                val rowIndex = displayNameIndex + 2
+                val rowIndex = displayNameIndex * (colNameIndex + 1) + 2
                 val rowCss = displayNameAndCss._2
                 val displayName = displayNameAndCss._1
                 val displayNameCellIndex = "A" + rowIndex.toString
@@ -275,7 +275,7 @@ case class phGetShowMuchTimelineTableBodyStyleAction() extends tableActionBase {
                     val data2ValueMap = args(argsMapKeys.DATA_2_Cell_VALUE_MAP).asInstanceOf[Map[String, String => String]]
                     val data2Value = data2ValueMap.getOrElse(colNameAndCss._1, data2ValueMap("DOT"))
                     val colCss = colNameAndCss._2
-                    val colIndex = tableShowArgs.colList.size * timelineIndex + colNameIndex + 1
+                    val colIndex = timelineIndex  + 1
                     val cellIndex = (colIndex + 65).toChar.toString + rowIndex.toString
                     //                    cellMap = cellMap ++ Map((displayName, timeline, colName) -> (cell(jobid, tableName, cellIndex, "", "Number", List(colCss, rowCss)), data2Value))
                     tableCells.noValueCells = tableCells.noValueCells ++
