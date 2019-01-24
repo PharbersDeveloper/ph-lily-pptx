@@ -1,6 +1,7 @@
 package com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.actions
 
 import com.pharbers.process.common.DTO.tableColArgs
+import com.pharbers.process.common.jsonData.phTable
 import com.pharbers.process.common.phCommand
 import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.{argsMapKeys, tableActionBase}
 import com.pharbers.process.stm.step.pptx.slider.content._
@@ -132,8 +133,11 @@ case class phGetAllColValueAction() extends tableActionBase {
 
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
+        val table = args(argsMapKeys.TABLE_MODEL).asInstanceOf[phTable]
+        val replaysDisplayMap = table.show_display.flatMap(x => x.col_display_name.map(m => Map(m -> x.show_display_name.split(":").head))).reduce(_ ++ _)
         val result = new phCityColAntiPart().getValue(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
-            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "mktDisplayName" -> colArgs.mktDisplayName))
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "mktDisplayName" -> colArgs.mktDisplayName,
+        "replaysDisplayMap" -> replaysDisplayMap))
         args ++ Map(name -> result)
     }
 }
@@ -143,10 +147,12 @@ case class phColCityStackedPrimaryValueAction() extends tableActionBase{
 
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
+        val table = args(argsMapKeys.TABLE_MODEL).asInstanceOf[phTable]
+        val replaysDisplayMap = table.show_display.flatMap(x => x.col_display_name.map(m => Map(m -> x.show_display_name.split(":").head))).reduce(_ ++ _)
         val cityList = args(argsMapKeys.CITY)
         //        val colMap = args(argsMapKeys.COL_COMMAND_MAP).asInstanceOf[Map[String, phCommand]]
         val result = new phCityColStacked().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
-            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "cityList" -> cityList))
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "cityList" -> cityList, "replaysDisplayMap" -> replaysDisplayMap))
         args ++ Map(name -> result)
     }
 }

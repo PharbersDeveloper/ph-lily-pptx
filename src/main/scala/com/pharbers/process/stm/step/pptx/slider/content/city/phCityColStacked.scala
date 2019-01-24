@@ -96,17 +96,19 @@ class phCityColStacked extends phCommand with phReportTableCol {
 class citySom extends phCommand with phReportTableCol {
     override def exec(args: Any): Any = {
         val argsMap = args.asInstanceOf[Map[String, Any]]
+        val mktDisplayName = argsMap("mktDisplayName").asInstanceOf[String]
         val data = argsMap("data").asInstanceOf[DataFrame]
 //        val timelineList = argsMap("timelineList").asInstanceOf[List[String]]
         val cityList = argsMap("cityList").asInstanceOf[List[String]]
 //        val timeline = timelineList.head
         val resultDF = cityList.map { city =>
             val dataTmp = data.filter(col("CITY") === city)
-            val totalResult = dataTmp.select("RESULT").agg("RESULT" -> "sum")
-                .collect().head.toString()
-                .replaceAll("[\\[\\]]", "")
+            val totalResult = dataTmp.filter(col("DISPLAY_NAME") === mktDisplayName)
+                    .select("RESULT")
+                    .collect().headOption.getOrElse("0").toString()
+                    .replaceAll("[\\[\\]]", "")
             dataTmp.withColumn("SOM", (col("RESULT") / totalResult) * 100)
-        }.reduce((df1, df2) => df1.union(df2))
+        }.reduce((df1, df2) => df1.union(df2)).filter(col("DISPLAY_NAME") =!= mktDisplayName)
         resultDF.na.fill(Double.NaN)
     }
 }

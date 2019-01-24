@@ -1,16 +1,33 @@
 {
-  "title": "Insulin_City_Quarterly",
+  "title": "",
   "slices": [
     {
       "filter": {
-        "name": "PDE-5_CHPA_ BRAND_1_MAPPING",
-        "description": "",
-        "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
-        "filt": []
+        "name": "ONCOLOGY_CHPA_ BRAND_1_MAPPING",
+        "description": "11",
+        "factory": "com.pharbers.process.stm.step.pptx.filter.phCityFilterImpl",
+        "filt": ["Beijing",
+          "Shanghai",
+          "Guangzhou",
+          "Chengdu",
+          "Shenyang",
+          "Nanjing",
+          "Hangzhou",
+          "Wuhan",
+          "Chongqing",
+          "Fuxiaquan",
+          "Pearl River Delta",
+          "Suzhou",
+          "Tianjin",
+          "Jinan",
+          "Xian",
+          "Zhengzhou",
+          "Ningbo"
+        ]
       },
       "sliders": [
         {
-          "title": "Lilly Insulin and Key Competitors Cash/MMU Performance in Total Insulin Market (MAT)",
+          "title": "  Gemzar and Alimta Key Competitors MG Performance in Beijing (QTR)",
           "content": {
             "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
             "texts": [
@@ -24,62 +41,126 @@
             ],
             "tables": [
               {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phContentTable.phCityMuchTimelineTableCommonTable",
-                "mkt_display": "",
-                "mkt_col": "",
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phContentTable.phCityStackedChartCommonTable",
+                "mkt_display": "Total Generic",
+                "mkt_col": "RMB",
                 "pos": [
-                  30, 60, 81, 81
+                  30, 60, 600, 400
                 ],
                 "timeline": [
-                  "MAT Q#qtime1#:timeline_2", "MAT Q#qtime2#:timeline_2",
-                  "MAT Q#qtime3#:timeline_2", "MAT Q#qtime4#:timeline_2",
-                  "MAT Q#qtime5#:timeline_2", "MAT Q#qtime6#:timeline_2",
-                  "MAT Q#qtime7#:timeline_2", "MAT Q#qtime8#:timeline_2"
+                  "Q#qtime8#:timeline_2"
                 ],
                 "col": {
                   "title" : ":col_title_common",
                   "count" : [
-                    "RMB(Mn):col_common1",
-                    "Growth(%):col_common3",
                     "SOM(%):col_common3"
                   ]
                 },
                 "row": {
                   "title" : ":row_title_common",
                   "display_name" : [
-                    "PDE-5 Mkt:row_7",
-                    "CIALIS    LLY:row_7"
-                  ]
-                }
-              },
-              {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phContentTable.phCityMuchTimelineTableCommonTable",
-                "mkt_display": "",
-                "mkt_col": "",
-                "pos": [
-                  30, 300, 81, 81
-                ],
-                "timeline": [
-                  "MAT Q#qtime1#:timeline_2", "MAT Q#qtime2#:timeline_2",
-                  "MAT Q#qtime3#:timeline_2", "MAT Q#qtime4#:timeline_2",
-                  "MAT Q#qtime5#:timeline_2", "MAT Q#qtime6#:timeline_2",
-                  "MAT Q#qtime7#:timeline_2", "MAT Q#qtime8#:timeline_2"
-                ],
-                "col": {
-                  "title" : ":col_title_common",
-                  "count" : [
-                    "Tablet:col_common1",
-                    "Growth(%):col_common3",
-                    "SOM(%):col_common3"
+                    "Total Generic:row_5",
+                    "Total Generic Gemcitabine(Generic Gemzar)",
+                    "Total Generic Pemetrexed(Generic Alimta)",
+                    "Total Generic Capecitabine(Generic Xeloda)",
+                    "Total Generic Docetaxel(Generic Taxotere)",
+                    "LI PU SU    JVY",
+                    "ABRAXANE    CC5",
+                    "ANZATAX    H1A",
+                    "All Other Generic Paclitaxel",
+                    "Total Generic Vinorelbine(Generic Navelbine)",
+                    "Generic Gefitinib- Generic Iressa",
+                    "XALKORI    PFZ:row_5",
+                    "AVASTIN    GTC:row_5",
+                    "CONMANA    Z1B:row_5",
+                    "TARCEVA    ROC:row_5",
+                    "IRESSA    AZN:row_5",
+                    "XELODA    ROC:row_5",
+                    "NAVELBINE    P.F:row_5",
+                    "TAXOL    BMS:row_5",
+                    "TAXOTERE    AVS:row_5",
+                    "ALIMTA    LLY:row_5",
+                    "GEMZAR    LLY:row_5"
                   ]
                 },
-                "row": {
-                  "title" : ":row_title_common",
-                  "display_name" : [
-                    "PDE-5 Mkt:row_7",
-                    "CIALIS    LLY:row_7"
-                  ]
-                }
+                "city" : ["Beijing",
+                  "Shanghai",
+                  "Guangzhou",
+                  "Chengdu",
+                  "Shenyang",
+                  "Nanjing",
+                  "Hangzhou",
+                  "Wuhan",
+                  "Chongqing",
+                  "Fuxiaquan",
+                  "Pearl River Delta",
+                  "Suzhou",
+                  "Tianjin",
+                  "Jinan",
+                  "Xian",
+                  "Zhengzhou",
+                  "Ningbo"],
+                "show_display": [
+                  {
+                    "show_display_name": "Total Generic:row_5",
+                    "col_display_name": [
+                      "Total Generic Gemcitabine(Generic Gemzar)",
+                      "Total Generic Pemetrexed(Generic Alimta)",
+                      "Total Generic Capecitabine(Generic Xeloda)",
+                      "Total Generic Docetaxel(Generic Taxotere)",
+                      "LI PU SU    JVY",
+                      "ABRAXANE    CC5",
+                      "ANZATAX    H1A",
+                      "All Other Generic Paclitaxel",
+                      "Total Generic Vinorelbine(Generic Navelbine)",
+                      "Generic Gefitinib- Generic Iressa"
+                    ]
+                  },
+                  {
+                    "show_display_name": "XALKORI:row_5",
+                    "col_display_name": ["XALKORI    PFZ"]
+                  },
+                  {
+                    "show_display_name": "AVASTIN:row_5",
+                    "col_display_name": ["AVASTIN    GTC"]
+                  },
+                  {
+                    "show_display_name": "CONMANA:row_5",
+                    "col_display_name": ["CONMANA    Z1B"]
+                  },
+                  {
+                    "show_display_name": "TARCEVA:row_5",
+                    "col_display_name": ["TARCEVA    ROC"]
+                  },
+                  {
+                    "show_display_name": "IRESSA:row_5",
+                    "col_display_name": ["IRESSA    AZN"]
+                  },
+                  {
+                    "show_display_name": "XELODA:row_5",
+                    "col_display_name": ["XELODA    ROC"]
+                  },
+                  {
+                    "show_display_name": "NAVELBINE:row_5",
+                    "col_display_name": ["NAVELBINE    P.F"]
+                  },
+                  {
+                    "show_display_name": "TAXOL:row_5",
+                    "col_display_name": ["TAXOL    BMS"]
+                  },
+                  {
+                    "show_display_name": "TAXOTERE:row_5",
+                    "col_display_name": ["TAXOTERE    AVS"]
+                  },
+                  {
+                    "show_display_name": "ALIMTA:row_5",
+                    "col_display_name": ["ALIMTA    LLY"]
+                  },
+                  {
+                    "show_display_name": "GEMZAR:row_5",
+                    "col_display_name": ["GEMZAR    LLY"]
+                  }
+                ]
               }
             ]
           }

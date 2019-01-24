@@ -17,4 +17,8 @@ case class cell(cell: String, var value: String, cate: String, cssName: List[Str
     def setValue(data: String): Unit ={
         value = data2Vale(data)
     }
+
+    def addValue(data: String): Unit ={
+        value = (value.toDouble + data2Vale(data).toDouble).toString
+    }
 }

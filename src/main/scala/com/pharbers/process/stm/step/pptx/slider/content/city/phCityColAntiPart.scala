@@ -201,7 +201,7 @@ class phCityColAntiPart extends Serializable {
                     }
                 }
                 val timelineSom = indexList.map(x => som(x))
-                (iter._1, "SOM", timelineSom)
+                (iter._1, "SOM in " + mktDisplayName, timelineSom)
             }
         }
         val func_value: RDD[(String, List[BigDecimal])] => RDD[(String, String, List[String])] = mid_sum => {

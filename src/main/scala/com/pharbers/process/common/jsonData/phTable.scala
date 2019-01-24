@@ -3,17 +3,20 @@ package com.pharbers.process.common.jsonData
 import java.text.SimpleDateFormat
 import java.util.{Calendar, Date}
 
-case class phTable(var factory: String, var mkt_display: String, var mkt_col: String, var pos: List[Int], var timeline: List[String], var col: col,  var row: row){
+trait phTableTrait {
     def initOne (list: List[String], Table2DataMap: Map[Any, Any])(func: String => Any): Any ={
         list.map(x => Table2DataMap.getOrElse(func(x),func(x)))
     }
-
-
 }
+
+case class phTable(var factory: String, var mkt_display: String, var mkt_col: String, var pos: List[Int],
+                   var timeline: List[String], var col: col,  var row: row, var show_display: List[phShowDisplayName] = Nil) extends phTableTrait
 
 case class col(var title: String, var count: List[String])
 
 case class row(var title: String, var display_name: List[String])
+
+case class phShowDisplayName(var show_display_name: String, var col_display_name: List[String])
 
 object phTable2Data{
     val jsonCol2DataColMap: Map[Any, Any] = Map(
