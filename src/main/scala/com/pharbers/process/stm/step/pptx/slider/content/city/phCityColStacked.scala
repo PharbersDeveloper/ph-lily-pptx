@@ -15,6 +15,7 @@ class phCityColStacked extends phCommand with phReportTableCol {
         val timelineList: List[String] = argsMap("timelineList").asInstanceOf[List[String]]
         val primaryValueName: String = argsMap("primaryValueName").asInstanceOf[String]
         val cityList: List[String] = argsMap("cityList").asInstanceOf[List[String]]
+        val replaysDisplayMap: Map[String, String] = argsMap("replaysDisplayMap").asInstanceOf[Map[String, String]]
         val allTimelineList: List[String] = if (colList.contains("Growth(%)")) {
             getAllTimeline(timelineList)
         } else {
@@ -47,7 +48,9 @@ class phCityColStacked extends phCommand with phReportTableCol {
             .filter(x => x.date >= allTimelst.min)
             .filter(x => x.date <= allTimelst.max)
             .filter(x => filterMap(primaryValueName)(x))
-
+        val replace_display_name = filter_display_name.map(x =>
+            phLycalData(x.id, x.product_name, x.pack_des, x.date, x.tp, x.add_rate, x.dot, x.value, replaysDisplayMap(x.display_name), x.result)
+        )
         /**
           * 2. reduce by key 就是以display name 求和, 叫中间和
           */
@@ -67,7 +70,7 @@ class phCityColStacked extends phCommand with phReportTableCol {
                 case _ => ymMap("month")
             }
             val endYm: String = ymMap("year").toString + month
-            filter_display_name.filter(x => x.date >= startYm)
+            replace_display_name.filter(x => x.date >= startYm)
                 .filter(x => x.date <= endYm)
                 .keyBy(x => (x.id, x.display_name, timeline))
                 .map { x =>
