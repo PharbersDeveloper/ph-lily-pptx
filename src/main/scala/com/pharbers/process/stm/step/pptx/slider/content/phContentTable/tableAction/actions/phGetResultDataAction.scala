@@ -152,7 +152,7 @@ case class phColCityStackedPrimaryValueAction() extends tableActionBase{
         val cityList = args(argsMapKeys.CITY)
         //        val colMap = args(argsMapKeys.COL_COMMAND_MAP).asInstanceOf[Map[String, phCommand]]
         val result = new phCityColStacked().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
-            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "cityList" -> cityList, "replaysDisplayMap" -> replaysDisplayMap)))
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "cityList" -> cityList, "replaysDisplayMap" -> replaysDisplayMap))
         args ++ Map(name -> result)
     }
 }
