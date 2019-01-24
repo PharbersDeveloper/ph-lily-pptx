@@ -95,6 +95,7 @@ class phCityColAntiPart extends Serializable {
         val timelineList: List[String] = argsMap("timelineList").asInstanceOf[List[String]]
         val mktDisplayName = argsMap("mktDisplayName").asInstanceOf[String]
         val primaryValueName: String = argsMap("primaryValueName").asInstanceOf[String]
+        val replaysDisplayMap: Map[String, String] = argsMap("replaysDisplayMap").asInstanceOf[Map[String, String]]
         val headstr = timelineList.head.dropRight(5)
         //需要计算出真正的所有timeline
         val allTimelineList: List[String] = if (colList.contains("Growth(%)")) {
@@ -145,6 +146,9 @@ class phCityColAntiPart extends Serializable {
             .filter(x => x.date >= allTimelst.min)
             .filter(x => x.date <= allTimelst.max)
             .filter(x => funcFileter(primaryValueName)(x))
+        val replace_display_name = filter_display_name.map{x =>
+            phLycalData(x.id, x.product_name, x.pack_des, x.date, x.tp, x.add_rate, x.dot, x.value, replaysDisplayMap(x.display_name), x.result)
+        }
         val func_rmb: phLycalData => BigDecimal = phLycalData => {
             phLycalData.value
         }
@@ -152,8 +156,7 @@ class phCityColAntiPart extends Serializable {
             phLycalData.dot
         }
         val valueFuncMap: Map[String, phLycalData => BigDecimal] = Map("rmb" -> func_rmb, "LC-RMB" -> func_rmb, "dot" -> func_dot)
-        import org.apache.spark.sql.functions.col
-        val mid_sum = filter_display_name.map { x =>
+        val mid_sum = replace_display_name.map { x =>
             val idx = allTimelst.indexOf(x.date)
             val lst = if (idx > -1) {
                 val ym = x.date.takeRight(4)
