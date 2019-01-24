@@ -146,9 +146,9 @@ class phCityColAntiPart extends Serializable {
             .filter(x => x.date >= allTimelst.min)
             .filter(x => x.date <= allTimelst.max)
             .filter(x => funcFileter(primaryValueName)(x))
-        val replace_display_name = filter_display_name.map{x =>
+        val replace_display_name = filter_display_name.map(x =>
             phLycalData(x.id, x.product_name, x.pack_des, x.date, x.tp, x.add_rate, x.dot, x.value, replaysDisplayMap(x.display_name), x.result)
-        }
+        )
         val func_rmb: phLycalData => BigDecimal = phLycalData => {
             phLycalData.value
         }
