@@ -1,16 +1,16 @@
 {
-  "title": "Insulin_City_Quarterly",
+  "title": "",
   "slices": [
     {
       "filter": {
-        "name": "PDE-5_CHPA_ BRAND_1_MAPPING",
+        "name": "Women's Health_CHPA_ BRAND_1_MAPPING",
         "description": "",
         "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
         "filt": []
       },
       "sliders": [
         {
-          "title": "Lilly Insulin and Key Competitors Cash/MMU Performance in Total Insulin Market (MAT)",
+          "title": "",
           "content": {
             "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
             "texts": [
@@ -28,63 +28,53 @@
                 "mkt_display": "",
                 "mkt_col": "",
                 "pos": [
-                  30, 60, 81, 81
+                  30,
+                  300,
+                  81,
+                  81
                 ],
                 "timeline": [
-                  "MAT Q#qtime1#:timeline_2", "MAT Q#qtime2#:timeline_2",
-                  "MAT Q#qtime3#:timeline_2", "MAT Q#qtime4#:timeline_2",
-                  "MAT Q#qtime5#:timeline_2", "MAT Q#qtime6#:timeline_2",
-                  "MAT Q#qtime7#:timeline_2", "MAT Q#qtime8#:timeline_2"
+                  "MAT Q#qtime1#:timeline_2",
+                  "MAT Q#qtime2#:timeline_2",
+                  "MAT Q#qtime3#:timeline_2",
+                  "MAT Q#qtime4#:timeline_2",
+                  "MAT Q#qtime5#:timeline_2",
+                  "MAT Q#qtime6#:timeline_2",
+                  "MAT Q#qtime7#:timeline_2",
+                  "MAT Q#qtime8#:timeline_2"
                 ],
                 "col": {
-                  "title" : ":col_title_common",
-                  "count" : [
-                    "RMB(Mn):col_common1",
+                  "title": ":col_title_common",
+                  "count": [
+                    "DOT(Mn):col_common1",
                     "Growth(%):col_common3",
                     "SOM(%):col_common3"
+
                   ]
                 },
                 "row": {
-                  "title" : ":row_title_common",
-                  "display_name" : [
-                    "PDE-5 Mkt:row_7",
-                    "CIALIS    LLY:row_7"
-                  ]
-                }
-              },
-              {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phContentTable.phCityMuchTimelineTableCommonTable",
-                "mkt_display": "",
-                "mkt_col": "",
-                "pos": [
-                  30, 300, 81, 81
-                ],
-                "timeline": [
-                  "MAT Q#qtime1#:timeline_2", "MAT Q#qtime2#:timeline_2",
-                  "MAT Q#qtime3#:timeline_2", "MAT Q#qtime4#:timeline_2",
-                  "MAT Q#qtime5#:timeline_2", "MAT Q#qtime6#:timeline_2",
-                  "MAT Q#qtime7#:timeline_2", "MAT Q#qtime8#:timeline_2"
-                ],
-                "col": {
-                  "title" : ":col_title_common",
-                  "count" : [
-                    "Tablet:col_common1",
-                    "Growth(%):col_common3",
-                    "SOM(%):col_common3"
+                  "title": ":row_title_common",
+                  "display_name": [
+                    "Women’s Health Mkt:row_5",
+                    "EVISTA    LLY:row_5",
+                    "FORSTEO    LLY:row_5"
                   ]
                 },
-                "row": {
-                  "title" : ":row_title_common",
-                  "display_name" : [
-                    "PDE-5 Mkt:row_7",
-                    "CIALIS    LLY:row_7"
-                  ]
-                }
+                "show_display": [
+                  {
+                    "show_display_mame": "Mkt:row_5",
+                    "col_display_name": ["Women’s Health Mkt"]
+                  },
+                  {
+                    "show_display_mame": "LLY:row_5",
+                    "col_display_name": ["EVISTA    LLY", "FORSTEO    LLY"]
+                  }
+                ]
               }
             ]
           }
         }
       ]
-    }
+    },
   ]
 }

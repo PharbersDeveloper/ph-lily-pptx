@@ -1,6 +1,7 @@
 package com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.actions
 
 import com.pharbers.process.common.DTO.{cell, tableCells, tableShowArgs}
+import com.pharbers.process.common.jsonData.{phTable, phTable2Data}
 import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.{argsMapKeys, tableActionBase}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.DataFrame
@@ -141,8 +142,8 @@ case class phGetCityShowTableHeadStyleAction() extends tableActionBase {
 
         tableShowArgs.timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
             val timeline = timelineAndCss._1
-            val month = "\\d\\d".r.findFirstIn("Q\\d\\d".r.findFirstIn(timeline).get).get.toInt
-            val qtimeline = timeline.replace(month.toString, (month / 3).toString)
+            val month = "\\d\\d".r.findFirstIn("Q\\d\\d".r.findFirstIn(timeline).get).get
+            val qtimeline = timeline.replace(month, (month.toInt / 3).toString)
             val timelineCss = timelineAndCss._2
             val cellLeft = (1 + timelineIndex * tableShowArgs.colList.size + 65).toChar.toString + "1"
             val cellRight = (timelineIndex * tableShowArgs.colList.size + tableShowArgs.colList.size + 65).toChar.toString + "1"
@@ -171,12 +172,32 @@ case class phGetCityShowTrendsTableHeadStyleAction() extends tableActionBase {
 
         tableShowArgs.timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
             val timeline = timelineAndCss._1
-            val month = "\\d\\d".r.findFirstIn("Q\\d\\d".r.findFirstIn(timeline).get).get.toInt
-            val qtimeline = timeline.replace(month.toString, (month / 3).toString)
+            val month = "\\d\\d".r.findFirstIn("Q\\d\\d".r.findFirstIn(timeline).get).get
+            val qtimeline = timeline.replace(month, (month.toInt / 3).toString)
             val timelineCss = timelineAndCss._2
             val cellLeft = (1 + timelineIndex * tableShowArgs.colList.size + 65).toChar.toString + "1"
             val cellRight = (timelineIndex * tableShowArgs.colList.size + tableShowArgs.colList.size + 65).toChar.toString + "1"
             val timeLineCell = cellLeft + ":" + cellRight
+            //            addCell(jobid, tableName, timeLineCell, timeline, "String", List(timelineCss))
+            tableCells.readyCells = tableCells.readyCells :+ s"#c#$timeLineCell#v#$qtimeline#t#String#s#$timelineCss"
+        }
+        args
+    }
+}
+
+case class phGetCityShowMuchTimeLineTableHeadStyleAction() extends tableActionBase {
+    override val name: String = "get show table head style"
+
+    override def show(args: Map[String, Any]): Map[String, Any] = {
+        val tableShowArgs = args(argsMapKeys.TABLE_SHOW_ARGS).asInstanceOf[tableShowArgs]
+        val tableCells = args(argsMapKeys.TABLE_CELLS).asInstanceOf[tableCells]
+
+        tableShowArgs.timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+            val timeline = timelineAndCss._1
+            val month = "\\d\\d".r.findFirstIn("Q\\d\\d".r.findFirstIn(timeline).get).get
+            val qtimeline = timeline.replace(month, (month.toInt / 3).toString)
+            val timelineCss = timelineAndCss._2
+            val timeLineCell = (1 + timelineIndex + 65).toChar.toString + "1"
             //            addCell(jobid, tableName, timeLineCell, timeline, "String", List(timelineCss))
             tableCells.readyCells = tableCells.readyCells :+ s"#c#$timeLineCell#v#$qtimeline#t#String#s#$timelineCss"
         }
@@ -213,14 +234,11 @@ case class phGetShowTrendsTableBodyStyleAction() extends tableActionBase {
             val rowIndex = displayNameIndex + 2
             val rowCss = displayNameAndCss._2
             val displayName = displayNameAndCss._1
-            val displayNemeCellIndex = "A" + rowIndex.toString
+            val displayNameCellIndex = "A" + rowIndex.toString
             val rowTitleCss = tableShowArgs.rowTitle._2
-            //            addCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String", List(rowTitle._2, rowCss))
-            tableCells.readyCells = tableCells.readyCells :+ s"#c#$displayNemeCellIndex#v#$displayName#t#String#s#$rowTitleCss*$rowCss"
+            tableCells.readyCells = tableCells.readyCells :+ s"#c#$displayNameCellIndex#v#$displayName#t#String#s#$rowTitleCss*$rowCss"
 
             tableShowArgs.timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
-                //                val timeline = timelineAndCss._1
-                //                val timelineCss = timelineAndCss._2
                 tableShowArgs.colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
                     val colName = tableShowArgs.col2DataColMap.getOrElse(colNameAndCss._1, colNameAndCss._1).replace("Share of", "SOM in")
                     val data2ValueMap = args(argsMapKeys.DATA_2_Cell_VALUE_MAP).asInstanceOf[Map[String, String => String]]
@@ -228,7 +246,6 @@ case class phGetShowTrendsTableBodyStyleAction() extends tableActionBase {
                     val colCss = colNameAndCss._2
                     val colIndex = tableShowArgs.colList.size * timelineIndex + colNameIndex + 1
                     val cellIndex = (colIndex + 65).toChar.toString + rowIndex.toString
-                    //                    cellMap = cellMap ++ Map((displayName, timeline, colName) -> (cell(jobid, tableName, cellIndex, "", "Number", List(colCss, rowCss)), data2Value))
                     tableCells.noValueCells = tableCells.noValueCells ++
                             Map((displayName, timelineIndex.toString, colName) -> cell(cellIndex, "", "Number", List(colCss, rowCss), data2Value))
                 }
@@ -244,13 +261,9 @@ case class phGetShowMuchTimelineTableBodyStyleAction() extends tableActionBase {
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val tableShowArgs = args(argsMapKeys.TABLE_SHOW_ARGS).asInstanceOf[tableShowArgs]
         val tableCells = args(argsMapKeys.TABLE_CELLS).asInstanceOf[tableCells]
-        val displayName2ShowDisplayName = Map(
-            "PDE-5 Mkt" -> "Mkt",
-            "CIALIS LLY" -> "LLY",
-            "Lilly relevant Mkt" -> "Mkt",
-            "PROZAC    LLY" -> "PROZAC",
-            "CYMBALTA    LLY" -> "CYMBALTA"
-        )
+
+        val phTable = args(argsMapKeys.TABLE_MODEL).asInstanceOf[phTable]
+        val showDisplayNameList = phTable.initOne(phTable.show_display.map(x => x.show_display_name), Map())(phTable2Data.severCss).asInstanceOf[List[(String, String)]]
 
         val colName2ShowColName = Map(
             "DOT(Mn)" -> "Size(Mn DOT)",
@@ -258,14 +271,14 @@ case class phGetShowMuchTimelineTableBodyStyleAction() extends tableActionBase {
             "Tablet" -> "Size(Tablet) "
         )
 
-        tableShowArgs.colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
-            tableShowArgs.rowList.zipWithIndex.foreach { case (displayNameAndCss, displayNameIndex) =>
-                val rowIndex = displayNameIndex * (colNameIndex + 1) + 2
+        showDisplayNameList.zipWithIndex.foreach { case (displayNameAndCss, displayNameIndex) =>
+            tableShowArgs.colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+                val rowIndex = colNameIndex + displayNameIndex * tableShowArgs.colList.size + 2
                 val rowCss = displayNameAndCss._2
                 val displayName = displayNameAndCss._1
                 val displayNameCellIndex = "A" + rowIndex.toString
                 val rowTitleCss = tableShowArgs.rowTitle._2
-                val showDisplayName = displayName2ShowDisplayName.getOrElse(displayName,displayName) + " " + colName2ShowColName.getOrElse(colNameAndCss._1, colNameAndCss._1)
+                val showDisplayName = displayName + " " + colName2ShowColName.getOrElse(colNameAndCss._1, colNameAndCss._1)
                 //            addCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String", List(rowTitle._2, rowCss))
                 tableCells.readyCells = tableCells.readyCells :+ s"#c#$displayNameCellIndex#v#$showDisplayName#t#String#s#$rowTitleCss*$rowCss"
 
@@ -275,18 +288,18 @@ case class phGetShowMuchTimelineTableBodyStyleAction() extends tableActionBase {
                     val data2ValueMap = args(argsMapKeys.DATA_2_Cell_VALUE_MAP).asInstanceOf[Map[String, String => String]]
                     val data2Value = data2ValueMap.getOrElse(colNameAndCss._1, data2ValueMap("DOT"))
                     val colCss = colNameAndCss._2
-                    val colIndex = timelineIndex  + 1
+                    val colIndex = timelineIndex + 1
                     val cellIndex = (colIndex + 65).toChar.toString + rowIndex.toString
                     //                    cellMap = cellMap ++ Map((displayName, timeline, colName) -> (cell(jobid, tableName, cellIndex, "", "Number", List(colCss, rowCss)), data2Value))
                     tableCells.noValueCells = tableCells.noValueCells ++
-                            Map((displayName, timelineIndex.toString, colName) -> cell(cellIndex, "", "Number", List(colCss, rowCss), data2Value))
+                            Map((displayName, timelineIndex.toString, colName) -> cell(cellIndex, "0", "Number", List(colCss, rowCss), data2Value))
 
                 }
             }
         }
-        tableShowArgs.timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
-            tableCells.noValueCells = tableCells.noValueCells.-(("Mkt", timelineIndex.toString, "SOM(%)"))
-        }
+        //        tableShowArgs.timelineList.zipWithIndex.foreach { case (timelineAndCss, timelineIndex) =>
+        //            tableCells.noValueCells = tableCells.noValueCells.-(("Mkt", timelineIndex.toString, "SOM(%)"))
+        //        }
         args
     }
 }
@@ -348,9 +361,9 @@ case class phGetShowMuchTimelineTableBodyValueAction() extends tableActionBase {
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val tableCells = args(argsMapKeys.TABLE_CELLS).asInstanceOf[tableCells]
         val rdd = args(argsMapKeys.DATA).asInstanceOf[RDD[(String, String, List[String])]]
-        rdd.collect().foreach{ case (displayName, col, list) =>
+        rdd.collect().foreach { case (displayName, col, list) =>
             list.zipWithIndex.foreach(x => {
-                val oneCell = tableCells.noValueCells.getOrElse((displayName, x._2.toString, col),cell("", "", "", Nil))
+                val oneCell = tableCells.noValueCells.getOrElse((displayName, x._2.toString, col), cell("", "", "", Nil))
                 oneCell.setValue(x._1.toString)
             })
         }

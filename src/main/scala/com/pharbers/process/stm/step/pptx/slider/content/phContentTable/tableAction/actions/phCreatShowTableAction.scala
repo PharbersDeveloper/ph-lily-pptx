@@ -26,12 +26,22 @@ class phCreatCityShowTableAction() extends phCreatShowTableAction{
 }
 
 class phCreatCityShowTrendsTableAction() extends phCreatShowTableAction{
+    override def stageReady(args: Map[String, Any]): Map[String, Any] = {
+        Map(argsMapKeys.DATA -> args(argsMapKeys.DATA), argsMapKeys.TABLE_SHOW_ARGS -> args(argsMapKeys.TABLE_SHOW_ARGS),
+            argsMapKeys.TABLE_CELLS -> tableCells(List(), Map()), argsMapKeys.TABLE_MODEL -> args(argsMapKeys.TABLE_MODEL))
+    }
+
     override val actionList: List[tableActionBase] = phGetData2CellValueMapAction() :: phGetCityShowTrendsTableHeadStyleAction() ::
             phGetShowTrendsTableBodyStyleAction() :: phGetShowTrendsTableBodyValueAction() :: Nil
 }
 
 class phCreatCityShowMuchTimelineTableAction() extends phCreatShowTableAction{
-    override val actionList: List[tableActionBase] = phGetData2CellValueMapAction() :: phGetCityShowTrendsTableHeadStyleAction() ::
+    override def stageReady(args: Map[String, Any]): Map[String, Any] = {
+        Map(argsMapKeys.DATA -> args(argsMapKeys.DATA), argsMapKeys.TABLE_SHOW_ARGS -> args(argsMapKeys.TABLE_SHOW_ARGS),
+            argsMapKeys.TABLE_CELLS -> tableCells(List(), Map()), argsMapKeys.TABLE_MODEL -> args(argsMapKeys.TABLE_MODEL))
+    }
+
+    override val actionList: List[tableActionBase] = phGetData2CellValueMapAction() :: phGetCityShowMuchTimeLineTableHeadStyleAction() ::
             phGetShowMuchTimelineTableBodyStyleAction() :: phGetShowMuchTimelineTableBodyValueAction() :: Nil
 }
 
