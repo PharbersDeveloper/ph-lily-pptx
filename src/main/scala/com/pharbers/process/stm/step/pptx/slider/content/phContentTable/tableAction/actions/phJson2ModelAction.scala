@@ -7,8 +7,9 @@ import play.api.libs.json.{JsValue, Json}
 trait phJson2Model {
     implicit val row = Json.format[row]
     implicit val col = Json.format[col]
-    implicit val phTable = Json.format[phTable]
     implicit val showDis = Json.format[phShowDisplayName]
+    implicit val phTable = Json.format[phTable]
+
 }
 
 case class phJson2ModelAction() extends tableActionBase with phJson2Model{

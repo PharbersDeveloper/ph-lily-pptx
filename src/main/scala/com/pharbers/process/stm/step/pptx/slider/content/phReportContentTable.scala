@@ -7,6 +7,7 @@ import com.pharbers.phsocket.phSocketDriver
 import com.pharbers.process.common.jsonData.{col, phTable, phTable2Data, row}
 import com.pharbers.process.common.{phCommand, phLycalArray, phLycalData}
 import com.pharbers.process.stm.step.pptx.slider.content.overview.TableCol.{PieTableCol, PieTableCol2}
+import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.actions.phJson2Model
 import com.pharbers.spark.phSparkDriver
 import org.apache.poi.xslf.usermodel.XSLFSlide
 import org.apache.spark.rdd.RDD
@@ -628,16 +629,13 @@ class rankTable extends phReportContentTableBaseImpl {
     }
 }
 
-class cityBaseTable extends phReportContentTableBaseImpl{
+class cityBaseTable extends phReportContentTableBaseImpl with phJson2Model{
 
 
     override def getColArgs(args: Any): colArgs = {
         val argsMap = args.asInstanceOf[Map[String, Any]]
         val data = argsMap("data")
         val element = argsMap("element").asInstanceOf[JsValue]
-        implicit val row = Json.format[row]
-        implicit val col = Json.format[col]
-        implicit val phTable = Json.format[phTable]
         val table = element.as[phTable]
         getColArgsFromPhTable(table, data)
     }
