@@ -71,7 +71,7 @@ class phGlpCityFilterImpl extends phFilter with phCommand {
     override def exec(args: Any): Any = {
         val js = args.asInstanceOf[JsValue]
         val name = (js \ "name").as[String]
-        val cityFilt = (js \ "filt").as[String]
+        val cityFilt = (js \ "filt").as[List[String]].head
         val countryDataName = (js \ "countryDataName").as[String]
         val shareDataName = (js \ "shareDataName").as[String]
         val countryData = phLyFactory.getStorageWithDFName(countryDataName).filter(col("CITY") === cityFilt)

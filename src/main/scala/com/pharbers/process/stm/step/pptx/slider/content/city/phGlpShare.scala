@@ -9,7 +9,7 @@ class phGlpShare extends phQuarterTableCol{
         val argsMap = args.asInstanceOf[Map[String, Any]]
         val data: DataFrame = argsMap("data").asInstanceOf[DataFrame]
         val displayNamelList: List[String] = argsMap("allDisplayNames").asInstanceOf[List[String]]
-        val displayNamelMap: Map[String, String] = argsMap("displayNamelMap").asInstanceOf[Map[String, String]]
+        val displayNamelMap: Map[String, String] = argsMap("replaysDisplayMap").asInstanceOf[Map[String, String]]
         val colList: List[String] = argsMap("colList").asInstanceOf[List[String]]
         val timelineList: List[String] = argsMap("timelineList").asInstanceOf[List[String]]
         val mktDisplayName = argsMap("mktDisplayName").asInstanceOf[String]
@@ -66,7 +66,7 @@ class phGlpShare extends phQuarterTableCol{
             .filter(x => x.date <= allTimelst.max)
             .filter(x => funcFileter(primaryValueName)(x))
         val replace_display_name = filter_display_name.map{x =>
-            val displayName_key = if (displayNamelList.indexOf(x.TC_II_SHORT) != -1) x.TC_II_SHORT else x.TC_IV_SHORT
+            val displayName_key = if (displayNamelList.indexOf(x.TC_IV_SHORT) != -1) x.TC_IV_SHORT else x.TC_II_SHORT
             (displayNamelMap(displayName_key), x)
         }
 
@@ -110,7 +110,8 @@ class phGlpShare extends phQuarterTableCol{
             }
         }
         val func_som: RDD[(String, List[BigDecimal])] => RDD[(String, List[String])] = mid_sum => {
-            val mktDisplayNameList = mid_sum.filter(x => x._1 == mktDisplayName).collect().headOption.getOrElse(("",List(BigDecimal(0))))._2
+            val mktDisplayNameList = mid_sum.reduce((rdd1, rdd2) => (mktDisplayName, rdd1._2.zip(rdd2._2).map(x => x._1 + x._2)))._2
+//            val mktDisplayNameList = mid_sum.filter(x => x._1 == mktDisplayName).collect().headOption.getOrElse(("",List(BigDecimal(0))))._2
             mid_sum.map { iter =>
                 val som = iter._2.zipWithIndex.map { case (value, idx) =>
                     if (indexList.contains(idx)) {

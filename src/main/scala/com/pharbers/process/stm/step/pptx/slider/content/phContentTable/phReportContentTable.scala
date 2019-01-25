@@ -7,7 +7,7 @@ import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAct
 trait phContentTableCommand extends phCommand {
     val actionList: List[tableActionBase]
     override def exec(args: Any): Any = {
-        actionList.head.perform(args.asInstanceOf[Map[String, Any]], Some(actionList.tail))
+        actionList.head.perform(args.asInstanceOf[Map[String, Any]], actionList.tail)
     }
 }
 

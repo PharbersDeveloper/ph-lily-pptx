@@ -5,7 +5,7 @@ import com.pharbers.process.common.jsonData.phTable
 import com.pharbers.process.common.phCommand
 import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.{argsMapKeys, tableActionBase}
 import com.pharbers.process.stm.step.pptx.slider.content._
-import com.pharbers.process.stm.step.pptx.slider.content.city.{citySom, phCityColAntiPart, phCityColStacked, phQuarterTableCol}
+import com.pharbers.process.stm.step.pptx.slider.content.city._
 import org.apache.spark.sql.DataFrame
 
 case class phColPrimaryValueAction() extends tableActionBase{
@@ -136,9 +136,9 @@ case class phGetGLP1ColValueAction() extends tableActionBase {
         val table = args(argsMapKeys.TABLE_MODEL).asInstanceOf[phTable]
         val replaysDisplayMap = table.show_display.flatMap(x => x.col_display_name.map(m => Map(m -> x.show_display_name.split(":").head)))
                 .reduce(_ ++ _) ++ Map(colArgs.mktDisplayName -> colArgs.mktDisplayName)
-        val result = new ().getValue(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+        val result = new phGlpShare().getValue(Map("data" -> colArgs.data, "allDisplayNames" ->  replaysDisplayMap.keys.toList, "colList" -> colArgs.colList,
             "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName,
-            "mktDisplayName" -> replaysDisplayMap.keys, "replaysDisplayMap" -> replaysDisplayMap))
+            "mktDisplayName" -> colArgs.mktDisplayName, "replaysDisplayMap" -> replaysDisplayMap))
         args ++ Map(name -> result)
     }
 }

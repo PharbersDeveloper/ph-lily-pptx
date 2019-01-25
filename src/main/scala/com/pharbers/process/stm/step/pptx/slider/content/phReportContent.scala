@@ -36,7 +36,7 @@ class phReportContentImpl extends phReportContent with phCommand {
             val factory = (table \ "factory").as[String]
             setElementInSlider(factory, table, data, slideIndex, jobid)
         })
-        setElementInSlider("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTextImpl", text, slideIndex = slideIndex, jobid = jobid)
+        setElementInSlider("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTextImpl", text, data, slideIndex = slideIndex, jobid = jobid)
     }
 }
 
@@ -48,6 +48,6 @@ class phReportMuchDataContentImpl extends phReportContent with phCommand {
             val tableData = data.asInstanceOf[Map[String, Any]]((table \ "data").as[String])
             setElementInSlider(factory, table, tableData, slideIndex, jobid)
         })
-        setElementInSlider("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTextImpl", text, slideIndex = slideIndex, jobid = jobid)
+        setElementInSlider("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTextImpl", text, data, slideIndex = slideIndex, jobid = jobid)
     }
 }

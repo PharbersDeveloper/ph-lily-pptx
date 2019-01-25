@@ -20,6 +20,10 @@ class phColTrendsValueAction extends phColValueAction {
 }
 
 class phColGPL1TrendsValueAction extends phColValueAction {
+    override def stageReady(args: Map[String, Any]): Map[String, Any] = {
+        Map(argsMapKeys.DATA -> args(argsMapKeys.DATA), argsMapKeys.TABLE_COL_ARGS -> args(argsMapKeys.TABLE_COL_ARGS),
+            argsMapKeys.TABLE_MODEL -> args(argsMapKeys.TABLE_MODEL))
+    }
     override val actionList: List[tableActionBase] = phGetGLP1ColValueAction() :: Nil
 }
 
