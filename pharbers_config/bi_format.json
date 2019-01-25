@@ -3,33 +3,18 @@
   "slices": [
     {
       "filter": {
-        "name": "ONCOLOGY_CHPA_ BRAND_1_MAPPING",
-        "description": "11",
-        "factory": "com.pharbers.process.stm.step.pptx.filter.phCityFilterImpl",
-        "filt": ["Beijing",
-          "Shanghai",
-          "Guangzhou",
-          "Chengdu",
-          "Shenyang",
-          "Nanjing",
-          "Hangzhou",
-          "Wuhan",
-          "Chongqing",
-          "Fuxiaquan",
-          "Pearl River Delta",
-          "Suzhou",
-          "Tianjin",
-          "Jinan",
-          "Xian",
-          "Zhengzhou",
-          "Ningbo"
-        ]
+        "name": "GLP-1_CHPA_ BRAND_1_MAPPING",
+        "description": "",
+        "factory": "GLP-1_CHPA_ BRAND_1_MAPPING",
+        "filt": [""],
+        "countryDataName" : "DF_gen_search_set",
+        "shareDataName" : "GLP_country"
       },
       "sliders": [
         {
-          "title": "  Gemzar and Alimta Key Competitors MG Performance in Beijing (QTR)",
+          "title": "GLP-1 Market DOT & RMB Performance in CHPA (MAT)",
           "content": {
-            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportMuchDataContentImpl",
             "texts": [
               {
                 "pos": [
@@ -41,124 +26,110 @@
             ],
             "tables": [
               {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phContentTable.phCityStackedChartCommonTable",
-                "mkt_display": "Total Generic",
-                "mkt_col": "RMB",
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.cityBaseTable",
+                "data": "DF_gen_search_set",
+                "mkt_display": "",
+                "mkt_col": "",
                 "pos": [
-                  30, 60, 600, 400
+                  30, 60, 81, 81
                 ],
                 "timeline": [
-                  "Q#qtime8#:timeline_2"
+                  "MAT Q#qtime8#:timeline_2", "MAT Q#qtime4#:timeline_2"
                 ],
                 "col": {
                   "title" : ":col_title_common",
                   "count" : [
-                    "SOM(%):col_common3"
+                    "DOT:col_common1",
+                    "SOM(%):col_common3",
+                    "Growth(%):col_common3"
                   ]
                 },
                 "row": {
                   "title" : ":row_title_common",
                   "display_name" : [
-                    "Total Generic:row_5",
-                    "Total Generic Gemcitabine(Generic Gemzar)",
-                    "Total Generic Pemetrexed(Generic Alimta)",
-                    "Total Generic Capecitabine(Generic Xeloda)",
-                    "Total Generic Docetaxel(Generic Taxotere)",
-                    "LI PU SU    JVY",
-                    "ABRAXANE    CC5",
-                    "ANZATAX    H1A",
-                    "All Other Generic Paclitaxel",
-                    "Total Generic Vinorelbine(Generic Navelbine)",
-                    "Generic Gefitinib- Generic Iressa",
-                    "XALKORI    PFZ:row_5",
-                    "AVASTIN    GTC:row_5",
-                    "CONMANA    Z1B:row_5",
-                    "TARCEVA    ROC:row_5",
-                    "IRESSA    AZN:row_5",
-                    "XELODA    ROC:row_5",
-                    "NAVELBINE    P.F:row_5",
-                    "TAXOL    BMS:row_5",
-                    "TAXOTERE    AVS:row_5",
-                    "ALIMTA    LLY:row_5",
-                    "GEMZAR    LLY:row_5"
+                    "GLP-1 Market:row_7",
+                    "BYETTA:row_5",
+                    "VICTOZA    N-N:row_5",
+                    "YI SHENG TAI    BNE:row_5",
+                    "BYDUREON    AZN:row_5"
+                  ]
+                }
+              },
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.cityBaseTable",
+                "data": "DF_gen_search_set",
+                "mkt_display": "",
+                "mkt_col": "",
+                "pos": [
+                  30, 200, 81, 81
+                ],
+                "timeline": [
+                  "MAT Q#qtime8#:timeline_2", "MAT Q#qtime4#:timeline_2"
+                ],
+                "col": {
+                  "title" : ":col_title_common",
+                  "count" : [
+                    "RMB:col_common1",
+                    "SOM(%):col_common3",
+                    "Growth(%):col_common3"
                   ]
                 },
-                "city" : ["Beijing",
-                  "Shanghai",
-                  "Guangzhou",
-                  "Chengdu",
-                  "Shenyang",
-                  "Nanjing",
-                  "Hangzhou",
-                  "Wuhan",
-                  "Chongqing",
-                  "Fuxiaquan",
-                  "Pearl River Delta",
-                  "Suzhou",
-                  "Tianjin",
-                  "Jinan",
-                  "Xian",
-                  "Zhengzhou",
-                  "Ningbo"],
+                "row": {
+                  "title" : ":row_title_common",
+                  "display_name" : [
+                    "GLP-1 Market:row_7",
+                    "BYETTA:row_5",
+                    "VICTOZA    N-N:row_5",
+                    "YI SHENG TAI    BNE:row_5",
+                    "BYDUREON    AZN:row_5"
+                  ]
+                }
+              },
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.",
+                "data": "GLP_country",
+                "mkt_display": "Diabetes Market",
+                "mkt_col": "RMB",
+                "pos": [
+                  30, 400, 600, 200
+                ],
+                "timeline": [
+                  "MAT Q#qtime1#:timeline_1",
+                  "MAT Q#qtime2#:timeline_1",
+                  "MAT Q#qtime3#:timeline_1",
+                  "MAT Q#qtime4#:timeline_1",
+                  "MAT Q#qtime5#:timeline_1",
+                  "MAT Q#qtime6#:timeline_1",
+                  "MAT Q#qtime7#:timeline_1",
+                  "MAT Q#qtime8#:timeline_1"
+                ],
+                "col": {
+                  "title" : ":col_title_chart",
+                  "count" : [
+                    "SOM%:col_chart"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_chart",
+                  "display_name" : [
+                    "GLP-1 Market:row_5",
+                    "Basal Insulin:row_5"
+                  ]
+                },
                 "show_display": [
                   {
-                    "show_display_name": "Total Generic:row_5",
+                    "show_display_name": "Diabetes Market",
                     "col_display_name": [
-                      "Total Generic Gemcitabine(Generic Gemzar)",
-                      "Total Generic Pemetrexed(Generic Alimta)",
-                      "Total Generic Capecitabine(Generic Xeloda)",
-                      "Total Generic Docetaxel(Generic Taxotere)",
-                      "LI PU SU    JVY",
-                      "ABRAXANE    CC5",
-                      "ANZATAX    H1A",
-                      "All Other Generic Paclitaxel",
-                      "Total Generic Vinorelbine(Generic Navelbine)",
-                      "Generic Gefitinib- Generic Iressa"
+                      "A10"
                     ]
                   },
                   {
-                    "show_display_name": "XALKORI:row_5",
-                    "col_display_name": ["XALKORI    PFZ"]
+                    "show_display_name": "GLP-1 Market",
+                    "col_display_name": ["A10S"]
                   },
                   {
-                    "show_display_name": "AVASTIN:row_5",
-                    "col_display_name": ["AVASTIN    GTC"]
-                  },
-                  {
-                    "show_display_name": "CONMANA:row_5",
-                    "col_display_name": ["CONMANA    Z1B"]
-                  },
-                  {
-                    "show_display_name": "TARCEVA:row_5",
-                    "col_display_name": ["TARCEVA    ROC"]
-                  },
-                  {
-                    "show_display_name": "IRESSA:row_5",
-                    "col_display_name": ["IRESSA    AZN"]
-                  },
-                  {
-                    "show_display_name": "XELODA:row_5",
-                    "col_display_name": ["XELODA    ROC"]
-                  },
-                  {
-                    "show_display_name": "NAVELBINE:row_5",
-                    "col_display_name": ["NAVELBINE    P.F"]
-                  },
-                  {
-                    "show_display_name": "TAXOL:row_5",
-                    "col_display_name": ["TAXOL    BMS"]
-                  },
-                  {
-                    "show_display_name": "TAXOTERE:row_5",
-                    "col_display_name": ["TAXOTERE    AVS"]
-                  },
-                  {
-                    "show_display_name": "ALIMTA:row_5",
-                    "col_display_name": ["ALIMTA    LLY"]
-                  },
-                  {
-                    "show_display_name": "GEMZAR:row_5",
-                    "col_display_name": ["GEMZAR    LLY"]
+                    "show_display_name": "Basal Insulin",
+                    "col_display_name": ["A10C2", "A10C5"]
                   }
                 ]
               }

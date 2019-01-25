@@ -27,12 +27,10 @@ object argsMapKeys{
 
 trait tableActionBase {
     val name = ""
-    def perform(args: Map[String, Any], actionListOp: Option[List[tableActionBase]]): Any ={
-        val actionList = actionListOp.getOrElse(List(endAction()))
-        if(actionList.nonEmpty){
-            actionList.headOption.getOrElse(endAction()).perform(show(args), Some(actionList.tail))
-        } else {
-            show(args)
+    def perform(args: Map[String, Any], actionList: List[tableActionBase]): Any ={
+        actionList match {
+            case Nil => show(args)
+            case _ => actionList.headOption.getOrElse(endAction()).perform(show(args), actionList.tail)
         }
     }
 
@@ -44,7 +42,7 @@ abstract class tableStageAction extends tableActionBase{
 
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val showMap = args.asInstanceOf[Map[String, Any]]
-        stageClean(showMap, actionList.head.perform(stageReady(showMap), Some(actionList.tail)).asInstanceOf[Map[String, Any]])
+        stageClean(showMap, actionList.head.perform(stageReady(showMap), actionList.tail).asInstanceOf[Map[String, Any]])
     }
 
     def stageReady(args: Map[String, Any]): Map[String, Any]
@@ -55,7 +53,7 @@ abstract class tableStageAction extends tableActionBase{
 case class endAction() extends tableActionBase{
     override val name = "end"
 
-    override def perform(args: Map[String, Any], actionList: Option[List[tableActionBase]]): Any = {
+    override def perform(args: Map[String, Any], actionList:List[tableActionBase]): Any = {
         show(args)
     }
 

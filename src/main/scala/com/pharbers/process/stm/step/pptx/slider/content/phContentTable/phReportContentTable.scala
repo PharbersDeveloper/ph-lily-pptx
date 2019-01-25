@@ -44,3 +44,9 @@ class phCityMuchTimelineTableCommonTable extends phContentTableCommand{
             new phCityTableShowArgsAction() :: new phColAllValueAction :: new phCreatCityShowMuchTimelineTableAction() :: phPushTableAction() :: Nil
 
 }
+
+class phCityGPL1LineChartCommonTable extends phContentTableCommand{
+    val actionList: List[tableActionBase] = phJson2ModelAction() :: new phCityTableColArgsAction() ::
+            new phCityTableShowArgsAction() :: new phColGPL1TrendsValueAction() :: new phCreatCityShowTrendsTableAction() :: new phPushLinChartAction() :: Nil
+
+}
