@@ -30,11 +30,6 @@ class phMOVFilterImpl extends phFilter with phCommand {
         val js = args.asInstanceOf[JsValue]
         val name = (js \ "name").as[List[String]]
         val movSourceList = List("LLYProd", "Manufa", "ManufaMNC", "market", "DF_gen_search_set")
-
-//        val mapping2Market:DataFrame => DataFrame => DataFrame = markt => mapping => {
-//            markt.join(mapping, markt("ID") === mapping("ID"))
-//        }
-//        val mappingSourceList = List("movMktOne", "movMktTwo", "movMktThree")
         val getDF: String => DataFrame = str => {
             phLyFactory.getStorageWithDFName(str)
         }
@@ -55,5 +50,36 @@ class phCityFilterImpl extends phFilter with phCommand {
             .filter(col("CITY").isin(cityFilt: _*))
             .withColumn("DATE", formatYm(col("DATE")))
         source.select("CITY", "PRODUCT NAME", "PACK DES", "DATE", "TYPE", "ADD RATE", "DOT", "VALUE", "Display Name")
+    }
+}
+
+class phGlpFilterImpl extends phFilter with phCommand {
+    override def exec(args: Any): Any = {
+        val js = args.asInstanceOf[JsValue]
+        val name = (js \ "name").as[String]
+        val countryDataName = (js \ "countryDataName").as[String]
+        val shareDataName = (js \ "shareDataName").as[String]
+        val countryData = phLyFactory.getStorageWithDFName(countryDataName).filter(col("name") === name)
+            .withColumn("DATE", formatYm(col("DATE")))
+        val shareData = phLyFactory.getStorageWithDFName(shareDataName).select("TC_II", "TC_IV","DATE", "TYPE", "VALUE", "ADD RATE", "DOT", "CITY")
+            .withColumn("DATE", formatYm(col("DATE")))
+        Map(countryDataName -> countryData, shareDataName -> shareData)
+    }
+}
+
+class phGlpCityFilterImpl extends phFilter with phCommand {
+    override def exec(args: Any): Any = {
+        val js = args.asInstanceOf[JsValue]
+        val name = (js \ "name").as[String]
+        val cityFilt = (js \ "filt").as[String]
+        val countryDataName = (js \ "countryDataName").as[String]
+        val shareDataName = (js \ "shareDataName").as[String]
+        val countryData = phLyFactory.getStorageWithDFName(countryDataName).filter(col("CITY") === cityFilt)
+            .filter(col("name") === name)
+            .withColumn("DATE", formatYm(col("DATE")))
+        val shareData = phLyFactory.getStorageWithDFName(shareDataName).filter(col("CITY") === cityFilt)
+            .select("TC_II", "TC_IV","DATE", "TYPE", "VALUE", "ADD RATE", "DOT", "CITY")
+            .withColumn("DATE", formatYm(col("DATE")))
+        Map(countryDataName -> countryData, shareDataName -> shareData)
     }
 }
