@@ -30,9 +30,6 @@ trait phReadData extends java.io.Serializable {
         val hdfs = FileSystem.get(conf)
         val hdfsPath = new Path(path)
         val filePathlst = hdfs.listStatus(hdfsPath)
-        filePathlst.foreach{filePath =>
-        println("++++++++++++++++++++++++++++++++")
-        println(filePath.getPath.toString)}
         val rdd1 = filePathlst.map { filePath =>
             formatDF(filePath.getPath.toString)
         }
@@ -79,7 +76,6 @@ trait phReadData extends java.io.Serializable {
                     val offset = (idx - start) % step
                     val cal = Calendar.getInstance()
                     cal.setTime(dt)
-//                    cal.add(2 /*Month*/ , offset)
                     cal.add(2 /*Month*/ , offsetMap(monthType)(offset))
                     val cal_str = dt_f.format(cal.getTime)
                     val tt = if (idx < start + (cat - 1) * step) cat01
