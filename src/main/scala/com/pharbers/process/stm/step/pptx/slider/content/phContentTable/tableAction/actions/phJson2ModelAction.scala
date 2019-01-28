@@ -2,13 +2,18 @@ package com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAc
 
 import com.pharbers.process.common.jsonData._
 import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.{argsMapKeys, tableActionBase}
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
 trait phJson2Model {
     implicit val row = Json.format[row]
     implicit val col = Json.format[col]
     implicit val showDis = Json.format[phShowDisplayName]
-    implicit val phTable = Json.format[phTable]
+    implicit val tableFormat: Format[phTable] = ((__ \ "factory").format[String] and (__ \ "mkt_display").format[String] and
+            (__ \ "mkt_col").format[String] and (__ \ "pos").format[List[Int]] and (__ \ "timeline").format[List[String]] and
+            (__ \ "col").format[col] and (__ \ "row").format[row] and
+            (__ \ "show_display").formatNullable[List[phShowDisplayName]].inmap[List[phShowDisplayName]](o => o.getOrElse(Nil), s => Some(s)))(phTable.apply, unlift(phTable.unapply))
+
 
 }
 

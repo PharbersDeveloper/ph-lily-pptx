@@ -45,7 +45,7 @@ trait phReadGLP extends java.io.Serializable {
 
         val keyCount = this.primary.size
         val func_city: Row => String = row => {
-            row(this.primary.last).toString.replace("Hospital Audit", "").trim.toLowerCase()
+            row(this.primary.last).toString.replace("Hospital Audit", "").replace("Delta", "").trim.toLowerCase()
         }
         val func_all: Row => String = row => "default"
         val funcMap = Map(2 -> func_all, 3 -> func_city)

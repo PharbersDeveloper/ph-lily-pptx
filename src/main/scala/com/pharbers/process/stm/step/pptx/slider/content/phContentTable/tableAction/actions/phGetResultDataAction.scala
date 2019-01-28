@@ -5,7 +5,7 @@ import com.pharbers.process.common.jsonData.phTable
 import com.pharbers.process.common.phCommand
 import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.{argsMapKeys, tableActionBase}
 import com.pharbers.process.stm.step.pptx.slider.content._
-import com.pharbers.process.stm.step.pptx.slider.content.city.{citySom, phCityColAntiPart, phCityColStacked, phQuarterTableCol}
+import com.pharbers.process.stm.step.pptx.slider.content.city._
 import org.apache.spark.sql.DataFrame
 
 case class phColPrimaryValueAction() extends tableActionBase{
@@ -128,6 +128,21 @@ case class phGetColValueAction() extends tableActionBase {
     }
 }
 
+case class phGetGLP1ColValueAction() extends tableActionBase {
+    override val name: String = argsMapKeys.DATA
+
+    override def show(args: Map[String, Any]): Map[String, Any] = {
+        val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
+        val table = args(argsMapKeys.TABLE_MODEL).asInstanceOf[phTable]
+        val replaysDisplayMap = table.show_display.flatMap(x => x.col_display_name.map(m => Map(m -> x.show_display_name.split(":").head)))
+                .reduce(_ ++ _) ++ Map(colArgs.mktDisplayName -> colArgs.mktDisplayName)
+        val result = new phGlpShare().getValue(Map("data" -> colArgs.data, "allDisplayNames" ->  replaysDisplayMap.keys.toList, "colList" -> colArgs.colList,
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName,
+            "mktDisplayName" -> colArgs.mktDisplayName, "replaysDisplayMap" -> replaysDisplayMap))
+        args ++ Map(name -> result)
+    }
+}
+
 case class phGetAllColValueAction() extends tableActionBase {
     override val name: String = argsMapKeys.DATA
 
@@ -148,7 +163,8 @@ case class phColCityStackedPrimaryValueAction() extends tableActionBase{
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
         val table = args(argsMapKeys.TABLE_MODEL).asInstanceOf[phTable]
-        val replaysDisplayMap = table.show_display.flatMap(x => x.col_display_name.map(m => Map(m -> x.show_display_name.split(":").head))).reduce(_ ++ _)
+        val replaysDisplayMap = table.show_display.flatMap(x => x.col_display_name.map(m => Map(m -> x.show_display_name.split(":").head)))
+                .reduce(_ ++ _) ++ Map(colArgs.mktDisplayName -> colArgs.mktDisplayName)
         val cityList = args(argsMapKeys.CITY)
         //        val colMap = args(argsMapKeys.COL_COMMAND_MAP).asInstanceOf[Map[String, phCommand]]
         val result = new phCityColStacked().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,

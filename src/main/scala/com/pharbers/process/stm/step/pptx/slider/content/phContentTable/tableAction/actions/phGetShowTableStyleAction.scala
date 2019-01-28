@@ -312,7 +312,7 @@ case class phGetShowStackedTableBodyStyleAction() extends tableActionBase {
         val tableCells = args(argsMapKeys.TABLE_CELLS).asInstanceOf[tableCells]
         val cityList = args(argsMapKeys.CITY).asInstanceOf[List[String]]
         val phTable = args(argsMapKeys.TABLE_MODEL).asInstanceOf[phTable]
-        val showDisplayNameList = phTable.initOne(phTable.show_display.map(x => x.show_display_name).filter(x => x != tableShowArgs.mktDisplayName), Map())(phTable2Data.severCss).asInstanceOf[List[(String, String)]]
+        val showDisplayNameList = phTable.initOne(phTable.show_display.map(x => x.show_display_name), Map())(phTable2Data.severCss).asInstanceOf[List[(String, String)]]
         showDisplayNameList.zipWithIndex.foreach { case (displayNameAndCss, displayNameIndex) =>
             val rowIndex = displayNameIndex + 2
             val rowCss = displayNameAndCss._2

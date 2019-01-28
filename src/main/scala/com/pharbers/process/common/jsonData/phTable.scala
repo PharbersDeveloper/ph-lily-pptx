@@ -10,7 +10,7 @@ trait phTableTrait {
 }
 
 case class phTable(var factory: String, var mkt_display: String, var mkt_col: String, var pos: List[Int],
-                   var timeline: List[String], var col: col,  var row: row, var show_display: List[phShowDisplayName] = Nil) extends phTableTrait
+                   var timeline: List[String], var col: col,  var row: row, var show_display: List[phShowDisplayName]) extends phTableTrait
 
 case class col(var title: String, var count: List[String])
 
