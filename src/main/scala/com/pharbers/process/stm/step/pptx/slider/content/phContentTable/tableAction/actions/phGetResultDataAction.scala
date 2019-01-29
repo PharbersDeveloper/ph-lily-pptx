@@ -1,12 +1,13 @@
 package com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.actions
 
-import com.pharbers.process.common.DTO.tableColArgs
+import com.pharbers.process.common.DTO.{tableColArgs, tableShowArgs}
 import com.pharbers.process.common.jsonData.phTable
 import com.pharbers.process.common.phCommand
 import com.pharbers.process.stm.step.pptx.slider.content.phContentTable.tableAction.{argsMapKeys, tableActionBase}
 import com.pharbers.process.stm.step.pptx.slider.content._
 import com.pharbers.process.stm.step.pptx.slider.content.city._
 import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.functions._
 
 case class phColPrimaryValueAction() extends tableActionBase{
     override val name: String = argsMapKeys.DATA
@@ -170,5 +171,29 @@ case class phColCityStackedPrimaryValueAction() extends tableActionBase{
         val result = new phCityColStacked().exec(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
             "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "cityList" -> cityList, "replaysDisplayMap" -> replaysDisplayMap))
         args ++ Map(name -> result)
+    }
+}
+
+case class phGetRankColValueAction() extends tableActionBase {
+    override val name: String = argsMapKeys.DATA
+
+    override def show(args: Map[String, Any]): Map[String, Any] = {
+        val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
+
+        val result = new ().getValue(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "mktDisplayName" -> colArgs.mktDisplayName))
+        args ++ Map(name -> result)
+    }
+}
+
+case class phGetRankRowList() extends tableActionBase{
+    override val name: String = argsMapKeys.CITY
+
+    override def show(args: Map[String, Any]): Map[String, Any] = {
+        val result = args(argsMapKeys.DATA).asInstanceOf[DataFrame]
+        val showArgs = args(argsMapKeys.TABLE_SHOW_ARGS).asInstanceOf[tableShowArgs]
+        val cityLIst = result.select("CITY").collect().map(x => x.toString()).toList
+        showArgs.rowList = cityLIst.map(x => (x, ""))
+        args ++ Map(name -> cityLIst)
     }
 }

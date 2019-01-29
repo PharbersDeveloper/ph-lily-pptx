@@ -32,7 +32,7 @@ case class phPushTableAction() extends tableActionBase{
     }
 }
 
-class phPushLinChartAction() extends phPushTableAction{
+class phPushLineChartAction() extends phPushTableAction{
     override def pushExcel(socketDriver: phSocketDriver, jobId: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
         socketDriver.excel2Chart(jobId, tableName, pos, sliderIndex, "Line")
     }
@@ -41,5 +41,17 @@ class phPushLinChartAction() extends phPushTableAction{
 class phPushColumnStackedChartAction() extends phPushTableAction{
     override def pushExcel(socketDriver: phSocketDriver, jobId: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
         socketDriver.excel2Chart(jobId, tableName, pos, sliderIndex, "ColumnStacked")
+    }
+}
+
+class phPushBarStackedChartAction() extends phPushTableAction{
+    override def pushExcel(socketDriver: phSocketDriver, jobId: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
+        socketDriver.excel2Chart(jobId, tableName, pos, sliderIndex, "Bar100PercentStacked")
+    }
+}
+
+class phPushBarChartAction() extends phPushTableAction{
+    override def pushExcel(socketDriver: phSocketDriver, jobId: String, tableName: String, pos: List[Int], sliderIndex: Int): Unit = {
+        socketDriver.excel2Chart(jobId, tableName, pos, sliderIndex, "Bar")
     }
 }
