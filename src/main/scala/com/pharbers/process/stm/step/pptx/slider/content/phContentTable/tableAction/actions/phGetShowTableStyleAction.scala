@@ -404,6 +404,24 @@ case class phGetShowCityStackedTableBodyValueAction() extends tableActionBase {
     }
 }
 
+case class phGetShowCityRankStackedTableBodyValueAction() extends tableActionBase {
+    override val name: String = "put data value into table body"
+
+    override def show(args: Map[String, Any]): Map[String, Any] = {
+        val tableCells = args(argsMapKeys.TABLE_CELLS).asInstanceOf[tableCells]
+        val showAgrs = args(argsMapKeys.TABLE_SHOW_ARGS).asInstanceOf[tableShowArgs]
+        val dataFrame = args(argsMapKeys.DATA).asInstanceOf[RDD[(String, String, List[BigDecimal])]]
+        dataFrame.collect().foreach{case (city, _, som) =>
+            som.zip(showAgrs.rowList.map(x => x._1)).foreach{case (result, displayName) =>
+                val oneCell = tableCells.noValueCells.getOrElse((displayName, city, showAgrs.colList.head._1), cell("", "", "", Nil))
+                oneCell.setValue(result.toString)
+            }
+        }
+        tableCells.allReady()
+        args
+    }
+}
+
 case class phGetShowCityRankTableBodyValueAction() extends tableActionBase {
     override val name: String = "put data value into table body"
 
