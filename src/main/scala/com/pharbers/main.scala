@@ -13,7 +13,7 @@ object main extends App {
     println("jobid:" + jobid)
     val socketDriver = phSocketDriver()
     socketDriver.createPPT(jobid)
-//    phLyFactory.setSaveMidDoc
+    //    phLyFactory.setSaveMidDoc
     phLyFactory.getInstance("com.pharbers.process.flow.phBIFlowGenImpl").asInstanceOf[phCommand].exec(jobid)
     phLyFactory.endProcess
     println(new Date())
@@ -40,14 +40,6 @@ object main extends App {
 //    ppt.write(new FileOutputStream("dcs.pptx"))
 //}
 //
-//object test2 extends App with phReportTableCol{
-//    val ymstr = "RQ10 16"
-//    val ym = ymstr.substring(1).split(" ")
-//    val month = ym(0).replaceAll("\\D","").toInt
-//    val year = 2000 + ym(1).toInt
-//    val res = getymlst(List(), month, year, 3).map { str =>
-//        if (str.length == 7) str
-//        else "0" + str
-//    }
-//    println()
+//object test2 extends App {
+//
 //}

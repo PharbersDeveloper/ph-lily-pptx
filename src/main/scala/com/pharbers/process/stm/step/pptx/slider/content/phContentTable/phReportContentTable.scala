@@ -43,7 +43,7 @@ class phCityStackedChartCommonTable extends phContentTableCommand{
 //todo: 计算需要先rank
 class phCityRankBarStackedChartCommonTable extends phContentTableCommand{
     val actionList: List[tableActionBase] = phCityStackedJson2ModelAction() :: new phCityTableColArgsAction() ::
-            new phCityTableShowArgsAction() :: new phColStackedValueAction() :: new phCreatCityShowStackedTableAction() :: new phPushBarStackedChartAction() :: Nil
+            new phCityTableShowArgsAction() :: new phColRankStackedValueAction() :: new phCreatCityShowRankStackedTableAction() :: new phPushBarStackedChartAction() :: Nil
 
 }
 
