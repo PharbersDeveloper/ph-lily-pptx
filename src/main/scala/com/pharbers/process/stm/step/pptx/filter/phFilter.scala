@@ -85,11 +85,15 @@ class phGlpCityFilterImpl extends phFilter with phCommand {
 }
 
 class phCityRankFilterImpl extends phFilter with phCommand {
-    override def exec(args: Any): DataFrame = {
+    override def exec(args: Any): Any = {
         val js = args.asInstanceOf[JsValue]
+        val countryDataName: String = (js \ "countryDataName").as[String]
+        val shareDataName: String = (js \ "shareDataName").as[String]
         val name = (js \ "name").as[String]
-        val source = phLyFactory.getStorageWithDFName("DF_gen_city_search_set").filter(col("name") === name)
+        val countryData = phLyFactory.getStorageWithDFName(countryDataName).filter(col("name") === name)
+                .withColumn("DATE", formatYm(col("DATE")))
+        val shareData = phLyFactory.getStorageWithDFName(shareDataName).filter(col("name") === name)
             .withColumn("DATE", formatYm(col("DATE")))
-        source
+        Map(countryDataName -> countryData, shareDataName -> shareData)
     }
 }

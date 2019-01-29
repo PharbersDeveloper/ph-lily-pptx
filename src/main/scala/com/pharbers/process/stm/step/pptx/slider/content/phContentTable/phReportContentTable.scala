@@ -29,13 +29,21 @@ class phCityTrendsTableCommonTable extends phContentTableCommand{
 
 class phCityLineChartCommonTable extends phContentTableCommand{
     val actionList: List[tableActionBase] = phJson2ModelAction() :: new phCityTableColArgsAction() ::
-            new phCityTableShowArgsAction() :: new phColTrendsValueAction :: new phCreatCityShowTrendsTableAction() :: new phPushLinChartAction() :: Nil
+            new phCityTableShowArgsAction() :: new phColTrendsValueAction :: new phCreatCityShowTrendsTableAction() :: new phPushLineChartAction() :: Nil
 
 }
 
 class phCityStackedChartCommonTable extends phContentTableCommand{
     val actionList: List[tableActionBase] = phCityStackedJson2ModelAction() :: new phCityTableColArgsAction() ::
             new phCityTableShowArgsAction() :: new phColStackedValueAction() :: new phCreatCityShowStackedTableAction() :: new phPushColumnStackedChartAction() :: Nil
+
+}
+
+
+//todo: 计算需要先rank
+class phCityRankBarStackedChartCommonTable extends phContentTableCommand{
+    val actionList: List[tableActionBase] = phCityStackedJson2ModelAction() :: new phCityTableColArgsAction() ::
+            new phCityTableShowArgsAction() :: new phColStackedValueAction() :: new phCreatCityShowStackedTableAction() :: new phPushBarStackedChartAction() :: Nil
 
 }
 
@@ -47,6 +55,12 @@ class phCityMuchTimelineTableCommonTable extends phContentTableCommand{
 
 class phCityGPL1LineChartCommonTable extends phContentTableCommand{
     val actionList: List[tableActionBase] = phJson2ModelAction() :: new phCityTableColArgsAction() ::
-            new phCityTableShowArgsAction() :: new phColGPL1TrendsValueAction() :: new phCreatCityShowTrendsTableAction() :: new phPushLinChartAction() :: Nil
+            new phCityTableShowArgsAction() :: new phColGPL1TrendsValueAction() :: new phCreatCityShowTrendsTableAction() :: new phPushLineChartAction() :: Nil
+
+}
+
+class phCityRankChartCommonTable extends phContentTableCommand{
+    val actionList: List[tableActionBase] = phJson2ModelAction() :: new phCityTableColArgsAction() ::
+            new phCityTableShowArgsAction() :: new phColRankValueAction :: new phCreatCityShowRankTableAction() :: new phPushBarChartAction() :: Nil
 
 }
