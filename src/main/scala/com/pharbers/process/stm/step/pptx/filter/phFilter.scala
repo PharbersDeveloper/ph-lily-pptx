@@ -29,7 +29,7 @@ class phMOVFilterImpl extends phFilter with phCommand {
     override def exec(args: Any): Any = {
         val js = args.asInstanceOf[JsValue]
         val name = (js \ "name").as[List[String]]
-        val movSourceList = List("LLYProd", "Manufa", "ManufaMNC", "market", "DF_gen_search_set")
+        val movSourceList = List("LLYProd", "Manufa", "ManufaMNC", "market", "DF_gen_search_set", "DF_gen_city_search_set")
         val getDF: String => DataFrame = str => {
             phLyFactory.getStorageWithDFName(str)
         }
