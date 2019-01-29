@@ -13,7 +13,7 @@ object main extends App {
     println("jobid:" + jobid)
     val socketDriver = phSocketDriver()
     socketDriver.createPPT(jobid)
-//    phLyFactory.setSaveMidDoc
+    //    phLyFactory.setSaveMidDoc
     phLyFactory.getInstance("com.pharbers.process.flow.phBIFlowGenImpl").asInstanceOf[phCommand].exec(jobid)
     phLyFactory.endProcess
     println(new Date())
@@ -40,14 +40,80 @@ object main extends App {
 //    ppt.write(new FileOutputStream("dcs.pptx"))
 //}
 //
-//object test2 extends App with phReportTableCol{
-//    val ymstr = "RQ10 16"
-//    val ym = ymstr.substring(1).split(" ")
-//    val month = ym(0).replaceAll("\\D","").toInt
-//    val year = 2000 + ym(1).toInt
-//    val res = getymlst(List(), month, year, 3).map { str =>
-//        if (str.length == 7) str
-//        else "0" + str
-//    }
-//    println()
-//}
+object test2 extends App {
+    val a = Array(1,2)
+    val b = Array(-1,3)
+    println(getValue(a,b))
+    def getValue(nums1: Array[Int], nums2: Array[Int]): Double = {
+        val length = nums1.length + nums2.length
+        var  resultIndex: List[Int] = Nil
+        var result: List[Int] = Nil
+        if (length % 2 == 1) {
+            resultIndex = List(length / 2)
+        } else {
+            resultIndex = List(length / 2, length / 2 - 1)
+        }
+        val ints1 = nums1
+        val ints2 = nums2
+        var index1 = ints1.length / 2
+        var index2 = ints2.length / 2
+        while (resultIndex.nonEmpty) {
+            val nums1InNums2Index = getIndexInNum2(ints1(index1), ints2, ints2.length / 2)
+            val nums2InNums1Index = getIndexInNum1(ints2(index2), ints1, ints1.length / 2)
+            if (resultIndex.contains(nums1InNums2Index + index1)) {
+                result = result :+ ints1(index1)
+                resultIndex = resultIndex.filter(x => x != nums1InNums2Index + index1)
+            }
+            if (resultIndex.contains(nums2InNums1Index + index2)) {
+                result = result :+ ints2(index2)
+                resultIndex = resultIndex.filter(x => x != nums2InNums1Index + index2)
+            }
+            index1 = (nums2InNums1Index + index1) / 2
+            index2 = (index2 + nums1InNums2Index) / 2
+        }
+        result.sum.toDouble / result.length
+    }
+
+    def getOneNumsValue(nums: Array[Int]): Double = {
+        val length = nums.length
+        var  resultIndex: List[Int] = Nil
+        var result: List[Int] = Nil
+        if (length % 2 == 1) {
+            resultIndex = List(length / 2)
+        } else {
+            resultIndex = List(length / 2, length / 2 - 1)
+        }
+        result = resultIndex.map(x => nums(x))
+        result.sum.toDouble / result.length
+    }
+
+    def getIndexInNum2(num: Int, nums: Array[Int], index: Int): Int = {
+        if (index > nums.length - 1) return nums.length
+
+        if (nums(index) < num && (index == nums.length - 1 || num <= nums(index + 1))) {
+            return index + 1
+        }
+        if (index <= 0) return 0
+        if (nums(index) <= num) {
+            getIndexInNum2(num, nums, (index + nums.length) / 2)
+        } else {
+            getIndexInNum2(num, nums, (-1 + index) / 2)
+        }
+
+    }
+
+    def getIndexInNum1(num: Int, nums: Array[Int], index: Int): Int = {
+        if (index > nums.length - 1) return nums.length
+
+        if (nums(index) <= num && (index == nums.length - 1 || num < nums(index + 1))) {
+            return index + 1
+        }
+        if (index <= 0) return 0
+        if (nums(index) <= num) {
+            getIndexInNum2(num, nums, (index + nums.length) / 2)
+        } else {
+            getIndexInNum2(num, nums, (-1 + index) / 2)
+        }
+
+    }
+}

@@ -45,6 +45,20 @@ class phColStackedValueAction extends phColValueAction {
     override val actionList: List[tableActionBase] = phGetColCityStackedCommandMapAction() :: phColCityStackedPrimaryValueAction() :: phColCityStackedOtherValueAction() :: Nil
 }
 
+class phColRankStackedValueAction extends phColValueAction {
+    override def stageReady(args: Map[String, Any]): Map[String, Any] = {
+        Map(argsMapKeys.DATA -> args(argsMapKeys.DATA),
+            argsMapKeys.TABLE_COL_ARGS -> args(argsMapKeys.TABLE_COL_ARGS),
+            argsMapKeys.CITY -> args(argsMapKeys.CITY),
+            argsMapKeys.TABLE_MODEL -> args(argsMapKeys.TABLE_MODEL))
+    }
+
+    override def stageClean(args: Map[String, Any], argsNew: Map[String, Any]): Map[String, Any] = {
+        args ++ Map(argsMapKeys.DATA -> argsNew(argsMapKeys.DATA),argsMapKeys.CITY -> argsNew(argsMapKeys.CITY) )
+    }
+    override val actionList: List[tableActionBase] = phGetRankColValueAction()  :: phGetRankStackedColValueAction() :: Nil
+}
+
 class phColRankValueAction extends phColValueAction {
     override def stageReady(args: Map[String, Any]): Map[String, Any] = {
         Map(argsMapKeys.DATA -> args(argsMapKeys.DATA),

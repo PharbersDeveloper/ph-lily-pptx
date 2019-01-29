@@ -191,10 +191,25 @@ case class phGetRankRowList() extends tableActionBase{
     override val name: String = argsMapKeys.CITY
 
     override def show(args: Map[String, Any]): Map[String, Any] = {
-        val result = args(argsMapKeys.DATA).asInstanceOf[DataFrame]
+        val data = args(argsMapKeys.DATA).asInstanceOf[DataFrame]
         val showArgs = args(argsMapKeys.TABLE_SHOW_ARGS).asInstanceOf[tableShowArgs]
-        val cityLIst = result.select("CITY").collect().map(x => x.toSeq.head.toString).toList
+        val cityLIst = data.select("CITY").collect().map(x => x.toSeq.head.toString).toList
         showArgs.rowList = cityLIst.map(x => (x, ""))
         args ++ Map(name -> cityLIst)
+    }
+}
+
+case class phGetRankStackedColValueAction() extends tableActionBase {
+    override val name: String = argsMapKeys.DATA
+
+    override def show(args: Map[String, Any]): Map[String, Any] = {
+        val data = args(argsMapKeys.DATA).asInstanceOf[DataFrame]
+        val cityLIst = data.select("CITY").collect().map(x => x.toSeq.head.toString).toList
+        val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
+        val dataMap = colArgs.data.asInstanceOf[Map[String, Any]]
+        val result = new phCityRank().exec(Map("countryData" -> dataMap("DF_gen_search_set"), "cityData" -> dataMap("DF_gen_city_search_set"),
+            "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList, "cityList" -> cityLIst,
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "mktDisplayName" -> colArgs.mktDisplayName))
+        args ++ Map(name -> result, argsMapKeys.CITY -> cityLIst)
     }
 }
