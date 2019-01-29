@@ -59,7 +59,7 @@ class phCreatCityShowRankStackedTableAction() extends phCreatShowTableAction{
     }
 
     override val actionList: List[tableActionBase] = phGetData2CellValueMapAction() :: phGetCityShowStackedTableHeadStyleAction() ::
-            phGetShowStackedTableBodyStyleAction() :: phGetShowCityRankStackedTableBodyValueAction() :: Nil
+            phGetShowRankStackedTableBodyStyleAction() :: phGetShowCityRankStackedTableBodyValueAction() :: Nil
 }
 
 class phCreatCityShowRankTableAction() extends phCreatShowTableAction{

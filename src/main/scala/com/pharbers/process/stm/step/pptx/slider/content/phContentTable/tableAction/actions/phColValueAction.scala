@@ -56,7 +56,7 @@ class phColRankStackedValueAction extends phColValueAction {
     override def stageClean(args: Map[String, Any], argsNew: Map[String, Any]): Map[String, Any] = {
         args ++ Map(argsMapKeys.DATA -> argsNew(argsMapKeys.DATA),argsMapKeys.CITY -> argsNew(argsMapKeys.CITY) )
     }
-    override val actionList: List[tableActionBase] = phGetRankColValueAction()  :: phGetRankStackedColValueAction() :: Nil
+    override val actionList: List[tableActionBase] = phGetRankColValueAction() :: phGetRankStackedColValueAction() :: Nil
 }
 
 class phColRankValueAction extends phColValueAction {

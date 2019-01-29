@@ -326,6 +326,42 @@ case class phGetShowStackedTableBodyStyleAction() extends tableActionBase {
     }
 }
 
+case class phGetShowRankStackedTableBodyStyleAction() extends tableActionBase {
+    override val name: String = "get show table body style"
+
+    override def show(args: Map[String, Any]): Map[String, Any] = {
+        val tableShowArgs = args(argsMapKeys.TABLE_SHOW_ARGS).asInstanceOf[tableShowArgs]
+        val tableCells = args(argsMapKeys.TABLE_CELLS).asInstanceOf[tableCells]
+        val cityList = args(argsMapKeys.CITY).asInstanceOf[List[String]]
+        tableShowArgs.rowList.zipWithIndex.foreach { case (displayNameAndCss, displayNameIndex) =>
+            val rowIndex = displayNameIndex + 2
+            val rowCss = displayNameAndCss._2
+            val displayName = displayNameAndCss._1
+            val displayNemeCellIndex = "A" + rowIndex.toString
+            val rowTitleCss = tableShowArgs.rowTitle._2
+            //            addCell(jobid, tableName, "A" + rowIndex.toString, displayName, "String", List(rowTitle._2, rowCss))
+            tableCells.readyCells = tableCells.readyCells :+ s"#c#$displayNemeCellIndex#v#$displayName#t#String#s#$rowTitleCss*$rowCss"
+
+            cityList.zipWithIndex.foreach { case (city, cityIndex) =>
+                //                val timeline = timelineAndCss._1
+                //                val timelineCss = timelineAndCss._2
+                tableShowArgs.colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+                    val colName = tableShowArgs.col2DataColMap.getOrElse(colNameAndCss._1, colNameAndCss._1).replaceAll(" in[\\s\\S]*", "")
+                    val data2ValueMap = args(argsMapKeys.DATA_2_Cell_VALUE_MAP).asInstanceOf[Map[String, String => String]]
+                    val data2Value = data2ValueMap.getOrElse(colNameAndCss._1, data2ValueMap("DOT"))
+                    val colCss = colNameAndCss._2
+                    val colIndex = tableShowArgs.colList.size * cityIndex + colNameIndex + 1
+                    val cellIndex = (colIndex + 65).toChar.toString + rowIndex.toString
+                    //                    cellMap = cellMap ++ Map((displayName, timeline, colName) -> (cell(jobid, tableName, cellIndex, "", "Number", List(colCss, rowCss)), data2Value))
+                    tableCells.noValueCells = tableCells.noValueCells ++
+                            Map((displayName, city, colName) -> cell(cellIndex, "", "Number", List(colCss, rowCss), data2Value))
+                }
+            }
+        }
+        args
+    }
+}
+
 //value
 
 case class phGetShowTableBodyValueAction() extends tableActionBase {
@@ -409,11 +445,11 @@ case class phGetShowCityRankStackedTableBodyValueAction() extends tableActionBas
 
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val tableCells = args(argsMapKeys.TABLE_CELLS).asInstanceOf[tableCells]
-        val showAgrs = args(argsMapKeys.TABLE_SHOW_ARGS).asInstanceOf[tableShowArgs]
+        val showArgs = args(argsMapKeys.TABLE_SHOW_ARGS).asInstanceOf[tableShowArgs]
         val dataFrame = args(argsMapKeys.DATA).asInstanceOf[RDD[(String, String, List[BigDecimal])]]
         dataFrame.collect().foreach{case (city, _, som) =>
-            som.zip(showAgrs.rowList.map(x => x._1)).foreach{case (result, displayName) =>
-                val oneCell = tableCells.noValueCells.getOrElse((displayName, city, showAgrs.colList.head._1), cell("", "", "", Nil))
+            som.zip(showArgs.rowList.map(x => x._1)).foreach{case (result, displayName) =>
+                val oneCell = tableCells.noValueCells.getOrElse((displayName, city, "SOM"), cell("", "", "", Nil))
                 oneCell.setValue(result.toString)
             }
         }

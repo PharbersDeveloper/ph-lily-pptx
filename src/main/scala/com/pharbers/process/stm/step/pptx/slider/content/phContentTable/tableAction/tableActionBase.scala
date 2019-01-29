@@ -14,6 +14,7 @@ object argsMapKeys{
     val COL_TITLE = "colTitle"
     val COL_2_DATA_COL_MAP = "col2DataColMap"
     val DATA = "data"
+    val RANK_DATA = "rankData"
     val JOB_ID = "jobid"
     val POS = "pos"
     val SLIDE_INDEX = "slideIndex"
