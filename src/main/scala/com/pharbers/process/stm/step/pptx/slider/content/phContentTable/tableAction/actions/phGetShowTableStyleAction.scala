@@ -414,10 +414,9 @@ case class phGetShowCityRankTableBodyValueAction() extends tableActionBase {
 
         dataFrame.collect().foreach(x => {
             val row = x.toSeq.zip(dataColNames).toList
-            val timeline = row.find(x => x._2.equals("TIMELINE")).get._1.toString
             val city = row.find(x => x._2.equals("CITY")).get._1.toString
             row.foreach(x => {
-                val oneCell = tableCells.noValueCells.getOrElse((city, timeline, x._2), cell("", "", "", Nil))
+                val oneCell = tableCells.noValueCells.getOrElse((city, "0", x._2), cell("", "", "", Nil))
                 oneCell.setValue(x._1.toString)
             })
         })

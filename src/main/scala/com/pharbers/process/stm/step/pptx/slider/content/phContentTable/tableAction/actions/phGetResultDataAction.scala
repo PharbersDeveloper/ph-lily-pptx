@@ -179,8 +179,9 @@ case class phGetRankColValueAction() extends tableActionBase {
 
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
-
-        val result = new ().getValue(Map("data" -> colArgs.data, "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+        val dataMap = colArgs.data.asInstanceOf[Map[String, Any]]
+        val result = new phCityRank().exec(Map("countryData" -> dataMap("DF_gen_search_set"), "cityData" -> dataMap("DF_gen_city_search_set"),
+            "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
             "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "mktDisplayName" -> colArgs.mktDisplayName))
         args ++ Map(name -> result)
     }
@@ -192,7 +193,7 @@ case class phGetRankRowList() extends tableActionBase{
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val result = args(argsMapKeys.DATA).asInstanceOf[DataFrame]
         val showArgs = args(argsMapKeys.TABLE_SHOW_ARGS).asInstanceOf[tableShowArgs]
-        val cityLIst = result.select("CITY").collect().map(x => x.toString()).toList
+        val cityLIst = result.select("CITY").collect().map(x => x.toSeq.head.toString).toList
         showArgs.rowList = cityLIst.map(x => (x, ""))
         args ++ Map(name -> cityLIst)
     }
