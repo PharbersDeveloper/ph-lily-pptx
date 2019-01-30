@@ -214,3 +214,18 @@ case class phGetRankStackedColValueAction() extends tableActionBase {
         args ++ Map(name -> result, argsMapKeys.CITY -> cityLIst)
     }
 }
+
+case class phGetYOYColValueAction() extends tableActionBase {
+    override val name: String = argsMapKeys.DATA
+
+    override def show(args: Map[String, Any]): Map[String, Any] = {
+        val data = args(argsMapKeys.DATA).asInstanceOf[DataFrame]
+        val cityLIst = args(argsMapKeys.CITY).asInstanceOf[List[String]] ::: data.select("CITY").collect().map(x => x.toSeq.head.toString).toList
+        val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
+        val dataMap = colArgs.data.asInstanceOf[Map[String, Any]]
+        val result = new phCityMixGrowth().exec(Map("countryData" -> dataMap("DF_gen_search_set"), "cityData" -> dataMap("DF_gen_city_search_set"),
+            "allDisplayNames" -> colArgs.displayNameList.filter(x => x != colArgs.mktDisplayName), "colList" -> colArgs.colList, "cityList" -> cityLIst, "Total CHPA" -> cityLIst.head,
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "mktDisplayName" -> colArgs.mktDisplayName))
+        args ++ Map(name -> result, argsMapKeys.CITY -> cityLIst)
+    }
+}

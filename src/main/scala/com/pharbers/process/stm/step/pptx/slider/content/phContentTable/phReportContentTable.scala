@@ -39,8 +39,6 @@ class phCityStackedChartCommonTable extends phContentTableCommand{
 
 }
 
-
-//todo: 计算需要先rank
 class phCityRankBarStackedChartCommonTable extends phContentTableCommand{
     val actionList: List[tableActionBase] = phCityStackedJson2ModelAction() :: new phCityTableColArgsAction() ::
             new phCityTableShowArgsAction() :: new phColRankStackedValueAction() :: new phCreatCityShowRankStackedTableAction() :: new phPushBarStackedChartAction() :: Nil
@@ -62,5 +60,11 @@ class phCityGPL1LineChartCommonTable extends phContentTableCommand{
 class phCityRankChartCommonTable extends phContentTableCommand{
     val actionList: List[tableActionBase] = phJson2ModelAction() :: new phCityTableColArgsAction() ::
             new phCityTableShowArgsAction() :: new phColRankValueAction :: new phCreatCityShowRankTableAction() :: new phPushBarChartAction() :: Nil
+
+}
+
+class phCityRankYOYCommonTable extends phContentTableCommand{
+    val actionList: List[tableActionBase] = phCityStackedJson2ModelAction() :: new phCityTableColArgsAction() ::
+            new phCityTableShowArgsAction() :: new phColRankYOYValueAction :: new phCreatCityShowRankYOYTableAction() :: phPushTableAction() :: Nil
 
 }
