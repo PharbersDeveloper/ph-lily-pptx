@@ -12,12 +12,12 @@ class phCityInsulinStacked extends phCommand with phCityRankValue {
         val mid_sum_Map = getAllDF(args)
         val country_mid_sum = mid_sum_Map("country_mid_sum").asInstanceOf[RDD[((String, String), phLycalData)]]
         val city_mid_sum = mid_sum_Map("city_mid_sum").asInstanceOf[RDD[((String, String, String), phLycalData)]]
-        val lenth = displayNameList.size
+        val displayNameSize = displayNameList.size
         val cityResult = city_mid_sum.filter(x => cityList.contains(x._1._1))
             .map{ x =>
                 val displayNameIndex = displayNameList.indexOf(x._1._3)
                 ((x._1._2, List.fill(displayNameIndex)(BigDecimal(0)) ::: List(x._2.result) :::
-                    List.fill(lenth-displayNameIndex-1)(BigDecimal(0))), x._2)
+                    List.fill(displayNameSize-displayNameIndex-1)(BigDecimal(0))), x._2)
             }.keyBy(x => (x._2.id, x._1._1))
             .reduceByKey{ (left, right) =>
                 val valueList = left._1._2.zip(right._1._2).map(x => x._1 + x._2)
@@ -27,11 +27,10 @@ class phCityInsulinStacked extends phCommand with phCityRankValue {
                 val somList = x._2._1._2.map(_/toalValue)
                 (x._1._1, x._2._1._1, somList)
             }
-//        x.display_name, timeline
         val countryResult = country_mid_sum.map{x =>
             val displayNameIndex = displayNameList.indexOf(x._1._1)
             ((x._1._2, List.fill(displayNameIndex)(BigDecimal(0)) ::: List(x._2.result) :::
-                List.fill(lenth-displayNameIndex-1)(BigDecimal(0))), x._2)
+                List.fill(displayNameSize-displayNameIndex-1)(BigDecimal(0))), x._2)
             }.keyBy(x => x._1._1)
             .reduceByKey{ (left, right) =>
                 val valueList = left._1._2.zip(right._1._2).map(x => x._1 + x._2)
