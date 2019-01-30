@@ -197,7 +197,6 @@ class phQuarterTableCol extends Serializable {
         val funcMap: Map[String, RDD[(String, List[BigDecimal])] => RDD[(String, List[String])]] =
             Map("som" -> func_som, "Growth(%)" -> func_growth)
         val result = funcMap(valueType)(mid_sum)
-        result.take(20).foreach(println)
         result
     }
 }

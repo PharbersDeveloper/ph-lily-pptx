@@ -11,9 +11,9 @@ class phCityRank extends phCommand with phCityRankValue {
         val country_mid_sum = mid_sum_Map("country_mid_sum").asInstanceOf[RDD[((String, String), phLycalData)]]
         val city_mid_sum = mid_sum_Map("city_mid_sum").asInstanceOf[RDD[((String, String, String), phLycalData)]]
         val mktDisplayNameSum = country_mid_sum.filter(x => x._1._1 == mktDisplayName)
-                .map(x => x._2.result).sum()
+            .map(x => x._2.result).sum()
         val resultList = city_mid_sum.filter(x => x._1._3 == mktDisplayName)
-                .map(x => (x._2.id, x._1._2, (x._2.result / mktDisplayNameSum) *100))
+            .map(x => (x._2.id, x._1._2, (x._2.result / mktDisplayNameSum) *100))
             .sortBy(x => -x._3)
         lazy val sparkDriver: phSparkDriver = phLyFactory.getCalcInstance()
         import sparkDriver.ss.implicits._
