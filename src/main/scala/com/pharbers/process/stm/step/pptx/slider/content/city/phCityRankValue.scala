@@ -12,7 +12,16 @@ trait phCityRankValue extends phReportTableCol{
         val timelineList = argsMap("timelineList").asInstanceOf[List[String]]
         val displayNamelList: List[String] = argsMap("allDisplayNames").asInstanceOf[List[String]]
         val primaryValueName: String = argsMap("primaryValueName").asInstanceOf[String]
-        val allTimelst: List[String] = timelineList.map { timeline =>
+        val colList: List[String] = argsMap("colList").asInstanceOf[List[String]]
+        val headstr = timelineList.head.dropRight(5)
+        val valueType = colList.head
+        //需要计算出真正的所有timeline
+        val allTimelineList: List[String] = if (colList.contains("Growth(%)")) {
+            getAllTimeline(timelineList)
+        } else {
+            timelineList
+        }
+        val allTimelst: List[String] = allTimelineList.map { timeline =>
             val startYm: String = getStartYm(timeline)
             val ymMap = getTimeLineYm(timeline)
             val month = ymMap("month").toString.length match {
@@ -41,7 +50,7 @@ trait phCityRankValue extends phReportTableCol{
             .filter(x => x.date >= allTimelst.min)
             .filter(x => x.date <= allTimelst.max)
             .filter(x => funcFileter(primaryValueName)(x))
-        val city_mid_sum = timelineList.map { timeline =>
+        val city_mid_sum = allTimelineList.map { timeline =>
             val startYm: String = getStartYm(timeline)
             val ymMap = getTimeLineYm(timeline)
             val month = ymMap("month").toString.length match {
@@ -67,7 +76,7 @@ trait phCityRankValue extends phReportTableCol{
                     left
                 }
         }.reduce((rdd1, rdd2) => rdd1.union(rdd2))
-        val country_mid_sum = timelineList.map { timeline =>
+        val country_mid_sum = allTimelineList.map { timeline =>
             val startYm: String = getStartYm(timeline)
             val ymMap = getTimeLineYm(timeline)
             val month = ymMap("month").toString.length match {
