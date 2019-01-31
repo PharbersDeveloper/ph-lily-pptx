@@ -187,6 +187,18 @@ case class phGetRankColValueAction() extends tableActionBase {
     }
 }
 
+case class phGetYOYRankColValueAction() extends tableActionBase {
+    override val name: String = argsMapKeys.DATA
+
+    override def show(args: Map[String, Any]): Map[String, Any] = {
+        val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
+        val dataMap = colArgs.data.asInstanceOf[Map[String, Any]]
+        val result = new phCityRank().exec(Map("countryData" -> dataMap("DF_gen_search_set"), "cityData" -> dataMap("DF_gen_city_search_set"),
+            "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList,
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "mktDisplayName" -> colArgs.displayNameList.head))
+        args ++ Map(name -> result)
+    }
+}
 
 case class phGetRankRowList() extends tableActionBase{
     override val name: String = argsMapKeys.CITY
@@ -224,7 +236,7 @@ case class phGetYOYColValueAction() extends tableActionBase {
         val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
         val dataMap = colArgs.data.asInstanceOf[Map[String, Any]]
         val result = new phCityMixGrowth().exec(Map("countryData" -> dataMap("DF_gen_search_set"), "cityData" -> dataMap("DF_gen_city_search_set"),
-            "allDisplayNames" -> colArgs.displayNameList.filter(x => x != colArgs.mktDisplayName), "colList" -> colArgs.colList, "cityList" -> cityLIst, "Total CHPA" -> cityLIst.head,
+            "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList, "cityList" -> cityLIst, "Total CHPA" -> cityLIst.head,
             "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "mktDisplayName" -> colArgs.mktDisplayName))
         args ++ Map(name -> result, argsMapKeys.CITY -> cityLIst)
     }
