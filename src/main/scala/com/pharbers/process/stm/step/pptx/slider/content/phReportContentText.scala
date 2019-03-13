@@ -2,6 +2,7 @@ package com.pharbers.process.stm.step.pptx.slider.content
 
 import com.pharbers.phsocket.phSocketDriver
 import com.pharbers.process.common.{phCommand, phLyFactory}
+import com.pharbers.process.stm.step.pptx.slider.content.phContentText.overview.prodSomInChpa
 import play.api.libs.json.JsValue
 
 trait phReportContentText {
