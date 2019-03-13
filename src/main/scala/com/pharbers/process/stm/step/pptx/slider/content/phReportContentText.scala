@@ -1,11 +1,15 @@
 package com.pharbers.process.stm.step.pptx.slider.content
 
 import com.pharbers.phsocket.phSocketDriver
+import com.pharbers.process.common.jsonData.phText
 import com.pharbers.process.common.{phCommand, phLyFactory}
 import play.api.libs.json.JsValue
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
 trait phReportContentText {
     val socketDriver = phSocketDriver()
+    implicit val textFormat: Format[phText] = Json.format[phText]
 }
 
 class phReportContentTextImpl extends phReportContentText with phCommand {
@@ -23,12 +27,14 @@ class phReportContentTextImpl extends phReportContentText with phCommand {
             }).mkString("")
 
             val data = argMap("data").asInstanceOf[Map[String, Any]]((x \ "match" \ "data").as[String])
-            val contentMap = phLyFactory.getInstance((x \ "match" \ "factory").as[String]).asInstanceOf[phCommand].exec(
-                Map("name" -> (x \ "match" \ "name").as[List[String]], "data" -> data, "timeline" -> phReportContentTable.time2timeLine((x \ "match" \ "timeline").as[String]))
-            ).asInstanceOf[Map[String, String]]
-            (x \ "match" \ "name").as[List[String]].foreach(x => {
-                content = content.replace(s"#$x#", contentMap(x))
+            (x \ "match").as[List[JsValue]].foreach(x => {
+                val textMode = x.as[phText]
+                val contentMap = phLyFactory.getInstance(textMode.factory).asInstanceOf[phCommand].exec(textMode).asInstanceOf[Map[String, Double]]
+                textMode.name.foreach(x => {
+                    content = content.replace(s"#$x#", contentMap(x).toString)
+                })
             })
+
             socketDriver.createTitle(jobid, content, (x \ "pos").as[List[Int]].map(x => (x / 0.000278).toInt), slideIndex, "")
         })
     }
