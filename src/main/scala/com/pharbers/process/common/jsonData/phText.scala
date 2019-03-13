@@ -1,5 +1,4 @@
 package com.pharbers.process.common.jsonData
 
-class phText {
-
-}
+case class phText(factory: String, data: String, timeline: String, name: List[String], colList: List[String], primaryValueName: String,
+                  valueType: String, valueID: String)
