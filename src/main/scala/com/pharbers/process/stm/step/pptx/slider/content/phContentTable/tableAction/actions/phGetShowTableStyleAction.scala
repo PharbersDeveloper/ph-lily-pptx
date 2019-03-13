@@ -387,19 +387,19 @@ case class phGetShowNoDisplayNameTableBodyStyleAction() extends tableActionBase 
         val tableShowArgs = args(argsMapKeys.TABLE_SHOW_ARGS).asInstanceOf[tableShowArgs]
         val tableCells = args(argsMapKeys.TABLE_CELLS).asInstanceOf[tableCells]
         val cityList = args(argsMapKeys.CITY).asInstanceOf[List[String]]
+        val displayName = tableShowArgs.rowList.head._1
+        val rowCss = tableShowArgs.rowList.head._2
         cityList.zipWithIndex.foreach { case (city, cityIndex) =>
-            tableShowArgs.rowList.foreach { case (displayName, rowCss) =>
-                tableShowArgs.colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
-                    val colName = tableShowArgs.col2DataColMap.getOrElse(colNameAndCss._1, colNameAndCss._1).replaceAll(" in[\\s\\S]*", "")
-                    val data2ValueMap = args(argsMapKeys.DATA_2_Cell_VALUE_MAP).asInstanceOf[Map[String, String => String]]
-                    val data2Value = data2ValueMap.getOrElse(colNameAndCss._1, data2ValueMap("DOT"))
-                    val colCss = colNameAndCss._2
-                    val colIndex = colNameIndex + 1
-                    val cellIndex = (colIndex + 64).toChar.toString + (cityIndex + 2).toString
-                    //                    cellMap = cellMap ++ Map((displayName, timeline, colName) -> (cell(jobid, tableName, cellIndex, "", "Number", List(colCss, rowCss)), data2Value))
-                    tableCells.noValueCells = tableCells.noValueCells ++
-                            Map((displayName, city, colName) -> cell(cellIndex, "", "Number", List(colCss, rowCss), data2Value))
-                }
+            tableShowArgs.colList.zipWithIndex.foreach { case (colNameAndCss, colNameIndex) =>
+                val colName = tableShowArgs.col2DataColMap.getOrElse(colNameAndCss._1, colNameAndCss._1).replaceAll(" in[\\s\\S]*", "")
+                val data2ValueMap = args(argsMapKeys.DATA_2_Cell_VALUE_MAP).asInstanceOf[Map[String, String => String]]
+                val data2Value = data2ValueMap.getOrElse(colNameAndCss._1, data2ValueMap("DOT"))
+                val colCss = colNameAndCss._2
+                val colIndex = colNameIndex + 1
+                val cellIndex = (colIndex + 64).toChar.toString + (cityIndex + 2).toString
+                //                    cellMap = cellMap ++ Map((displayName, timeline, colName) -> (cell(jobid, tableName, cellIndex, "", "Number", List(colCss, rowCss)), data2Value))
+                tableCells.noValueCells = tableCells.noValueCells ++
+                        Map((displayName, city, colName) -> cell(cellIndex, "", "Number", List(colCss, rowCss), data2Value))
             }
         }
         args
@@ -492,8 +492,8 @@ case class phGetShowCityRankStackedTableBodyValueAction() extends tableActionBas
         val showArgs = args(argsMapKeys.TABLE_SHOW_ARGS).asInstanceOf[tableShowArgs]
         val dataFrame = args(argsMapKeys.DATA).asInstanceOf[RDD[(String, String, List[BigDecimal])]]
         val colName = showArgs.col2DataColMap.getOrElse(showArgs.colList.head._1, showArgs.colList.head._1).replaceAll(" in[\\s\\S]*", "")
-        dataFrame.collect().foreach{case (city, _, som) =>
-            som.zip(showArgs.rowList.map(x => x._1)).foreach{case (result, displayName) =>
+        dataFrame.collect().foreach { case (city, _, som) =>
+            som.zip(showArgs.rowList.map(x => x._1)).foreach { case (result, displayName) =>
                 val oneCell = tableCells.noValueCells.getOrElse((displayName, city, colName), cell("", "", "", Nil))
                 oneCell.setValue(result.toString)
             }
@@ -511,8 +511,8 @@ case class phGetShowCityRankYOYTableBodyValueAction() extends tableActionBase {
         val showArgs = args(argsMapKeys.TABLE_SHOW_ARGS).asInstanceOf[tableShowArgs]
         val dataFrame = args(argsMapKeys.DATA).asInstanceOf[RDD[(String, List[BigDecimal])]]
         val displayName = showArgs.rowList.head._1
-        dataFrame.collect().foreach{case (city, som) =>
-            som.zip(showArgs.colList.map(x => x._1)).foreach{case (result, colName) =>
+        dataFrame.collect().foreach { case (city, som) =>
+            som.zip(showArgs.colList.map(x => x._1)).foreach { case (result, colName) =>
                 val oneCell = tableCells.noValueCells.getOrElse((displayName, city, colName), cell("", "", "", Nil))
                 oneCell.setValue(result.toString)
             }

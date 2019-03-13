@@ -12,6 +12,7 @@ trait phGenSlider {
 class phGenSliderImpl extends phGenSlider with phCommand {
     override def exec(args: Any): Any = {
         // 在这里获得传递进来的ppt实例，在这里创建一个slider，并添加到ppt实例中
+        //todo：如果要设定幻灯片版式，在这儿获取json的版式信息，并且发送消息给生成端
         val tmp = args.asInstanceOf[Map[String, AnyRef]]
         val jobid = tmp("jobid").asInstanceOf[String]
         val ppt = tmp("ppt").asInstanceOf[XMLSlideShow]

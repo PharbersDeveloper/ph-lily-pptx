@@ -1,139 +1,418 @@
 {
-  "title": "",
+  "title": "5,6,7,8,9,10,11,12,13,14,18-34,35-41,42-48,49-56,57-67,68-78,79-93,94-100,101-108,109-119,120-131,132-138,139-186,187-194,195-205,206-215,216-225,226-235",
   "slices": [
     {
       "filter": {
-        "name": "GLP-1_CHPA_ BRAND_1_MAPPING",
-        "description": "",
-        "factory": "GLP-1_CHPA_ BRAND_1_MAPPING",
-        "filt": [""],
-        "countryDataName" : "DF_gen_search_set",
-        "shareDataName" : "GLP_country"
+        "name": "ONCOLOGY_CHPA_ BRAND_1_MAPPING",
+        "description": "18-34",
+        "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
+        "filt": []
       },
       "sliders": [
         {
-          "title": "GLP-1 Market DOT & RMB Performance in CHPA (MAT)",
+          "title": " ",
           "content": {
-            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportMuchDataContentImpl",
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
             "texts": [
               {
                 "pos": [
-                  0, 0, 100, 100
+                  293, 814, 2023, 434
                 ],
-                "font": "",
-                "text": ""
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "bigTitle",
+                        "text": "Lilly CHPA Brand Report"
+                      }
+                    ],
+                    "format": "center"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhDateRunText",
+                        "format": "default",
+                        "text": "#time24#",
+                        "timeFormat": "yyyy"
+                      },
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "M"
+                      },
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhDateRunText",
+                        "format": "default",
+                        "text": "#time24#",
+                        "timeFormat": "MM"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ]
+              }
+            ],
+            "tables": [
+
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "filter": {
+        "name": ["Manufa", "market", "movMktOne"],
+        "description": "5",
+        "factory": "com.pharbers.process.stm.step.pptx.filter.phMOVFilterImpl",
+        "filt": []
+      },
+      "sliders": [
+        {
+          "title": "SOM&GR of LOCAL/JV/IM in CHPA",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  332, 363, 1968, 269
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "overviewContent",
+                        "text": "Total CHPA Market was RMB #sum# Bn and Lilly got RMB #lillySum# "
+                      }
+                    ],
+                    "format": "center"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "overviewContent",
+                        "text": "(SOM: #lillySom#%) IN "
+                      },
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhDateRunText",
+                        "format": "overviewContent",
+                        "text": "MAT M#time24#",
+                        "timeFormat": "MM yy"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": {
+                    "factory": "",
+                    "data": "Manufa",
+                    "timeline": "MAT M#time24#",
+                    "name": ["sum", "lillySum", "lillySom"]
+                }
+
               }
             ],
             "tables": [
               {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.cityBaseTable",
-                "data": "DF_gen_search_set",
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContent3DPieChart",
                 "mkt_display": "",
-                "mkt_col": "",
-                "pos": [
-                  30, 60, 81, 81
-                ],
-                "timeline": [
-                  "MAT Q#qtime8#:timeline_2", "MAT Q#qtime4#:timeline_2"
-                ],
-                "col": {
-                  "title" : ":col_title_common",
-                  "count" : [
-                    "DOT:col_common1",
-                    "SOM(%):col_common3",
-                    "Growth(%):col_common3"
-                  ]
-                },
-                "row": {
-                  "title" : ":row_title_common",
-                  "display_name" : [
-                    "GLP-1 Market:row_7",
-                    "BYETTA:row_5",
-                    "VICTOZA    N-N:row_5",
-                    "YI SHENG TAI    BNE:row_5",
-                    "BYDUREON    AZN:row_5"
-                  ]
-                }
-              },
-              {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.cityBaseTable",
-                "data": "DF_gen_search_set",
-                "mkt_display": "",
-                "mkt_col": "",
-                "pos": [
-                  30, 200, 81, 81
-                ],
-                "timeline": [
-                  "MAT Q#qtime8#:timeline_2", "MAT Q#qtime4#:timeline_2"
-                ],
-                "col": {
-                  "title" : ":col_title_common",
-                  "count" : [
-                    "RMB:col_common1",
-                    "SOM(%):col_common3",
-                    "Growth(%):col_common3"
-                  ]
-                },
-                "row": {
-                  "title" : ":row_title_common",
-                  "display_name" : [
-                    "GLP-1 Market:row_7",
-                    "BYETTA:row_5",
-                    "VICTOZA    N-N:row_5",
-                    "YI SHENG TAI    BNE:row_5",
-                    "BYDUREON    AZN:row_5"
-                  ]
-                }
-              },
-              {
-                "factory": "com.pharbers.process.stm.step.pptx.slider.content.",
-                "data": "GLP_country",
-                "mkt_display": "Diabetes Market",
                 "mkt_col": "RMB",
                 "pos": [
-                  30, 400, 600, 200
+                  670, 615, 1379, 640
                 ],
                 "timeline": [
-                  "MAT Q#qtime1#:timeline_1",
-                  "MAT Q#qtime2#:timeline_1",
-                  "MAT Q#qtime3#:timeline_1",
-                  "MAT Q#qtime4#:timeline_1",
-                  "MAT Q#qtime5#:timeline_1",
-                  "MAT Q#qtime6#:timeline_1",
-                  "MAT Q#qtime7#:timeline_1",
-                  "MAT Q#qtime8#:timeline_1"
+                  "MAT M#time24#:timeline_1"
                 ],
                 "col": {
                   "title" : ":col_title_chart",
                   "count" : [
-                    "SOM%:col_chart"
+                    "RMB:col_chart2"
                   ]
                 },
                 "row": {
                   "title" : ":row_title_chart",
                   "display_name" : [
-                    "GLP-1 Market:row_5",
-                    "Basal Insulin:row_5"
+                    "IMPORT:row_5",
+                    "JOINT-VENTURE:row_5",
+                    "LOCAL:row_5"
+                  ]
+                }
+              },
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.overview.phDoubleTimeLineTable",
+                "mkt_display": "",
+                "mkt_col": "RMB",
+                "pos": [
+                  210, 1159, 817, 235
+                ],
+                "timeline": [
+                  "MAT M#time24#:timeline_1",
+                  "M#time24#:timeline_1"
+                ],
+                "col": {
+                  "title" : ":col_title_chart",
+                  "count" : [
+                    "Growth(%):col_chart2"
                   ]
                 },
-                "show_display": [
-                  {
-                    "show_display_name": "Diabetes Market",
-                    "col_display_name": [
-                      "A10"
-                    ]
-                  },
-                  {
-                    "show_display_name": "GLP-1 Market",
-                    "col_display_name": ["A10S"]
-                  },
-                  {
-                    "show_display_name": "Basal Insulin",
-                    "col_display_name": ["A10C2", "A10C5"]
-                  }
-                ]
+                "row": {
+                  "title" : ":row_title_chart",
+                  "display_name" : [
+                    "Lilly:row_5",
+                    "Local:row_5",
+                    "MNC:row_5",
+                    "Total:row_5"
+                  ]
+                }
+              },
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.overview.phOverViewMarketTrendTable",
+                "mkt_display": "",
+                "mkt_col": "RMB",
+                "pos": [
+                  210, 1473, 2246, 188
+                ],
+                "timeline": [
+                  "MAT M#time13#:timeline_1", "MAT M#time14#:timeline_1","MAT M#time15#:timeline_1","MAT M#time16#:timeline_1","MAT M#time17#:timeline_1","MAT M#time18#:timeline_1",
+                  "MAT M#time19#:timeline_1","MAT M#time20#:timeline_1","MAT M#time21#:timeline_1","MAT M#time22#:timeline_1","MAT M#time23#:timeline_1","MAT M#time24#:timeline_1"
+                ],
+                "col": {
+                  "title" : ":col_title_chart",
+                  "count" : [
+                    "Growth(%):col_chart2"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_chart1",
+                  "display_name" : [
+                    "Local:row_5",
+                    "MNC:row_5",
+                    "Total:row_5"
+                  ]
+                }
               }
             ]
+          }
+        }
+      ]
+    },
+    {
+      "filter": {
+        "name": ["Manufa"],
+        "description": "7",
+        "factory": "com.pharbers.process.stm.step.pptx.filter.phMOVFilterImpl",
+        "filt": []
+      },
+      "sliders": [
+        {
+          "title": "Top 20 Corporations Cash SOM in CHPA",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.overview.phOverViewRankColumnTable",
+                "mkt_display": "",
+                "mkt_col": "RMB",
+                "pos": [
+                  71, 463, 2342, 1270
+                ],
+                "timeline": [
+                  "MAT M#time24#:timeline_1"
+                ],
+                "data": "Manufa",
+                "mapping": "",
+                "col": {
+                  "title" : ":col_title_chart",
+                  "count" : [
+                    "SOM(%):col_chart"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_chart",
+                  "display_name" : [
+                    "ELI LILLY GROUP:row_chart"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "filter": {
+        "name": ["LLYProd","movMktTwo"],
+        "description": "14",
+        "factory": "com.pharbers.process.stm.step.pptx.filter.phMOVFilterImpl",
+        "filt": []
+      },
+      "sliders": [
+        {
+          "title": "Profile of Lilly Products in CHPA",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentPieChart",
+                "mkt_display": "",
+                "mkt_col": "RMB",
+                "pos": [
+                  0, 1066, 820, 726
+                ],
+                "timeline": [
+                  "MAT M#time00#:timeline_1"
+                ],
+                "col": {
+                  "title" : ":col_title_chart",
+                  "count" : [
+                    "RMB:col_chart"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_chart",
+                  "display_name" : [
+                    "Ceclor:row_chart",
+                    "Vancocin:row_chart",
+                    "Cialis:row_chart",
+                    "Evista:row_chart",
+                    "Lly Insulin:row_chart",
+                    "Gemzar:row_chart",
+                    "Alimta:row_chart",
+                    "Prozac:row_chart",
+                    "Cymbalta:row_chart",
+                    "Zyprexa:row_chart",
+                    "Strattera:row_chart"
+                  ]
+                }
+              },
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentPieChart",
+                "mkt_display": "",
+                "mkt_col": "RMB",
+                "pos": [
+                  917, 834, 881, 746
+                ],
+                "timeline": [
+                  "MAT M#time12#:timeline_1"
+                ],
+                "col": {
+                  "title" : ":col_title_chart",
+                  "count" : [
+                    "RMB:col_chart"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_chart",
+                  "display_name" : [
+                    "Ceclor:row_chart",
+                    "Vancocin:row_chart",
+                    "Cialis:row_chart",
+                    "Evista:row_chart",
+                    "Lly Insulin:row_chart",
+                    "Gemzar:row_chart",
+                    "Alimta:row_chart",
+                    "Prozac:row_chart",
+                    "Cymbalta:row_chart",
+                    "Zyprexa:row_chart",
+                    "Strattera:row_chart"
+                  ]
+                }
+              },
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentPieChart",
+                "mkt_display": "",
+                "mkt_col": "RMB",
+                "pos": [
+                  1658, 334, 881, 746
+                ],
+                "timeline": [
+                  "MAT M#time24#:timeline_1"
+                ],
+                "col": {
+                  "title" : ":col_title_chart",
+                  "count" : [
+                    "RMB:col_chart"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_chart",
+                  "display_name" : [
+                    "Ceclor:row_chart",
+                    "Vancocin:row_chart",
+                    "Cialis:row_chart",
+                    "Evista:row_chart",
+                    "Lly Insulin:row_chart",
+                    "Gemzar:row_chart",
+                    "Alimta:row_chart",
+                    "Prozac:row_chart",
+                    "Cymbalta:row_chart",
+                    "Zyprexa:row_chart",
+                    "Strattera:row_chart"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "filter": {
+        "name": "mCRC 3L Market (Relevant)_CHPA_ BRAND_1_MAPPING",
+        "description": "35-41",
+        "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
+        "filt": []
+      },
+      "sliders": [
+        {
+          "title": "Elunate and Key Competitors CASH SOM Trends in CHPA",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentTrendsChart",
+                "mkt_display": "Total mCRC 3L Market (Relevant)",
+                "mkt_col": "RMB",
+                "pos": [
+                  114, 392, 2311, 1380
+                ],
+                "timeline": [
+                  "M#time13#:timeline_1", "M#time14#:timeline_1","M#time15#:timeline_1","M#time16#:timeline_1","M#time17#:timeline_1","M#time18#:timeline_1",
+                  "M#time19#:timeline_1","M#time20#:timeline_1","M#time21#:timeline_1","M#time22#:timeline_1","M#time23#:timeline_1","M#time24#:timeline_1"
+                ],
+                "col": {
+                  "title" : ":col_title_chart",
+                  "count" : [
+                    "SOM(%):col_chart"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_chart",
+                  "display_name" : [
+                    "AI HENG            JSH:row_5","ELOXATIN           SG9:row_5","Other Oxaliplatin:row_5",
+                    "XELODA             ROC:row_5","Other Capecitabine:row_5","AI LI              JSH:row_5",
+                    "CAMPTO             PFZ:row_5","Other Irinotecan:row_5",
+                    "AVASTIN            GTC:row_5","ERBITUX            MCK:row_5",
+                    "FLUOROURACIL:row_5","RALTITREXED:row_5",
+                    "FANG KE            HNQ:row_5","Other Tegafur:row_5",
+                    "STIVARGA           BY6:row_5","AI TAN             JSH:row_5"
+                  ]
+                }
+              }
+            ]
+
           }
         }
       ]

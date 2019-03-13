@@ -223,6 +223,7 @@ case class phGetRankStackedColValueAction() extends tableActionBase {
         val result = new phCityInsulinStacked().exec(Map("countryData" -> dataMap("DF_gen_search_set"), "cityData" -> dataMap("DF_gen_city_search_set"),
             "allDisplayNames" -> colArgs.displayNameList.filter(x => x != colArgs.mktDisplayName), "colList" -> colArgs.colList, "cityList" -> cityLIst, "Total CHPA" -> cityLIst.head,
             "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "mktDisplayName" -> colArgs.mktDisplayName))
+//        val showArgs = args(argsMapKeys.TABLE_SHOW_ARGS).asInstanceOf[tableShowArgs]
         args ++ Map(name -> result, argsMapKeys.CITY -> cityLIst)
     }
 }
@@ -232,12 +233,16 @@ case class phGetYOYColValueAction() extends tableActionBase {
 
     override def show(args: Map[String, Any]): Map[String, Any] = {
         val data = args(argsMapKeys.DATA).asInstanceOf[DataFrame]
+        val table = args(argsMapKeys.TABLE_MODEL).asInstanceOf[phTable]
         val cityLIst = args(argsMapKeys.CITY).asInstanceOf[List[String]] ::: data.select("CITY").collect().map(x => x.toSeq.head.toString).toList
         val colArgs = args(argsMapKeys.TABLE_COL_ARGS).asInstanceOf[tableColArgs]
         val dataMap = colArgs.data.asInstanceOf[Map[String, Any]]
+        val replaysDisplayMap = table.show_display.flatMap(x => x.col_display_name.map(m => Map(m -> x.show_display_name.split(":").head)))
+                .reduce(_ ++ _) ++ Map(colArgs.mktDisplayName -> colArgs.mktDisplayName)
         val result = new phCityMixGrowth().exec(Map("countryData" -> dataMap("DF_gen_search_set"), "cityData" -> dataMap("DF_gen_city_search_set"),
             "allDisplayNames" -> colArgs.displayNameList, "colList" -> colArgs.colList, "cityList" -> cityLIst, "Total CHPA" -> cityLIst.head,
-            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "mktDisplayName" -> colArgs.mktDisplayName))
+            "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "mktDisplayName" -> colArgs.mktDisplayName,
+        "replaysDisplayMap" -> replaysDisplayMap))
         args ++ Map(name -> result, argsMapKeys.CITY -> cityLIst)
     }
 }
