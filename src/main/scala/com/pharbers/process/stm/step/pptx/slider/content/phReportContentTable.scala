@@ -23,11 +23,11 @@ object phReportContentTable {
         timelineStar = new SimpleDateFormat("MM yy").parse(time)
     }
 
-    def time2timeLine(time: String): String = {
+    def time2timeLine(time: String, timeFormat: String = "MM yy"): String = {
         val cal = Calendar.getInstance()
         cal.setTime(timelineStar)
         cal.add(Calendar.MONTH, "-?\\d+".r.findFirstIn("#time-?\\d+#".r.findFirstIn(time).get).getOrElse("24").toInt - 24)
-        time.replaceAll("#time-?\\d+#", new SimpleDateFormat("MM yy").format(cal.getTime))
+        time.replaceAll("#time-?\\d+#", new SimpleDateFormat(timeFormat).format(cal.getTime))
     }
 
     def qtime2timeLine(time: String): String = {
@@ -116,7 +116,7 @@ class phReportContentTableBaseImpl extends phReportContentTable {
         val rowList = (element \ "row" \ "display_name").as[List[String]].map(x => (x.split(":").head, x.split(":").tail.headOption.getOrElse("")))
         val colList = (element \ "col" \ "count").as[List[String]].map(x => (x.split(":").head, x.split(":").tail.headOption.getOrElse("")))
         val timelineList = (element \ "timeline").as[List[String]].map(x => (phReportContentTable.time2timeLine(x.split(":").head), x.split(":").tail.headOption.getOrElse("")))
-        val pos = (element \ "pos").as[List[Int]]
+        val pos = (element \ "pos").as[List[Int]].map(x => (x / 0.000278).toInt)
         val colTitle = ((element \ "col" \ "title").as[String].split(":").head, (element \ "col" \ "title").as[String].split(":").tail.headOption.getOrElse(""))
         val rowTitle = ((element \ "row" \ "title").as[String].split(":").head, (element \ "row" \ "title").as[String].split(":").tail.headOption.getOrElse(""))
         val mktDisplayName: String = ((element \ "mkt_display").as[String] :: rowList.head._1 :: Nil).filter(x => x != "").head

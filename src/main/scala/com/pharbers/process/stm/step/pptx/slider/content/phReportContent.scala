@@ -9,7 +9,7 @@ trait phReportContent {
     var jobid = ""
     var data: Any = _
     var slideIndex = 0
-    var text: JsValue = _
+    var text: List[JsValue] = _
     var tables: List[JsValue] = Nil
 
     def init(args: Any): Unit ={
@@ -18,7 +18,7 @@ trait phReportContent {
         data = argMap("data")
         slideIndex = argMap("slideIndex").asInstanceOf[Int]
         val content = argMap("content").asInstanceOf[JsValue]
-        text = (content \ "texts").as[JsValue]
+        text = (content \ "texts").as[List[JsValue]]
         tables = (content \ "tables").as[List[JsValue]]
     }
 

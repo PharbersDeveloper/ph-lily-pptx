@@ -223,6 +223,7 @@ case class phGetRankStackedColValueAction() extends tableActionBase {
         val result = new phCityInsulinStacked().exec(Map("countryData" -> dataMap("DF_gen_search_set"), "cityData" -> dataMap("DF_gen_city_search_set"),
             "allDisplayNames" -> colArgs.displayNameList.filter(x => x != colArgs.mktDisplayName), "colList" -> colArgs.colList, "cityList" -> cityLIst, "Total CHPA" -> cityLIst.head,
             "timelineList" -> colArgs.timelineList, "primaryValueName" -> colArgs.primaryValueName, "mktDisplayName" -> colArgs.mktDisplayName))
+//        val showArgs = args(argsMapKeys.TABLE_SHOW_ARGS).asInstanceOf[tableShowArgs]
         args ++ Map(name -> result, argsMapKeys.CITY -> cityLIst)
     }
 }
