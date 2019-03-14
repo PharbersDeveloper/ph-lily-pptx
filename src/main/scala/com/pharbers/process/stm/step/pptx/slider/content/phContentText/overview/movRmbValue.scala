@@ -10,17 +10,11 @@ class movRmbValue extends phCommand with phReportTableCol {
 	override def exec(args: Any): Any = {
 		val argsMap = args.asInstanceOf[Map[String, Any]]
 		val data = argsMap("data").asInstanceOf[DataFrame]
-//		val colList: List[String] = argsMap("colList").asInstanceOf[List[String]]
 		val timelineList: List[String] = argsMap("timelineList").asInstanceOf[List[String]]
 		val primaryValueName: String = argsMap("primaryValueName").asInstanceOf[String]
 		val valueType = argsMap("valueType").asInstanceOf[String]
 		val valueId = argsMap("valueId").asInstanceOf[String]
 		val allTimelineList: List[String] = timelineList
-//			if (colList.contains("Growth(%)")) {
-//			getAllTimeline(timelineList)
-//		} else {
-//			timelineList
-//		}
 		val allTimelst: List[String] = allTimelineList.map { timeline =>
 			val startYm: String = getStartYm(timeline)
 			val ymMap = getTimeLineYm(timeline)
@@ -45,7 +39,6 @@ class movRmbValue extends phCommand with phReportTableCol {
 			filteredData.map(x => x.get(3).toString.toDouble).reduce(_ + _)
 		}
 		val func_company: String => Double = valueID => {
-//			"ELI LILLY GROUP"
 			filteredData.filter(col("ID") === valueID).map(x => x.get(3).toString.toDouble).reduce(_ + _)
 		}
 		val funcMap = Map("total" -> func_total, "company" -> func_company)

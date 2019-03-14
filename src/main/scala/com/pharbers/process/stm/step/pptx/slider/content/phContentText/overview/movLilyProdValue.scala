@@ -3,7 +3,7 @@ package com.pharbers.process.stm.step.pptx.slider.content.phContentText.overview
 import com.pharbers.process.common.phCommand
 import org.apache.spark.sql.DataFrame
 
-class prodSomInChpa extends phCommand {
+class movLilyProdValue extends phCommand {
 	override def exec(args: Any): Any = {
 		val argsMap = args.asInstanceOf[Map[String, Any]]
 		val timelineList: List[String] = List(argsMap("timeline").asInstanceOf[String])
@@ -12,10 +12,6 @@ class prodSomInChpa extends phCommand {
 		val c = new movRmbValue()
 		val totalValue = c.exec(Map("data" -> data, "colList" -> "RMB", "timelineList" -> timelineList,
 			"primaryValueName" -> "LC-RMB", "valueType" -> "total", "valueId" -> "total")).asInstanceOf[Double]
-		val mktValue = c.exec(Map("data" -> data, "colList" -> "RMB", "timelineList" -> timelineList,
-			"primaryValueName" -> "LC-RMB", "valueType" -> "company", "valueId" -> "ELI LILLY GROUP")).asInstanceOf[Double]
-		val som = mktValue * 100 / totalValue
-		val resultList = List(totalValue.formatted("%.2f").toString, mktValue.formatted("%.1f").toString, som.formatted("%.2f").toString)
-		resultNameList.zip(resultList).toMap
+		Map(resultNameList.head -> totalValue)
 	}
 }
