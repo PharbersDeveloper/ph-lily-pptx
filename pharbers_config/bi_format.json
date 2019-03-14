@@ -4,7 +4,7 @@
     {
       "filter": {
         "name": "ONCOLOGY_CHPA_ BRAND_1_MAPPING",
-        "description": "18-34",
+        "description": "1-4,15,16,17,35,36,42,43,49,50,57,58,68,69,79,80,94,95,101,102,109,110,120,121,132,133,139,140,187,188,195,196,206,216,226",
         "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
         "filt": []
       },
@@ -51,11 +51,1847 @@
                     ],
                     "format": "center"
                   }
-                ]
+                ],
+                "match": []
               }
             ],
             "tables": [
 
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  428,
+                  2138,
+                  1309
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "content20Bold",
+                        "text": "·Overview\n·Brand Performance in Total Market"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "content20Bold",
+                        "text": "    ·Monthly performance\n    ·MAT performance\n    ·YTD performance\n    ·RQ performance\n    ·Monthly SOM Trends"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "content20Bold",
+                        "text": "·Brand Performance in Branded Market*"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "content20Bold",
+                        "text": "    ·Monthly performance\n    ·MAT performance\n    ·YTD performance\n    ·RQ performance"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "content12Bold",
+                        "text": "    *Defined by respective brand teams\n"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  43,
+                  175,
+                  2391,
+                  140
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "36GrayBold",
+                        "text": "Brand Performance Contents"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  184,
+                  354,
+                  2000,
+                  1395
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12BlueBold",
+                        "text": "ONCOLOGY -Gemzar & Alimta \n\nMCRC 3L MARKET(RELEVANT)-Elunate\nMCRC 3L MARKET (INDICATION)-Elunate\n\nONCOLOGY MARKET-Tyvyt \n\nANTIDEPRESSANTS-Prozac & Cymbalta\n\n"
+                      },
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12BlueBold",
+                        "text": "CYMBALTA CMP-Cymbalta\n\nANTI-PSYCHOTICS-Zyprexa\n\nADHD-Strattera\n\nMALE ERECTILE DYSFUNCTION-Cialis \n\nCIALIS BPH-Cialis\n\nWOMEN’S HEALTH-Forsteo, Evista \n\nOLUMIANT RA-Olumiant\n\nDIABETES-Insulin\n\nGLP-1 Market\n\n"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  8,
+                  212,
+                  1778,
+                  140
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "36GrayBold",
+                        "text": "Overview"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  321,
+                  813,
+                  1780,
+                  367
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14Gray",
+                        "text": "*Please note:\n\n·  All Growth Rates in the report are Year-on-Year Growth Rate.\n·  The market defined in CHPA report is the hospital market with beds > 100, which is about 64% of total China RX market."
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  70,
+                  553,
+                  1778,
+                  180
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "36GrayBold",
+                        "text": "Brand Performance\n"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  633,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "\nONCOLOGY\n \nGemzar & Alimta "
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "Oncology relevant market definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  245,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "•L1A = Alkylating Agents\n•L1B = Antimetabolites\n•L1C = Vinca Alkaloids\n•L1D = Antineoplastic Antibiotics\n•L1X2 = Platinum Compounds\n•Lilly relevant MKT: Includes 13 molecules(Gemcitabine, Pemetrexed, Docetaxel, Paclitaxel, Vinorelbine, ICOTINIB, Gefitinib, Erlotinib,Capecitabine, Crizotinib, Bevacizumab, Afatinib, Osimertinib)\n•Lilly relevant TKI Mkt: ICOTINIB, Gefitinib, Erlotinib, Crizotinib, Bevacizumab, Afatinib, Osimertinib\n•Lilly relevant chemo market: Lilly relevant MKT excluding 7 target agents (ICOTINIB, Gefitinib, Erlotinib, Crizotinib, Bevacizumab, Afatinib, Osimertinib)\n"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  633,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "\nMCRC 3L MARKET (RELEVANT)\n\nElunate\n"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "mCRC 3L Market (Relevant) Definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  245,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "mCRC 3L Market (Relevant)"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12Black",
+                        "text": "• mCRC 3L Market (Relevant) including products under following Molecule:\n-   Bevacizumab\n-   Cetuximab\n-   Apatinib\n-   Oxaliplatin\n-   Capecitabine\n-   Irinotecan\n-   Raltitrexed\n-   Fluorouracil\n-   Tegafur\n-   Regorafenib\n-   Fruquintinib"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  633,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "\nMCRC 3L MARKET (INDICATION)\n\nElunate\n"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "mCRC 3L Market (Indication) Definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  392,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "mCRC 3L Market (Indication)"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12Black",
+                        "text": "• mCRC 3L Market (Indication) including products under following Molecule:\n-   Cetuximab\n-   Regorafenib\n-   Fruquintinib"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  633,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "\nONCOLOGY MARKET\n\nTyvyt \n"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "Tyvyt Market Definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  392,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "Oncology market L01"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12Black",
+                        "text": "•PD-1 market including products under following molecules:\n-   Sintilimab\n-   Durvalumab\n-   Atezolizumab\n-   Pembrolizumab\n-   Nivolumab\n-   Avelumab\n-   Camrelizumab\n-   Tislelizumab\n-   JS-001"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  633,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "\nANTIDEPRESSANTS \n\nProzac & Cymbalta\n"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "Antidepressants Relevant Market Definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  392,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14Black",
+                        "text": "Antidepressants N06A\n•2 sub-segments in antidepressants will also be reported:"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12Black",
+                        "text": "•SSRI including products under following molecules:"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "11Black",
+                        "text": "–Fluoxetine\n–Paroxetine\n–Sertraline\n–Citalopram\n–Fluvoxamine\n–Escitalopram\n–Vortioxetine"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12Black",
+                        "text": "•SNRI including products under following molecules:"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "11Black",
+                        "text": "–Venlafaxine\n–Duloxetine\n–Milnacipran"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14Black",
+                        "text": "•Lilly relevant MKT definition:"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12Black",
+                        "text": "-SSRI+SNRI+MIRTAZAPINE"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14Black",
+                        "text": "•AD Branded Market definition:"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "11Black",
+                        "text": "–PROZAC,CYMBALTA,SEROXAT,EFEXOR XR,ZOLOFT,CIPRAMIL,REMERON,LUVOX,LEXAPRO"
+                      }
+                    ],
+                    "format": "left"
+                  }
+
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  633,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "\nCYMBALTA CMP \n\nCymbalta\n"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "Cymbalta CMP Market Definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  392,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "Cymbalta CMP Market"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12BlueBold",
+                        "text": "•Cymbalta CMP including following products:"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "11Black",
+                        "text": "-   CYMBALTA\n-   LYRICA"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12BlueBold",
+                        "text": "•Cymbalta CMP including following molecules:"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  108,
+                  781,
+                  602,
+                  1140
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "11Black",
+                        "text": "-   Celecoxib\n-   Ibuprofen\n-   Diclofenac\n-   Loxoprofen\n-   Nimesulide\n-   Aceclofenac"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  690,
+                  781,
+                  602,
+                  1140
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "11Black",
+                        "text": "-   Meloxicam\n-   Etoricoxib\n-   Diflunisal\n-   Nabumetone\n-   Codeine+ibuprofen\n-   Oxycodone+paracetamol"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  1265,
+                  781,
+                  679,
+                  1140
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "11Black",
+                        "text": "-   Tramadol\n-   Dihydrocodeine+paracetamol\n-   Paracetamol+tramadol\n-   Codeine+naproxen\n-   Codeine+paracetamol\n-   Morphine"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  1908,
+                  781,
+                  679,
+                  1140
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "11Black",
+                        "text": "-   Oxycodone\n-   Eperisone\n-   Tizanidine\n-   Chlorzoxazone+paracetamol\n-   Baclofen\n-   Chlorzoxazone"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  80,
+                  1206,
+                  2410,
+                  598
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12BlackBold",
+                        "text": "•Cymbalta CMP select APP form: Oral"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14BlackBold",
+                        "text": "Cymbalta CMP Branded Market"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12Black",
+                        "text": "•Cymbalta CMP Branded Market definition:"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "11Black",
+                        "text": "–CYMBALTA, LYRICA, CELEBREX, LOXONIN, MOBIC, VOLTAREN, ARCOXIA, TYLOX, TRAMCONTIN\n•Cymbalta CMP select APP form: Oral"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  633,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "\nANTI-PSYCHOTICS \n\nZyprexa\n"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "Antipsychotics relevant market definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  392,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14Black",
+                        "text": "Antipsychotics including products under following TC & molecules :"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14Black",
+                        "text": "• ATC3 = N5A\n•Select Mood Stabilizers:"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12Black",
+                        "text": "    • Mol = Lithium (N6A)\n    • Mol = Valproic Acid (N3A)\n    • Mol = Valproate Semisodium (N3A)\n    • Mol = Valpromide (N3A)\n    • Mol = Lamotrigine (N3A)\n    • Mol = Carbamazepine (N3A)"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14Black",
+                        "text": "•Lilly relevant MKT definition: Atypical antipsychotics (N05A1)-Total Clozapine-Total PEROSPIRONE-Total BLONANSERIN\n•Branded MKT Definition: ZYPREXA, RISPERDAL, SEROQUEL, ZELDOX, Abilify, RISPERIDAL CONSTA, INVEGA, SOLIAN"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  633,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "\nADHD\n\nStrattera"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "ADHD relevant market definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  102,
+                  412,
+                  2375,
+                  1340
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "•ATC3 = Psycho-stimulants (N6B) – excluding all caffeine-containing products:\n•Mol = Amphetamine- and Dexamphetamine-containing products (from A8A)\n•Mol = Atomoxetine (Strattera from N7X)"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  633,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "\n\nMALE ERECTILE DYSFUNCTION \n\nCialis \n"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "ED relevant market definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  102,
+                  412,
+                  2375,
+                  1340
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "•Only PDE-5 molecule-containing products from G4E:\n•Mol = Tadalafil (Cialis)\n•Mol = Sildenafil (Viagra, Jin Ge,WanFeiLe)\n•Mol = Vardenafil (Levitra)\n•All data is from hospital market audit"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  633,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "\nCialis BPH\n\nCialis\n"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "Cialis BPH Market Definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  96,
+                  392,
+                  2375,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14Black",
+                        "text": "Cialis BPH market"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12Black",
+                        "text": "• Cialis BPH including following products:"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "11Black",
+                        "text": "-   CIALIS TAB 5MG 28\n-   CIALIS TAB 5MG 14"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12Black",
+                        "text": "• Cialis BPH including following molecules:"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  92,
+                  797,
+                  460,
+                  1140
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "11Black",
+                        "text": "-   Tamsulosin\n-   Doxazosin\n-   Terazosin\n-   Alfuzosin\n-   Silodosin"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  690,
+                  797,
+                  460,
+                  1140
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "11Black",
+                        "text": "-   Finasteride\n-   Epristeride\n-   Dutasteride\n-   Naftopidil"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  96,
+                  1326,
+                  2410,
+                  598
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14BlackBold",
+                        "text": "Cialis BPH Branded Market"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12Black",
+                        "text": "•Cialis BPH  branded market definition:"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "11Black",
+                        "text": "–CIALIS TAB 5MG 28, CIALIS TAB 5MG 14, HARNAL, CARDURA XL, HYTRIN, XATRAL, URIEF, PROSCAR, EPRISTERIDE, AVODART"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  633,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "\n\n\nWOMEN’S HEALTH \n\nForsteo, Evista \n"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "Osteoporosis relevant market definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  102,
+                  412,
+                  2375,
+                  1340
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "The Osteoporosis relevant market includes :"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  150,
+                  613,
+                  620,
+                  844
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12Black",
+                        "text": "ACLASTA NVR\nAN LUN B4W\nAN TI FEN SH.\nBANG DE LIN S1J\nBEI BANG JSH\nCALCITONIN    S1H\nCALCO LPM\nELCATONIN LZB\nELCITONIN ASC\nEVISTA LLY\nFOSAMAX MSD\nFOSAMAX PLUS MSD\nGAI RUI NING QD2\nGU BANG S1H\nFORSTEO LLY"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  810,
+                  613,
+                  620,
+                  844
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12Black",
+                        "text": "GU TONG NING BJA\nJIN ER LI B-Y\nMIACALCIC NVR\nPAMIDRONATE BISOD. ZJA\nRISEDRONATE SODIUM YKJ\nSAI ER GAI SBP\nSI DI NUO S-Y\nTIAN KE    HQG\nXIN YI SHENG S9H\nYI LIN    CTA\nYI TAI TNJ\nYIN SHU S.I\nZHONGBAOBIXIN JZ6\nOSSEOR SVR"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  633,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "\nOLUMIANT RA\n\nOlumiant"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "Olumiant RA Market Definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  69,
+                  392,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14BlackBold",
+                        "text": "Olumiant RA market"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12Black",
+                        "text": "•Olumiant RA  including products under following products:"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "11Black",
+                        "text": "-   HUMIRA\n-   YI SAI PU\n-   REMICADE\n-   ENBREL\n-   ANBAINUO\n-   QIANG KE\n-   ACTEMRA\n-   XELJANZ\n-   SIMPONI\n-   OLUMIANT"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  633,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "\nDIABETES\n\nInsulin\n"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "Insulin relevant market definition ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  102,
+                  412,
+                  2375,
+                  1340
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Blue",
+                        "text": "Total Lilly Insulin:"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Black",
+                        "text": "Human Insulin, Analog and Animal Insulin (A10C&D) "
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Blue",
+                        "text": "Humulin:"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Black",
+                        "text": "Human Insulin"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Blue",
+                        "text": "Humalog, Humalog mix 25 and Humalog mix 50: :"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Black",
+                        "text": "Mealtime Analog(Rapid+Mixture)"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  633,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "GLP-1 Market"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "GLP-1 relevant market definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  69,
+                  392,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Black",
+                        "text": "•ATC3 = A10S\n•Mol = Exenatide + Liraglutide + Benaglutide"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": " ",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  633,
+                  2286,
+                  1061
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "default",
+                        "text": "ANTIBIOTICS\n\nCeclor Liquid\nCeclor Solid\nCeclor Total\n\nVancocin"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "Ceclor Liquid relevant market definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  450,
+                  2343,
+                  1243
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Black",
+                        "text": "Lilly relevant liquid market definition:  Include 4 molecules----"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Blue",
+                        "text": "Cefaclor, Azithromax, Cefixime and Amoxicillin."
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Black",
+                        "text": "products in J1 with NFC1 codes: D (oral liquid ord.), or E (oral liquid long-acting)"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "Ceclor Solid relevant market definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  450,
+                  2343,
+                  1243
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Black",
+                        "text": "Lilly relevant liquid market definition:  Include 7 molecules----"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Blue",
+                        "text": "Cefaclor, Azithromax, Cefixime, Cefdinir, Levofloxacin, Moxifloxacin and Amoxicillin."
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Black",
+                        "text": "Oral Solid Antibiotic = products in J1 with NFC1 codes: A (oral solid ord.), B (oral solid long-acting)"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "Ceclor Total relevant market definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  450,
+                  2343,
+                  1243
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Black",
+                        "text": "Lilly relevant liquid market definition:  Include 7 molecules----"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Blue",
+                        "text": "Cefaclor, Azithromax, Cefixime, Cefdinir, Levofloxacin, Moxifloxacin and Amoxicillin."
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Black",
+                        "text": "Oral Antibiotics = products in J1 with NFC1 codes: A (oral solid ord.), B (oral solid long-acting), D (oral liquid ord.), or E (oral liquid long-acting)"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "Vancocin relevant market definition",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  127,
+                  450,
+                  2343,
+                  1243
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Blue",
+                        "text": "Vancocin:"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "24Black",
+                        "text": "Molecules:\n VANCOMYCIN,TEICOPLANIN,NORVANCOMYCIN,LINEZOLID,DAPTOMYCIN\n"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
             ]
           }
         }
@@ -106,12 +1942,19 @@
                     "format": "center"
                   }
                 ],
-                "match": {
+                "match": [
+                  {
                     "factory": "",
                     "data": "Manufa",
                     "timeline": "MAT M#time24#",
-                    "name": ["sum", "lillySum", "lillySom"]
-                }
+                    "name": ["sum", "lillySum", "lillySom"],
+                    "colList": [],
+                    "primaryValueName": "RMB",
+                    "displayNameList": [],
+                    "valueType": "",
+                    "valueID": ""
+                  }
+                ]
 
               }
             ],
@@ -258,7 +2101,132 @@
           "content": {
             "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
             "texts": [
+              {
+                "pos": [
+                  190, 941, 360, 107
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhDateRunText",
+                        "format": "overviewContent",
+                        "text": "MAT M#time0#",
+                        "timeFormat": "MM yy"
+                      }
+                    ],
+                    "format": "center"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "overviewContent",
+                        "text": "#sum# Bn RMB"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": [
+                  {
+                    "factory": "com.pharbers.process.stm.step.pptx.slider.content.phContentText.overview.movLilyProdValue",
+                    "data": "LLYProd",
+                    "timeline": "MAT M#time0#",
+                    "name": ["sum"],
+                    "colList": [],
+                    "primaryValueName": "RMB",
+                    "displayNameList": [],
+                    "valueType": "",
+                    "valueID": ""
+                  }
+                ]
 
+              },
+              {
+                "pos": [
+                  1156, 746, 360, 109
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhDateRunText",
+                        "format": "overviewContent",
+                        "text": "MAT M#time0#",
+                        "timeFormat": "MM yy"
+                      }
+                    ],
+                    "format": "center"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "overviewContent",
+                        "text": "#sum# Bn RMB"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": [
+                  {
+                    "factory": "com.pharbers.process.stm.step.pptx.slider.content.phContentText.overview.movLilyProdValue",
+                    "data": "LLYProd",
+                    "timeline": "MAT M#time0#",
+                    "name": ["sum"],
+                    "colList": [],
+                    "primaryValueName": "RMB",
+                    "displayNameList": [],
+                    "valueType": "",
+                    "valueID": ""
+                  }
+                ]
+
+              },
+              {
+                "pos": [
+                  1516, 407, 360, 107
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhDateRunText",
+                        "format": "overviewContent",
+                        "text": "MAT M#time0#",
+                        "timeFormat": "MM yy"
+                      }
+                    ],
+                    "format": "center"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "overviewContent",
+                        "text": "#sum# Bn RMB"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": [
+                  {
+                    "factory": "com.pharbers.process.stm.step.pptx.slider.content.phContentText.overview.movLilyProdValue",
+                    "data": "LLYProd",
+                    "timeline": "MAT M#time0#",
+                    "name": ["sum"],
+                    "colList": [],
+                    "primaryValueName": "RMB",
+                    "displayNameList": [],
+                    "valueType": "",
+                    "valueID": ""
+                  }
+                ]
+
+              }
             ],
             "tables": [
               {
@@ -408,6 +2376,85 @@
                     "FLUOROURACIL:row_5","RALTITREXED:row_5",
                     "FANG KE            HNQ:row_5","Other Tegafur:row_5",
                     "STIVARGA           BY6:row_5","AI TAN             JSH:row_5"
+                  ]
+                }
+              }
+            ]
+
+          }
+        }
+      ]
+    },
+    {
+      "filter": {
+        "name": "ANTIPSYCHOTICS_CHPA_ BRAND_1_MAPPING",
+        "description": "79-93",
+        "factory": "com.pharbers.process.stm.step.pptx.filter.phSearchFilterImpl",
+        "filt": []
+      },
+      "sliders": [
+        {
+          "title": "Branded Competitors DOT&CASH Performance in Lilly Relevant & Branded Market",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  40, 1468, 91, 2460
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "overviewContent",
+                        "text": "-Lilly relevant MKT Year-on-Year GR is #growth1#% by DOT, #growth2#% by Cash\n"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": [
+                  {
+                    "factory": "com.pharbers.process.stm.step.pptx.slider.content.phContentText.overview.movRmbValue",
+                    "data": "LLYProd",
+                    "timeline": "MAT M#time0#",
+                    "name": ["growth1", "growth2"],
+                    "colList": [],
+                    "primaryValueName": "RMB",
+                    "valueType": "",
+                    "valueID": ""
+                  }
+                ]
+
+              }
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentDotAndRmbTable",
+                "mkt_display": "",
+                "mkt_col": "",
+                "pos": [
+                  132, 562, 2358, 691
+                ],
+                "timeline": [
+                  "DOT MAT M#time23#:timeline_2","RMB MAT M#time23#:timeline_2"
+                ],
+                "col": {
+                  "title" : ":col_title_common",
+                  "count" : [
+                    "Share of Lilly Relevant Mkt:col_common",
+                    "GR(%):col_common",
+                    "Share of Relevant Branded Mkt:col_common"
+                  ]
+                },
+                "row": {
+                  "title" : ":row_title_chart",
+                  "display_name" : [
+                    "Branded Product:row_1","ZYPREXA    LLY:row_1",
+                    "RISPERDAL    JAN:row_5","SEROQUEL    AZN:row_5","ZELDOX    PFZ:row_5",
+                    "Abilify    OSU:row_5","RISPERIDAL CONSTA    XJS:row_5","INVEGA    JAN:row_5",
+                    "SOLIAN    SSY:row_5"
                   ]
                 }
               }

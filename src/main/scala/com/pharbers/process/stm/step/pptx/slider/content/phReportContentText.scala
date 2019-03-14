@@ -26,10 +26,13 @@ class phReportContentTextImpl extends phReportContentText with phCommand {
                 "#{#" + runs + "#P#" + (x \ "format").as[String] + "#}#"
             }).mkString("")
 
-            val data = argMap("data").asInstanceOf[Map[String, Any]]((x \ "match" \ "data").as[String])
             (x \ "match").as[List[JsValue]].foreach(x => {
                 val textMode = x.as[phText]
-                val contentMap = phLyFactory.getInstance(textMode.factory).asInstanceOf[phCommand].exec(textMode).asInstanceOf[Map[String, Double]]
+                val data = argMap("data").asInstanceOf[Map[String, Any]](textMode.data)
+                val contentMap = phLyFactory.getInstance(textMode.factory).asInstanceOf[phCommand].exec(Map(
+                    "data" ->data, "name" -> textMode.name, "colList" -> textMode.colList, "timeline" -> textMode.timeline,
+                    "displayNameList" -> textMode.displayNameList, "primaryValueName" -> textMode.primaryValueName
+                )).asInstanceOf[Map[String, Double]]
                 textMode.name.foreach(x => {
                     content = content.replace(s"#$x#", contentMap(x).toString)
                 })
