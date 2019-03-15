@@ -15,7 +15,7 @@ class prodSomInChpa extends phCommand {
 		val mktValue = c.exec(Map("data" -> data, "colList" -> "RMB", "timelineList" -> timelineList,
 			"primaryValueName" -> "LC-RMB", "valueType" -> "company", "valueId" -> "ELI LILLY GROUP")).asInstanceOf[Double]
 		val som = mktValue * 100 / totalValue
-		val resultList = List(totalValue.formatted("%.2f").toString, mktValue.formatted("%.1f").toString, som.formatted("%.2f").toString)
+		val resultList = List(totalValue, mktValue, som)
 		resultNameList.zip(resultList).toMap
 	}
 }

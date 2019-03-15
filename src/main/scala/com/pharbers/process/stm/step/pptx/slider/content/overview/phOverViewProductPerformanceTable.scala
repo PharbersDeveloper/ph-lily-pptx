@@ -81,7 +81,7 @@ class phOverViewProductPerformanceTable extends phCommand {
         val rowColList = (element \ "row" \ "display_name").as[List[JsValue]].map(x => (x \ "col").as[String])
         val colList = (element \ "col" \ "count").as[List[String]].map(x => (x.split(":").head, x.split(":").tail.headOption.getOrElse("")))
         val timelineList = (element \ "timeline").as[List[String]].map(x => (phReportContentTable.time2timeLine(x.split(":").head), x.split(":").tail.headOption.getOrElse("")))
-        val pos = (element \ "pos").as[List[Int]]
+        val pos = (element \ "pos").as[List[Int]].map(x => (x / 0.000278).toInt)
         val colTitle = ((element \ "col" \ "title").as[String].split(":").head, (element \ "col" \ "title").as[String].split(":").tail.headOption.getOrElse(""))
         val rowTitle = ((element \ "row" \ "title").as[String].split(":").head, (element \ "row" \ "title").as[String].split(":").tail.headOption.getOrElse(""))
         val mktDisplayName: String = (element \ "mkt_display").as[String]
