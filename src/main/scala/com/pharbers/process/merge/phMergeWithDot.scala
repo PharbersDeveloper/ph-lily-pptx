@@ -136,7 +136,6 @@ class phMergeCityWithDotImpl extends phMergeWithDot with phCommand {
         val reval = rdd.keyBy(row => row.product_name + "===" + row.pack_des + "===" + row.tp)
             .leftOuterJoin(rdd_add.keyBy(row => row._2.product_name + "===" + row._2.pack_des + "===" + row._2.tp))
             .map { iter =>
-                iter
                 if (iter._2._2 != None) {
                     val addrate = iter._2._2.get._2.add_rate
                     iter._2._1.add_rate = addrate

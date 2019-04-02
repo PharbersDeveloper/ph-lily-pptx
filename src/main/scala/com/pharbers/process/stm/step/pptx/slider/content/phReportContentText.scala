@@ -44,7 +44,7 @@ class phReportContentTextImpl extends phReportContentText with phCommand {
                 })
             })
 
-            socketDriver.createTitle(jobid, content, (x \ "pos").as[List[Int]].map(x => (x / 0.000278).toInt), slideIndex, "")
+            socketDriver.createText(jobid, content, (x \ "pos").as[List[Int]].map(x => (x / 0.000278).toInt), slideIndex, (x \ "shapeType").asOpt[String].getOrElse("Rectangle"))
         })
     }
 }

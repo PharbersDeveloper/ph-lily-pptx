@@ -15,7 +15,7 @@ import play.api.libs.json._
 import scala.io.Source
 import scala.xml.{Node, NodeSeq}
 
-trait phSocket_managers extends createPPT with setExcel with excel2PPT with createTitle
+trait phSocket_managers extends createPPT with setExcel with excel2PPT with createText with createSlider
 
 sealed trait phRequest extends phSocket_trait {
     val dataOutputStream = new DataOutputStream(socket.getOutputStream)
@@ -48,6 +48,25 @@ trait createPPT extends phRequest with CirceJsonapiSupport {
         request.jobid = jobid
         val msg = toJsonapi(request).asJson.toString()
         println(msg)
+        sendMessage(msg)
+    }
+}
+
+trait createSlider extends phRequest with  CirceJsonapiSupport{
+    def createSlider(jobId: String, `type`: String, title: String, index: Int): Unit ={
+        val id: String = UUID.randomUUID().toString
+        val request = new PhRequest
+        request.id = id
+        request.`type` = "PhRequest"
+        request.command = "CreateSlider"
+        request.jobid = jobId
+        val slider = new PhCreateSlider()
+        slider.sliderType = `type`
+        slider.slider = index
+        slider.title = title
+        request.slider = Some(slider)
+
+        val msg = toJsonapi(request).asJson.toString()
         sendMessage(msg)
     }
 }
@@ -110,8 +129,8 @@ trait excel2PPT extends phRequest with CirceJsonapiSupport {
     }
 }
 
-trait createTitle extends phRequest with CirceJsonapiSupport {
-    def createTitle(jobid: String, content: String, pos: List[Int], slider: Int, css: String): Unit = {
+trait createText extends phRequest with CirceJsonapiSupport {
+    def createText(jobid: String, content: String, pos: List[Int], slider: Int, shapeType: String): Unit = {
         val id: String = UUID.randomUUID().toString
         val request = new PhRequest
         request.id = id
@@ -123,7 +142,7 @@ trait createTitle extends phRequest with CirceJsonapiSupport {
         phTest2PPT.content = content
         phTest2PPT.pos = pos
         phTest2PPT.slider = slider
-        phTest2PPT.css = css
+        phTest2PPT.shapeType = shapeType
         request.text = Some(phTest2PPT)
         val msg = toJsonapi(request).asJson.toString()
         sendMessage(msg)

@@ -18,7 +18,7 @@ class phReportTitlePropImpl extends phReportTitleProp with phCommand {
         val pos = List(35,35,2286,158).map(x => (x / 0.000278).toInt)
         val contentString = argMap("title").asInstanceOf[String]
         val content = s"#{##[#$contentString#C#default#]##P#center#}#"
-        val css = "test"
-        socketDriver.createTitle(jobid,content,pos,slideIndex,css)
+        socketDriver.createSlider(jobid, argMap("type").asInstanceOf[String],argMap("title").asInstanceOf[String], slideIndex)
+//        socketDriver.createTitle(jobid,content,pos,slideIndex,css)
     }
 }

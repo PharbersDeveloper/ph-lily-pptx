@@ -66,7 +66,7 @@ object tojsonapi extends App with CirceJsonapiSupport {
     phTest2PPT5.content = "cuiTest"
     phTest2PPT5.pos = List(10, 10, 700, 50)
     phTest2PPT5.slider = 0
-    phTest2PPT5.css = "test"
+    phTest2PPT5.shapeType = "test"
     request5.text = Some(phTest2PPT5)
 
     //    try {
