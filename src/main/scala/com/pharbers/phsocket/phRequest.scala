@@ -11,6 +11,7 @@ import com.pharbers.jsonapi.json.circe.CirceJsonapiSupport
 import com.pharbers.moduleConfig.{ConfigDefines, ConfigImpl}
 import io.circe.syntax._
 import play.api.libs.json._
+import scalaj.http.{Http, HttpOptions}
 
 import scala.io.Source
 import scala.xml.{Node, NodeSeq}
@@ -18,13 +19,18 @@ import scala.xml.{Node, NodeSeq}
 trait phSocket_managers extends createPPT with setExcel with excel2PPT with createText with createSlider
 
 sealed trait phRequest extends phSocket_trait {
-    val dataOutputStream = new DataOutputStream(socket.getOutputStream)
+//    val dataOutputStream = new DataOutputStream(socket.getOutputStream)
 
     def sendMessage(msg: String): Unit = {
 
         val tmp = msg.getBytes()
-        dataOutputStream.write(int2Bytes(tmp.length).union(tmp))
-        dataOutputStream.flush()
+//        dataOutputStream.write(int2Bytes(tmp.length).union(tmp))
+//        dataOutputStream.flush()
+        val response = Http("http://example.com/url").postData(tmp)
+                .header("Content-Type", "application/json")
+                .header("Charset", "UTF-8")
+                .option(HttpOptions.readTimeout(10000)).toString
+        println(response)
     }
 
     def int2Bytes(value: Int): Array[Byte] = {
