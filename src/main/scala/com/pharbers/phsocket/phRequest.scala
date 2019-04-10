@@ -26,11 +26,11 @@ sealed trait phRequest extends phSocket_trait {
         val tmp = msg.getBytes()
 //        dataOutputStream.write(int2Bytes(tmp.length).union(tmp))
 //        dataOutputStream.flush()
-        val response = Http("http://example.com/url").postData(tmp)
+        val response = Http("http://192.168.100.195:9999/api/ppt").postData(tmp)
                 .header("Content-Type", "application/json")
                 .header("Charset", "UTF-8")
-                .option(HttpOptions.readTimeout(10000)).toString
-        println(response)
+                .option(HttpOptions.readTimeout(10000)).asString
+        println(response.body)
     }
 
     def int2Bytes(value: Int): Array[Byte] = {
