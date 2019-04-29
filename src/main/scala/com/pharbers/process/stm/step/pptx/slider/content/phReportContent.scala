@@ -3,7 +3,7 @@ package com.pharbers.process.stm.step.pptx.slider.content
 import com.pharbers.process.common.{phCommand, phLyFactory}
 import org.apache.poi.xslf.usermodel.XSLFSlide
 import org.apache.spark.sql.DataFrame
-import play.api.libs.json.JsValue
+import play.api.libs.json.{JsObject, JsValue}
 
 trait phReportContent {
     var jobid = ""
@@ -22,7 +22,7 @@ trait phReportContent {
         tables = (content \ "tables").as[List[JsValue]]
     }
 
-    def setElementInSlider(className: String, element: Any, data: Any = null, slideIndex: Int, jobid: String = ""): Unit ={
+    def setElementInSlider(className: String, element: Any, data: Any = null, slideIndex: Int, jobid: String = ""): Any ={
         phLyFactory.getInstance(className).asInstanceOf[phCommand]
             .exec(Map("element" -> element, "data" -> data, "slideIndex" -> slideIndex, "jobid" -> jobid))
     }
@@ -32,11 +32,14 @@ trait phReportContent {
 class phReportContentImpl extends phReportContent with phCommand {
     override def exec(args: Any): Any = {
         init(args)
-        tables.foreach(table => {
+        val cellShpaes = tables.map(table => {
             val factory = (table \ "factory").as[String]
-            setElementInSlider(factory, table, data, slideIndex, jobid)
+            setElementInSlider(factory, table, data, slideIndex, jobid).asInstanceOf[JsObject]
         })
-        setElementInSlider("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTextImpl", text, data, slideIndex = slideIndex, jobid = jobid)
+        val txtShpaes = setElementInSlider("com.pharbers.process.stm.step.pptx.slider.content.phReportContentTextImpl", text, data, slideIndex = slideIndex, jobid = jobid)
+                .asInstanceOf[List[JsObject]]
+
+        txtShpaes ::: cellShpaes
     }
 }
 

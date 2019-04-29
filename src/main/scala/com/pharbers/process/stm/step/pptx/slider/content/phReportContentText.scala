@@ -1,5 +1,7 @@
 package com.pharbers.process.stm.step.pptx.slider.content
 
+import java.io.{File, PrintWriter}
+
 import com.pharbers.phsocket.phSocketDriver
 import com.pharbers.process.common.jsonData.phText
 import com.pharbers.process.common.{phCommand, phLyFactory}
@@ -7,6 +9,8 @@ import com.pharbers.process.stm.step.pptx.slider.content.phContentText.overview.
 import play.api.libs.json.JsValue
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
+
+import scala.io.Source
 
 trait phReportContentText {
     val socketDriver = phSocketDriver()
@@ -19,10 +23,12 @@ class phReportContentTextImpl extends phReportContentText with phCommand {
         val jobid = argMap("jobid").asInstanceOf[String]
         val slideIndex = argMap("slideIndex").asInstanceOf[Int]
 
-        argMap("element").asInstanceOf[List[JsValue]].foreach(x => {
+        argMap("element").asInstanceOf[List[JsValue]].map(x => {
+            var index = 0
             var content = (x \ "text").as[List[JsValue]].map(x => {
                 val runs = (x \ "runs").as[List[JsValue]].map(r => {
-                    phLyFactory.getInstance((r \ "factory").as[String]).asInstanceOf[phCommand].exec(Map("element" -> r, "data" -> argMap("data"))).asInstanceOf[String]
+                    index += 1
+                    phLyFactory.getInstance((r \ "factory").as[String]).asInstanceOf[phCommand].exec(Map("element" -> r, "data" -> argMap("data"), "index" -> index)).asInstanceOf[String]
                 }).mkString("")
                 "#{#" + runs + "#P#" + (x \ "format").as[String] + "#}#"
             }).mkString("")
@@ -44,12 +50,26 @@ class phReportContentTextImpl extends phReportContentText with phCommand {
                 })
             })
 
+//            val shapeJson = Json.obj("type" -> "txt", "pos" -> (x \ "pos").as[List[Int]].map(x => (x / 0.000278).toInt), "format" -> content , "shapeType" -> (x \ "shapeType").asOpt[String].getOrElse("Rectangle"))
             socketDriver.createText(jobid, content, (x \ "pos").as[List[Int]].map(x => (x / 0.000278).toInt), slideIndex, (x \ "shapeType").asOpt[String].getOrElse("Rectangle"))
+//            shapeJson
         })
     }
 }
 
 class PhNormalRunText extends phCommand {
+    override def exec(args: Any): Any = {
+        val run = args.asInstanceOf[Map[String, Any]]("element").asInstanceOf[JsValue]
+        val index = args.asInstanceOf[Map[String, Any]]("index").asInstanceOf[Int]
+        if(index == 1) {
+            "#[#" + "txt" + "#C#" + (run \ "format").as[String] + "#]#"
+        } else {
+            "#[#" + "txt" + index + "#C#" + (run \ "format").as[String] + "#]#"
+        }
+    }
+}
+
+class PhNormalRunTextForMongo extends phCommand {
     override def exec(args: Any): Any = {
         val run = args.asInstanceOf[Map[String, Any]]("element").asInstanceOf[JsValue]
         "#[#" + (run \ "text").as[String] + "#C#" + (run \ "format").as[String] + "#]#"

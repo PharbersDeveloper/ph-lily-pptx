@@ -3,18 +3,13 @@ package com.pharbers.phsocket
 import java.io.DataOutputStream
 import java.util.UUID
 
-import com.pharbers.baseModules.PharbersInjectModule
 import com.pharbers.pptxmoudles._
 import com.pharbers.macros._
 import com.pharbers.macros.convert.jsonapi.JsonapiMacro._
 import com.pharbers.jsonapi.json.circe.CirceJsonapiSupport
-import com.pharbers.moduleConfig.{ConfigDefines, ConfigImpl}
 import io.circe.syntax._
-import play.api.libs.json._
 import scalaj.http.{Http, HttpOptions}
 
-import scala.io.Source
-import scala.xml.{Node, NodeSeq}
 
 trait phSocket_managers extends createPPT with setExcel with excel2PPT with createText with createSlider
 
@@ -22,7 +17,7 @@ sealed trait phRequest extends phSocket_trait {
 //    val dataOutputStream = new DataOutputStream(socket.getOutputStream)
 
     def sendMessage(msg: String): Unit = {
-
+        println(msg)
         val tmp = msg.getBytes()
 //        dataOutputStream.write(int2Bytes(tmp.length).union(tmp))
 //        dataOutputStream.flush()
@@ -77,7 +72,7 @@ trait createSlider extends phRequest with  CirceJsonapiSupport{
     }
 }
 
-trait setExcel extends phRequest with CirceJsonapiSupport with createExcelCss {
+trait setExcel extends phRequest with CirceJsonapiSupport{
     def setExcel(jobid: String, excelName: String, cells: List[String]): Unit = {
         val id: String = UUID.randomUUID().toString
         val request = new PhRequest
@@ -155,43 +150,43 @@ trait createText extends phRequest with CirceJsonapiSupport {
     }
 }
 
-trait createExcelCss extends phRequest with PharbersInjectModule {
-
-    import com.pharbers.moduleConfig.ModuleConfig.fr
-
-    implicit val f: (ConfigDefines, Node) => ConfigImpl = ((c, n) => ConfigImpl(c.md map (x => x -> (n \ x))))
-
-    override val md: List[String] = "format" :: "out_file" :: "css_file" :: Nil
-    override val id: String = "gen_pages"
-    override val configPath: String = "pharbers_config/bi_config.xml"
-    override lazy val config: ConfigImpl = loadConfig(configDir + "/" + configPath)
-
-    lazy val cssPath = config.mc.find(_._1 == "css_file").map { iter =>
-        (iter._2.asInstanceOf[NodeSeq] \\ "@path").toString()
-    }.getOrElse(throw new Exception("配置文件错误，phGenPPT => out_file"))
-
-    def createCss(name: List[String], cell: String): PhExcelCss = {
-        val phExcelCss = new PhExcelCss
-        phExcelCss.id = UUID.randomUUID().toString
-        phExcelCss.cell = cell
-        val jsValue = Json.parse(Source.fromFile(cssPath).mkString)
-        val cssJs = (jsValue \ name.head).asOpt[JsValue].getOrElse(Json.toJson(""))
-        var cssJs2 = Json.toJson("")
-        if (name.tail.nonEmpty) cssJs2 = (jsValue \ name.tail.head).asOpt[JsValue].getOrElse(Json.toJson(""))
-        //        val cssJs2 = (jsValue \ name.tail).asOpt[JsValue].getOrElse(Json.toJson(""))
-        phExcelCss.factory = (cssJs \ "factory").asOpt[String].getOrElse((cssJs2 \ "factory").asOpt[String].getOrElse(phExcelCss.factory))
-        phExcelCss.fontSize = (cssJs \ "fontSize").asOpt[String].getOrElse((cssJs2 \ "fontSize").asOpt[String].getOrElse(phExcelCss.fontSize))
-        phExcelCss.fontColor = (cssJs \ "fontColor").asOpt[String].getOrElse((cssJs2 \ "fontColor").asOpt[String].getOrElse(phExcelCss.fontColor))
-        phExcelCss.fontName = (cssJs \ "fontName").asOpt[String].getOrElse((cssJs2 \ "fontName").asOpt[String].getOrElse(phExcelCss.fontName))
-        phExcelCss.fontStyle = (cssJs \ "fontStyle").asOpt[List[String]].getOrElse(Nil) ::: (cssJs2 \ "fontStyle").asOpt[List[String]].getOrElse(Nil)
-        phExcelCss.cellColor = (cssJs \ "cellColor").asOpt[String].getOrElse((cssJs2 \ "cellColor").asOpt[String].getOrElse(phExcelCss.cellColor))
-        phExcelCss.cellBorders = (cssJs \ "cellBorders").asOpt[List[String]].getOrElse(Nil) ::: (cssJs2 \ "cellBorders").asOpt[List[String]].getOrElse(Nil)
-        phExcelCss.cellBordersColor = (cssJs \ "cellBordersColor").asOpt[String].getOrElse((cssJs2 \ "cellBordersColor").asOpt[String].getOrElse(phExcelCss.cellBordersColor))
-        phExcelCss.width = (cssJs \ "width").asOpt[String].getOrElse((cssJs2 \ "width").asOpt[String].getOrElse(phExcelCss.width))
-        phExcelCss.height = (cssJs \ "height").asOpt[String].getOrElse((cssJs2 \ "height").asOpt[String].getOrElse(phExcelCss.height))
-        phExcelCss.horizontalAlignType = (cssJs \ "horizontalAlignType").asOpt[String].getOrElse((cssJs2 \ "horizontalAlignType").asOpt[String].getOrElse(phExcelCss.horizontalAlignType))
-        phExcelCss.verticalAlignType = (cssJs \ "verticalAlignType").asOpt[String].getOrElse((cssJs2 \ "verticalAlignType").asOpt[String].getOrElse(phExcelCss.verticalAlignType))
-        phExcelCss
-    }
-}
+//trait createExcelCss extends phRequest with PharbersInjectModule {
+//
+//    import com.pharbers.moduleConfig.ModuleConfig.fr
+//
+//    implicit val f: (ConfigDefines, Node) => ConfigImpl = ((c, n) => ConfigImpl(c.md map (x => x -> (n \ x))))
+//
+//    override val md: List[String] = "format" :: "out_file" :: "css_file" :: Nil
+//    override val id: String = "gen_pages"
+//    override val configPath: String = "pharbers_config/bi_config.xml"
+//    override lazy val config: ConfigImpl = loadConfig(configDir + "/" + configPath)
+//
+//    lazy val cssPath = config.mc.find(_._1 == "css_file").map { iter =>
+//        (iter._2.asInstanceOf[NodeSeq] \\ "@path").toString()
+//    }.getOrElse(throw new Exception("配置文件错误，phGenPPT => out_file"))
+//
+////    def createCss(name: List[String], cell: String): PhExcelCss = {
+////        val phExcelCss = new PhExcelCss
+////        phExcelCss.id = UUID.randomUUID().toString
+////        phExcelCss.cell = cell
+////        val jsValue = Json.parse(Source.fromFile(cssPath).mkString)
+////        val cssJs = (jsValue \ name.head).asOpt[JsValue].getOrElse(Json.toJson(""))
+////        var cssJs2 = Json.toJson("")
+////        if (name.tail.nonEmpty) cssJs2 = (jsValue \ name.tail.head).asOpt[JsValue].getOrElse(Json.toJson(""))
+////        //        val cssJs2 = (jsValue \ name.tail).asOpt[JsValue].getOrElse(Json.toJson(""))
+////        phExcelCss.factory = (cssJs \ "factory").asOpt[String].getOrElse((cssJs2 \ "factory").asOpt[String].getOrElse(phExcelCss.factory))
+////        phExcelCss.fontSize = (cssJs \ "fontSize").asOpt[String].getOrElse((cssJs2 \ "fontSize").asOpt[String].getOrElse(phExcelCss.fontSize))
+////        phExcelCss.fontColor = (cssJs \ "fontColor").asOpt[String].getOrElse((cssJs2 \ "fontColor").asOpt[String].getOrElse(phExcelCss.fontColor))
+////        phExcelCss.fontName = (cssJs \ "fontName").asOpt[String].getOrElse((cssJs2 \ "fontName").asOpt[String].getOrElse(phExcelCss.fontName))
+////        phExcelCss.fontStyle = (cssJs \ "fontStyle").asOpt[List[String]].getOrElse(Nil) ::: (cssJs2 \ "fontStyle").asOpt[List[String]].getOrElse(Nil)
+////        phExcelCss.cellColor = (cssJs \ "cellColor").asOpt[String].getOrElse((cssJs2 \ "cellColor").asOpt[String].getOrElse(phExcelCss.cellColor))
+////        phExcelCss.cellBorders = (cssJs \ "cellBorders").asOpt[List[String]].getOrElse(Nil) ::: (cssJs2 \ "cellBorders").asOpt[List[String]].getOrElse(Nil)
+////        phExcelCss.cellBordersColor = (cssJs \ "cellBordersColor").asOpt[String].getOrElse((cssJs2 \ "cellBordersColor").asOpt[String].getOrElse(phExcelCss.cellBordersColor))
+////        phExcelCss.width = (cssJs \ "width").asOpt[String].getOrElse((cssJs2 \ "width").asOpt[String].getOrElse(phExcelCss.width))
+////        phExcelCss.height = (cssJs \ "height").asOpt[String].getOrElse((cssJs2 \ "height").asOpt[String].getOrElse(phExcelCss.height))
+////        phExcelCss.horizontalAlignType = (cssJs \ "horizontalAlignType").asOpt[String].getOrElse((cssJs2 \ "horizontalAlignType").asOpt[String].getOrElse(phExcelCss.horizontalAlignType))
+////        phExcelCss.verticalAlignType = (cssJs \ "verticalAlignType").asOpt[String].getOrElse((cssJs2 \ "verticalAlignType").asOpt[String].getOrElse(phExcelCss.verticalAlignType))
+////        phExcelCss
+////    }
+//}
 

@@ -42,6 +42,811 @@
           }
         },
         {
+          "title": "Contents",
+          "type": "national",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  250,
+                  79,
+                  1990,
+                  255
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "18Black",
+                        "text": "Contents"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": [
+
+                ]
+              },
+              {
+                "pos": [
+                  466,
+                  593,
+                  1548,
+                  285
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "16BlueBold",
+                        "text": "·  口服降糖药市场5个城市整体分析"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  466,
+                  720,
+                  1548,
+                  996
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "16Gary",
+                        "text": "·  城市分析\n\n  ·  上海\n\n  ·  北京\n\n  ·  广州\n\n  ·  南京\n\n  ·  杭州"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
+          "title": "样本覆盖率及数据相关说明",
+          "type": "national",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  250,
+                  79,
+                  1990,
+                  255
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "18Black",
+                        "text": "样本覆盖率及数据相关说明"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  275 ,
+                  466,
+                  893,
+                  86
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14Black",
+                        "text": "5个城市的CHC样本覆盖率"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  1387 ,
+                  462,
+                  893,
+                  86
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14Black",
+                        "text": "报告数据相关说明"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  1393,
+                  591,
+                  893,
+                  1081
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12BlueBold",
+                        "text": "·  时间定义："
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "10BlueBold",
+                        "text": "       YTD"
+                      },
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "10Blue",
+                        "text": "从该年的1月份到截止时间的时间段\n"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12BlueBold",
+                        "text": "·  计算公式："
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "10BlueBold",
+                        "text": "       销量同比增长"
+                      },
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "10Blue",
+                        "text": "=销量2018YTD /销量2017YTD -1\n"
+                      },
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "10BlueBold",
+                        "text": "       份额同比增长"
+                      },
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "10Blue",
+                        "text": "=份额2018YTD -份额2017YTD\n"
+                      },
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "10BlueBold",
+                        "text": "       EI"
+                      },
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "10Blue",
+                        "text": "=份额2018YTD /份额2017YTD *100\n"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12BlueBold",
+                        "text": "·  数据说明："
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "10Blue",
+                        "text": "·  数据选取五个城市的社区卫生服务中心\n    （不含站点）样本采购价（低于内部核算\n    价），通过统计放大的方法，计算出五个\n    城市所有社区卫生服务中心市场定义内产\n    品销量。数据精确到城市。\n·  在北京市为站点单独采购，因此报告中仅\n    包含社区卫生服务中心销量；其他城市为\n    卫生服务中心代站点采购，因此报告中社\n    区卫生服务中心销量也代表站点销量\n"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.chcTest",
+                "pos": [191, 594, 1079, 1029],
+                "name": "1",
+                "type": "ChcNationalCombo"
+              }
+            ]
+          }
+        },
+        {
+          "title": "4",
+          "type": "national",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  250,
+                  79,
+                  1990,
+                  255
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "18Black",
+                        "text": "与2017年相比，北京、上海、广州、杭州和南京五个城市在2018年口服降糖药CHC市场贡献率有不同程度的升高或降低。\n总体来说同比增长26.1%"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  212 ,
+                  535,
+                  893,
+                  145
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14Black",
+                        "text": "在5个城市中，北京和广州的口服降糖药市场规模在2018年贡献度升高"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  1461 ,
+                  535,
+                  624,
+                  145
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14Black",
+                        "text": "5城市各类别口服降糖药CHC市场同比增长26%"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  2025,
+                  684,
+                  202,
+                  124
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "12BlueBold",
+                        "text": "增长率"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  2034,
+                  875,
+                  191,
+                  57
+                ],
+                "shapeType": "FlowChartTerminator5B9BD5",
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "9WhiteBold",
+                        "text": "29.8%"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  2031,
+                  1185,
+                  191,
+                  57
+                ],
+                "shapeType": "FlowChartTerminator005598",
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "9WhiteBold",
+                        "text": "16.5%"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  2031,
+                  1334,
+                  191,
+                  57
+                ],
+                "shapeType": "FlowChartTerminator0563C1",
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "9WhiteBold",
+                        "text": "41.1%"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  2034,
+                  1418,
+                  191,
+                  57
+                ],
+                "shapeType": "FlowChartTerminator954F72",
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "9WhiteBold",
+                        "text": "12.2%"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  2034,
+                  1488,
+                  191,
+                  57
+                ],
+                "shapeType": "FlowChartTerminatorE7E6E6",
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "9WhiteBold",
+                        "text": "19.6%"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.chcTest",
+                "pos": [184, 773, 928, 831],
+                "name": "2",
+                "type": "ChcColumn"
+              },
+              {
+                "factory": "com.pharbers.chcTest",
+                "pos": [1239, 783, 742, 869],
+                "name": "3",
+                "type": "Stacked"
+              }
+            ]
+          }
+        },
+        {
+          "title": "5",
+          "type": "national",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  250,
+                  79,
+                  1990,
+                  255
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "18Black",
+                        "text": "在5城市CHC，2018年前15排名的企业共贡献81%的市场销量；其中，拜耳排名第一位，占26%的市场份额，Merck排名第3位，市场份额7.5%，销量增长远高于其他企业"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.chcTest",
+                "pos": [203, 460, 2157, 1236],
+                "name": "4",
+                "type": "Bubble"
+              }
+            ]
+          }
+        },
+        {
+          "title": "6",
+          "type": "national",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts":[
+              {
+                "pos": [
+                  250,
+                  79,
+                  1990,
+                  255
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "18Black",
+                        "text": "从季度变化看，连续两年排名前五的品类一直是阿卡波糖、二甲双胍等"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": [
+
+                ]
+              },
+              {
+                "pos": [
+                  702,
+                  402,
+                  1136,
+                  86
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14Black",
+                        "text": "5城市CHC口服降糖市场各分子份额的季度变化"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+              {
+                "factory": "com.pharbers.chcTest",
+                "pos": [212, 518, 2053, 1147],
+                "name": "5",
+                "type": "Stacked"
+              }
+            ]
+          }
+        },
+        {
+          "title": "7",
+          "type": "national",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts":[
+              {
+                "pos": [
+                  250,
+                  79,
+                  1990,
+                  255
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "18Black",
+                        "text": "从口服降糖药市场的所有产品看，2018年排名前15的产品贡献了78%以上的销量。五城市销量最高的产品是拜唐苹，格华止排名第三位"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": [
+
+                ]
+              },
+              {
+                "pos": [
+                  729,
+                  445,
+                  946,
+                  86
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14Black",
+                        "text": "5城市CHC口服降糖药整体市场Top15产品\n"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+              {
+                "pos": [357, 681, 1717, 884],
+                "factory": "com.pharbers.chcTest2",
+                "name": "6"
+              }
+            ]
+          }
+        },
+        {
+          "title": "8",
+          "type": "national",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts":[
+              {
+                "pos": [
+                  250,
+                  79,
+                  1990,
+                  255
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "18Black",
+                        "text": "从二甲双胍类产品看，2018年五城市销量最高的产品是格华止，市场份额48%，销量同比增长72%"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": [
+
+                ]
+              },
+              {
+                "pos": [
+                  127,
+                  411,
+                  946,
+                  146
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "14Black",
+                        "text": "5城市CHC二甲双胍类重点产品\n（单位：百万元人民币）\n"
+                      }
+                    ],
+                    "format": "center"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+              {
+                "pos": [96, 560, 927, 1159],
+                "factory": "com.pharbers.chcTest",
+                "name": "7",
+                "type": "Stacked"
+              },
+              {
+                "pos": [1080, 560, 1315, 1058],
+                "factory": "com.pharbers.chcTest2",
+                "name": "8"
+              }
+            ]
+          }
+        },
+        {
+          "title": "9",
+          "type": "national",
+          "content": {
+            "factory": "com.pharbers.process.stm.step.pptx.slider.content.phReportContentImpl",
+            "texts": [
+              {
+                "pos": [
+                  250,
+                  79,
+                  1990,
+                  255
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "18Black",
+                        "text": "Contents"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": [
+
+                ]
+              },
+              {
+                "pos": [
+                  466,
+                  593,
+                  1548,
+                  285
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "16Gary",
+                        "text": "·  口服降糖药市场5个城市整体分析"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              },
+              {
+                "pos": [
+                  466,
+                  720,
+                  1548,
+                  996
+                ],
+                "text": [
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "16BlueBold",
+                        "text": "·  城市分析\n"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "16Gary",
+                        "text": "  ·  上海\n"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "16BlueBold",
+                        "text": "  ·  北京\n"
+                      }
+                    ],
+                    "format": "left"
+                  },
+                  {
+                    "runs": [
+                      {
+                        "factory": "com.pharbers.process.stm.step.pptx.slider.content.PhNormalRunText",
+                        "format": "16Gary",
+                        "text": "  ·  广州\n\n  ·  南京\n\n  ·  杭州"
+                      }
+                    ],
+                    "format": "left"
+                  }
+                ],
+                "match": []
+              }
+            ],
+            "tables": [
+            ]
+          }
+        },
+        {
           "title": "市场分析",
           "type": "default",
           "content": {
@@ -245,7 +1050,7 @@
               {
                 "factory": "com.pharbers.chcTest",
                 "pos": [169, 624, 927, 1105],
-                "name": "1",
+                "name": "9",
                 "type": "Stacked"
               }
             ]
@@ -304,7 +1109,7 @@
               {
                 "factory": "com.pharbers.chcTest",
                 "pos": [233, 423, 1947, 1284],
-                "name": "2",
+                "name": "10",
                 "type": "Bubble"
               }
             ]
@@ -386,7 +1191,7 @@
               {
                 "factory": "com.pharbers.chcTest",
                 "pos": [212, 518, 2053, 1147],
-                "name": "3",
+                "name": "11",
                 "type": "Stacked"
               }
             ]
@@ -468,13 +1273,13 @@
               {
                 "pos": [96, 560, 927, 1159],
                 "factory": "com.pharbers.chcTest",
-                "name": "4",
+                "name": "12",
                 "type": "Stacked"
               },
               {
                 "pos": [1080, 560, 1315, 1058],
                 "factory": "com.pharbers.chcTest2",
-                "name": "5"
+                "name": "13"
               }
             ]
           }
@@ -555,13 +1360,13 @@
               {
                 "pos": [96, 560, 927, 1159],
                 "factory": "com.pharbers.chcTest",
-                "name": "6",
+                "name": "14",
                 "type": "Stacked"
               },
               {
                 "factory": "com.pharbers.chcTest2",
                 "pos": [1080, 560, 1315, 1058],
-                "name": "7"
+                "name": "15"
               }
             ]
           }
@@ -642,7 +1447,7 @@
               {
                 "factory": "com.pharbers.chcTest",
                 "pos": [212, 518, 2117, 1147],
-                "name": "8",
+                "name": "16",
                 "type": "ChcLine"
               }
             ]
@@ -724,7 +1529,7 @@
               {
                 "factory": "com.pharbers.chcTest",
                 "pos": [212, 518, 2053, 1147],
-                "name": "9",
+                "name": "17",
                 "type": "Stacked"
               }
             ]
