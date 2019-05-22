@@ -1,5 +1,5 @@
 object creatCells extends App {
-    val cellNumber: (Int, Int) = (17, 10)
+    val cellNumber: (Int, Int) = (2, 15)
     List.fill(cellNumber._1)(List.fill(cellNumber._2)("chc_table_white")).zipWithIndex.foreach(x => {
         x._1.zipWithIndex.foreach(y => {
             val column = ('A'.toInt + x._2).toChar.toString
